@@ -15,11 +15,17 @@ export default {
     this.updateMapTilerApiKey()
   },
   computed: {
+    mapLanguage () {
+      // Primary language subtag, e.g. 'ja' from 'ja-JP', 'en' from 'en-US'
+      return navigator.language.split('-')[0]
+    },
     mapStyle () {
       if (!this.mapTilerApiKey) {
         return null
       }
 
+      // Cloud styles: return UUID string so MapLibre GL fetches them internally.
+      // Language is applied post-load via applyLanguageToMap() in updateLayers().
       if (this.mapType === 'maptiler_outdoor') {
         if (this.$store.state.altitudeUnits === 'ft') {
           return 'dc9edd90-1320-4fa4-98ba-ad2d4efe5998'
@@ -34,7 +40,8 @@ export default {
         }
       }
 
-      let style = this.mapTypes[this.mapType].style
+      // Local styles: deep clone and patch (no post-load flash)
+      let style = JSON.parse(JSON.stringify(this.mapTypes[this.mapType].style))
 
       // Show/hide layers according to map options for initial render to save time
       style.layers.forEach(layer => {
@@ -55,7 +62,7 @@ export default {
       })
       style.glyphs = style.glyphs.replace('{key}', this.mapTilerApiKey)
 
-      // Patch units
+      // Patch units for SOTLAS summit labels
       if (this.$store.state.altitudeUnits === 'ft') {
         style.layers.forEach(layer => {
           if (layer.id === 'summits_names') {
@@ -66,7 +73,7 @@ export default {
         })
       }
 
-      return style
+      return this.applyLanguageToStyle(style)
     },
     mapType () {
       let mapType = this.$store.state.mapType
@@ -125,6 +132,13 @@ export default {
           }
         }
       })
+
+      // For cloud styles, apply language patches via setLayoutProperty
+      // (local styles are pre-patched in the mapStyle computed)
+      const isCloudStyle = (this.mapType === 'maptiler_outdoor' || this.mapType === 'maptiler_winter')
+      if (isCloudStyle) {
+        this.applyLanguageToMap(map)
+      }
 
       if (this.mapTypes[this.mapType].snow_depth) {
         if (this.mapOptions['snow_depth']) {
@@ -196,6 +210,73 @@ export default {
           }
         }
       }
+    },
+    applyLanguageToMap (map) {
+      const lang = this.mapLanguage
+      map.getStyle().layers.forEach(layer => {
+        if (!layer.layout || layer.layout['text-field'] === undefined) return
+        if (layer.id && layer.id.startsWith('summit')) return
+        if (layer.metadata && layer.metadata['sotlas-map-option']) return
+
+        const textField = layer.layout['text-field']
+        let patched
+        if (typeof textField === 'string') {
+          if (textField === '{name}' || textField === 'name') {
+            patched = ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+          }
+        } else if (Array.isArray(textField)) {
+          patched = this.patchLanguageExpression(textField, lang)
+        }
+
+        if (patched !== undefined && patched !== textField) {
+          map.setLayoutProperty(layer.id, 'text-field', patched)
+        }
+      })
+    },
+    applyLanguageToStyle (style) {
+      const lang = this.mapLanguage
+      style.layers.forEach(layer => {
+        if (!layer.layout || layer.layout['text-field'] === undefined) return
+        if (layer.id && layer.id.startsWith('summit')) return
+        if (layer.metadata && layer.metadata['sotlas-map-option']) return
+
+        const textField = layer.layout['text-field']
+        if (typeof textField === 'string') {
+          if (textField === '{name}' || textField === 'name') {
+            layer.layout['text-field'] = ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+          }
+        } else if (Array.isArray(textField)) {
+          layer.layout['text-field'] = this.patchLanguageExpression(textField, lang)
+        }
+      })
+      return style
+    },
+    patchLanguageExpression (expr, lang) {
+      if (!Array.isArray(expr)) return expr
+
+      // ["get", "name"] or ["get", "name:latin"] or ["get", "name:nonlatin"]
+      // → ["coalesce", ["get", "name:XX"], ["get", "name"]]
+      if (expr[0] === 'get' && expr.length === 2) {
+        const field = expr[1]
+        if (field === 'name' || field === 'name:latin' || field === 'name:nonlatin') {
+          return ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+        }
+        return expr
+      }
+
+      // ["coalesce", ["get", "name:..."], ...] → replace the whole coalesce
+      if (expr[0] === 'coalesce' && expr.length >= 2) {
+        const firstArg = expr[1]
+        if (Array.isArray(firstArg) && firstArg[0] === 'get') {
+          const field = firstArg[1]
+          if (typeof field === 'string' && (field === 'name' || field.startsWith('name:'))) {
+            return ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+          }
+        }
+      }
+
+      // Recurse into nested expressions
+      return expr.map(item => Array.isArray(item) ? this.patchLanguageExpression(item, lang) : item)
     }
   },
   watch: {

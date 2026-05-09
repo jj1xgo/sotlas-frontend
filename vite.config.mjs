@@ -55,7 +55,10 @@ export default defineConfig(async ({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src')
+        '@': path.resolve(__dirname, 'src'),
+        '@fortawesome/pro-regular-svg-icons': path.resolve(__dirname, 'src/fa-pro-regular-stub.js'),
+        '@fortawesome/pro-solid-svg-icons': path.resolve(__dirname, 'src/fa-pro-solid-stub.js'),
+        'vue/dist/vue.esm': path.resolve(__dirname, 'node_modules/vue/dist/vue.esm.js')
       },
     },
     optimizeDeps: {
