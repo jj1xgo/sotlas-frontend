@@ -56,8 +56,12 @@ def patch_language_expression(expr, lang):
             for item in expr]
 
 
+_NAME_PLACEHOLDER_RE = __import__("re").compile(r"^\{name(:[\w-]+)?\}$")
+
+
 def patch_string_text_field(text_field, lang):
-    if text_field in ("{name}", "name"):
+    # Bare 'name' or Mapbox-style placeholders '{name}', '{name:en}', etc.
+    if text_field == "name" or _NAME_PLACEHOLDER_RE.match(text_field):
         return ["coalesce", ["get", f"name:{lang}"], ["get", "name"]]
     return text_field
 
@@ -66,6 +70,9 @@ LANG = "ja"
 
 CASES = [
     ("Simple {name} placeholder string", "{name}"),
+    ("{name:en} placeholder (MapTiler City/Country/Continent/Ocean labels)", "{name:en}"),
+    ("{name:latin} placeholder", "{name:latin}"),
+    ("Literal dot (Via ferrata symbol -- should NOT match)", "."),
     ("Plain get name", ["get", "name"]),
     ("get name:latin (used in swisstopo)", ["get", "name:latin"]),
     ("get name:nonlatin", ["get", "name:nonlatin"]),

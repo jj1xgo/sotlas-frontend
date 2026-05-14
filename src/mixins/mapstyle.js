@@ -211,6 +211,16 @@ export default {
         }
       }
     },
+    patchStringTextField (textField, lang) {
+      // Bare 'name' or Mapbox-style placeholders '{name}', '{name:en}',
+      // '{name:latin}', '{name:nonlatin}', etc. → coalesce(name:XX, name).
+      // Without this branch, MapTiler layers that use '{name:en}' (Country/
+      // City/Continent/Ocean labels) leak English through.
+      if (textField === 'name' || /^\{name(:[\w-]+)?\}$/.test(textField)) {
+        return ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+      }
+      return undefined
+    },
     applyLanguageToMap (map) {
       const lang = this.mapLanguage
       map.getStyle().layers.forEach(layer => {
@@ -221,9 +231,7 @@ export default {
         const textField = layer.layout['text-field']
         let patched
         if (typeof textField === 'string') {
-          if (textField === '{name}' || textField === 'name') {
-            patched = ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
-          }
+          patched = this.patchStringTextField(textField, lang)
         } else if (Array.isArray(textField)) {
           patched = this.patchLanguageExpression(textField, lang)
         }
@@ -242,8 +250,9 @@ export default {
 
         const textField = layer.layout['text-field']
         if (typeof textField === 'string') {
-          if (textField === '{name}' || textField === 'name') {
-            layer.layout['text-field'] = ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+          const patched = this.patchStringTextField(textField, lang)
+          if (patched !== undefined) {
+            layer.layout['text-field'] = patched
           }
         } else if (Array.isArray(textField)) {
           layer.layout['text-field'] = this.patchLanguageExpression(textField, lang)
