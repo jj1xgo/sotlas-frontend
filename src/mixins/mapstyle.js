@@ -264,12 +264,35 @@ export default {
         return expr
       }
 
-      // ["coalesce", ["get", "name:..."], ...] → replace the whole coalesce
-      if (expr[0] === 'coalesce' && expr.length >= 2) {
-        const firstArg = expr[1]
-        if (Array.isArray(firstArg) && firstArg[0] === 'get') {
-          const field = firstArg[1]
-          if (typeof field === 'string' && (field === 'name' || field.startsWith('name:'))) {
+      const isNameGet = (e) => Array.isArray(e) && e.length === 2 && e[0] === 'get' &&
+        typeof e[1] === 'string' &&
+        (e[1] === 'name' || e[1] === 'name_int' || e[1].startsWith('name:'))
+
+      // ["concat", ...]: collapse when it joins >=2 name references with no
+      // structural non-name fields. Prevents the same name being rendered
+      // twice (e.g. latin + nonlatin → "東京\n東京").
+      if (expr[0] === 'concat') {
+        let nameRefs = 0
+        let otherNonStrings = 0
+        for (let i = 1; i < expr.length; i++) {
+          const arg = expr[i]
+          if (isNameGet(arg)) {
+            nameRefs++
+          } else if (Array.isArray(arg)) {
+            otherNonStrings++
+          }
+        }
+        if (nameRefs >= 2 && otherNonStrings === 0) {
+          return ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
+        }
+      }
+
+      // ["coalesce", ...]: if any arg references a name field (anywhere in
+      // the list, not just first), replace the whole expression so the
+      // user's language wins over name_int / name:latin / etc.
+      if (expr[0] === 'coalesce') {
+        for (let i = 1; i < expr.length; i++) {
+          if (isNameGet(expr[i])) {
             return ['coalesce', ['get', `name:${lang}`], ['get', 'name']]
           }
         }
