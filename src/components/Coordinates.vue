@@ -408,6 +408,12 @@ export default {
           }
         },
         {
+          name: 'HERE WeGo',
+          url: () => {
+            return `https://wego.here.com/?map=${this.latitude},${this.longitude},17`
+          }
+        },
+        {
           name: 'Gaia GPS',
           url: () => {
             return `https://www.gaiagps.com/map/?loc=14/${this.longitude}/${this.latitude}`
