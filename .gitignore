@@ -20,3 +20,13 @@ yarn-error.log*
 *.sln
 *.sw?
 src/compiled-icons
+
+# claude code files
+.claude/settings.local.json
+.claude/conversations/
+.claude/sessions/
+.claude/skills/.cache/
+.claude/handovers/
+.claude/incidents/
+.claude/bash_history
+.claude/lessons.md
