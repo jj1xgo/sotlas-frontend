@@ -51,10 +51,13 @@
 
 ## 計画・タスク管理
 
-- Plan Mode 承認済みの計画は `.claude/plan-<slug>.md` に置く。`<slug>` は `/plan` が
-  `~/.claude/plans/<slug>.md` に生成するファイル名をそのまま流用する
-- `.claude/plan-<slug>.md` は作成・更新・削除のいずれも、そのターン内にコミットする
-  （削除は完了後、区切りがついたら `git rm` で行う。作業が中断・持ち越しで handover を書く場合は残す）
+- Plan Mode の計画は `.claude/plans/<slug>.md` に置く。`.claude/settings.json` の
+  `plansDirectory: ".claude/plans"` により plan ファイルは最初からリポジトリ内に生成されるため、
+  承認後の `mv` は不要。万一 `~/.claude/plans/`（ホーム配下・グローバル）に生成された場合は
+  設定が効いていないサインなので、異常として報告した上で `mv` で `.claude/plans/` へ移動する
+- `.claude/plans/<slug>.md` は承認後の作成・更新・削除のいずれも、そのターン内にコミットする
+  （削除は完了後、区切りがついたら `git rm` で行う。作業が中断・持ち越しで handover を書く場合は残す。
+  承認に至らず放棄された下書きが未追跡ファイルとして残っていたら、気づいた時点で削除してよい）
 - 軽微な実装タスクは `.claude/todo.md` に直接書く。完了したものは消す（履歴は git で追える）
 - handover ファイル名の日時は `date '+%Y-%m-%d_%H%M'` で実時刻を取得する（推測しない）
 
@@ -75,7 +78,7 @@ sotlas-frontend 自体の仕様・実装ではなく、コンテナ環境（clau
 `.claude/todo.md` ではなく `jj1xgo/claude-container` への GitHub issue で起票する。
 
 **判定基準**: 問題の原因・対応先がコンテナ環境側にある → claude-container への `gh issue`。
-sotlas-frontend 自身の問題 → 従来どおり `.claude/todo.md` / `.claude/plan-*.md`。
+sotlas-frontend 自身の問題 → 従来どおり `.claude/todo.md` / `.claude/plans/*.md`。
 
 **フロー**: 起票 → （claude-container 側が調査・実装・対応完了コメント）→ 対応待ち →
 **リビルド後**に動作確認 → 確認内容をコメントに付記してクローズ。
