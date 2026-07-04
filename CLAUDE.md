@@ -4,7 +4,8 @@
 
 [SOTA (Summits On The Air)](https://www.sota.org.uk/) の地図・データベース Web フロントエンド。
 [manuelkasper/sotlas-frontend](https://github.com/manuelkasper/sotlas-frontend) の fork で、
-機能追加・修正は上流への Pull Request を前提に進める。
+機能追加・修正は上流への Pull Request を前提に進める。上流への issue・コメント投稿には
+モデル名署名を付けない（署名はユーザー所有リポジトリ限定。→「環境課題の連携」ルール3）。
 
 - 技術スタック: Vue **2.7**（EOL。Vue 3 専用 API・Vue 3 前提の依存やコードは提案しない）/ Vite 6 / Buefy (Bulma) / vue-mapbox（実体は MapLibre）
 - テストスイートはなし。`npm run lint`（eslint）が唯一の機械的チェック
@@ -35,7 +36,7 @@
 
 この仕組みのおかげで `npm install` に `NPM_FONTAWESOME_TOKEN` は不要。関連: 上流の
 [issue #23](https://github.com/manuelkasper/sotlas-frontend/issues/23)（同種の課題が
-2023年から未解決）。この方式を上流にコメントで共有するかどうかは `.claude/todo.md` の保留項目。
+2023年から未解決）。
 
 ## lint
 
@@ -57,11 +58,6 @@
   handover を書く場合は残す）
 - handover ファイル名の日時は `date '+%Y-%m-%d_%H%M'` で実時刻を取得する（推測しない）
 
-## セッション開始ルーティン
-
-`.claude/hooks/session-start.sh` が SessionStart 時に handover 最新1件・lessons.md 未蒸留分・
-未解決インシデント・（コンテナ内）claude-container issue の open 状態を自動注入する。
-
 ## コンテナ開発
 
 `../claude-container` を使ってサンドボックス化されたコンテナ内で開発できる。
@@ -69,8 +65,7 @@
 - 起動: `../claude-container/claude-container -b ~/sota/sotlas-frontend`（初回・設定変更後は `-b` 必須）
 - Node は Debian stable 由来の 20.x 系（`.claude-container.d/packages.txt` で指定）。
   `package.json` の `engines`（22.x）とはずれるが vite 6 の対応範囲内のため実害はない。
-  厳密対応は claude-container 側へのビルドフック追加提案（issue 起票済み。
-  下記「環境課題の連携」参照）が受け入れられてから対応する
+  厳密対応は claude-container 側でビルドフック追加提案が対応されてから行う
 - コンテナはポートを公開しない。ブラウザ確認は上記「検証方法」のとおりホスト側で行う
 - issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す
 
@@ -92,7 +87,8 @@ sotlas-frontend 自身の問題 → 従来どおり `.claude/todo.md` / `.claude
 2. 動作確認は稼働中コンテナでは不十分になりうるため、リビルド（`-b`）後に行う
 3. AI が起票・コメント・クローズする場合は、本文の**末尾にモデル名のみを署名**として記入する
    （現在のセッションのモデル名。例: `— Sonnet 5`）。ユーザーアカウントでの投稿が自問自答に見えるのを
-   防ぐため。経緯の説明文は書かない
+   防ぐため。経緯の説明文は書かない。**この署名ルールはユーザー所有リポジトリへの投稿に限る**。
+   外部プロジェクト（upstream 等）への issue・コメント投稿には署名を付けない
 4. 起票先リポジトリ名・仕様は推測せず、不明な場合はユーザーに確認してから起票する
 5. 1 issue 1 論点
 
@@ -104,9 +100,6 @@ sotlas-frontend 自身の問題 → 従来どおり `.claude/todo.md` / `.claude
 
 - 学びは `.claude/lessons.md` に随時記録する（git 管理外・コミット不要）
 - `/update-best-practices`（グローバルコマンド）が `.claude/lessons.md` を再分析し、
-  `.claude/best_practices.md`（git 管理対象）を再合成する
-  - 蒸留観点: 手戻り防止 / 判断コスト削減 / 信頼性の担保 / コンテキスト継続 / 仕様と実装の整合
-  - 原則数目安: 14〜18件（増えすぎたら統合する）
-  - 除外: プロジェクト固有の技術詳細は原則に含めない
-  - 実行後、`.claude/best_practices.md` と `.claude/best_practices_watermark` はコマンド内でコミットまで完結する
+  `.claude/best_practices.md`（git 管理対象）を再合成する。蒸留観点・原則数の既定と
+  watermark 更新・コミットはコマンド側で完結する
 - lessons.md が一定量増えるとセッション開始時に実行が自動的に推奨される（hooks 側で検知）
