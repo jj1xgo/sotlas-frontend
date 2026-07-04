@@ -1,0 +1,5 @@
+# sotlas-frontend 用の追加許可ドメイン。
+# npm install の実パッケージ取得に必要。
+# 注: FontAwesome Pro は使わない（stub+alias でローカルパッチ済み）ため
+# npm.fontawesome.com は不要。
+registry.npmjs.org
