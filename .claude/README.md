@@ -47,7 +47,9 @@ sotlas-frontend 向けに移植・アレンジ）。
 - `.claude/lessons.md` の増加件数を `.claude/best_practices_watermark` と比較し、閾値（10件）超過で
   初回返答時に `AskUserQuestion` による `/update-best-practices` 実行可否確認を Claude へ指示
 - （コンテナ内・`gh` 認証済みの場合）`jj1xgo/claude-container` への起票 issue の open 状態を確認し注入
-  （fail-soft。`gh` 不在・API 失敗時は一行メッセージのみでスキップ）
+  （fail-soft。`gh` 不在・API 失敗時は一行メッセージのみでスキップ）。`jq` が使えれば各 issue に
+  最終コメントの最終非空行（署名行想定）も添え、コンテナ内 gh が `comments` フィールド未対応の場合は
+  comments 無しの従来クエリへ自動フォールバックする
 
 `lint-posttool.sh` は PostToolUse イベント（`Write|Edit`）で実行され、編集されたファイルが
 `$CLAUDE_PROJECT_DIR` 配下の `*.js`/`*.vue`（`npm run lint` と同じ対象）であれば eslint をかけ、
