@@ -58,7 +58,7 @@
 - `.claude/plans/<slug>.md` は承認後の作成・更新・削除のいずれも、そのターン内にコミットする
   （削除は完了後、区切りがついたら `git rm` で行う。作業が中断・持ち越しで handover を書く場合は残す。
   承認に至らず放棄された下書きが未追跡ファイルとして残っていたら、気づいた時点で削除してよい）
-- 軽微な実装タスクは `.claude/todo.md` に直接書く。完了したものは消す（履歴は git で追える）
+- 軽微な実装タスクの管理は GitHub Issues で行う（→「課題管理（GitHub Issues）」節参照）
 - handover ファイル名の日時は `date '+%Y-%m-%d_%H%M'` で実時刻を取得する（推測しない）
 
 ## コンテナ開発
@@ -72,13 +72,28 @@
 - コンテナはポートを公開しない。ブラウザ確認は上記「検証方法」のとおりホスト側で行う
 - issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す
 
+## 課題管理（GitHub Issues）
+
+軽微な実装タスク・バックログの管理は `jj1xgo/sotlas-frontend` への GitHub Issues で行う
+（グローバル CLAUDE.md「GitHub Issues による課題管理（opt-in）」節参照）。
+
+- **対象リポジトリ**: `jj1xgo/sotlas-frontend`
+- **ラベル体系**: `enhancement`（GitHub 既定）・`on-hold`（保留。本文に再検討トリガーを明記する
+  ものだけに使う）
+- **署名**: 自リポジトリ（ユーザー所有）への投稿のためモデル名のみ（例: `— Sonnet 5`）
+- `.claude/plans/<slug>.md` の実装計画ファイル運用は本節の対象外。「計画・タスク管理」節のとおり
+  Plan Mode 承認後の個別タスクに引き続き使う
+- session-start hook が open issue の状態を自動確認し注入する（フェイルソフト。`gh` 不在・API 失敗時は
+  一行メッセージのみでスキップ）
+
 ## 環境課題の連携（claude-container への issue 起票）
 
 sotlas-frontend 自体の仕様・実装ではなく、コンテナ環境（claude-container）に起因する問題・要望は
-`.claude/todo.md` ではなく `jj1xgo/claude-container` への GitHub issue で起票する。
+本リポジトリ（jj1xgo/sotlas-frontend）の GitHub Issues ではなく `jj1xgo/claude-container` への
+GitHub issue で起票する。
 
 **判定基準**: 問題の原因・対応先がコンテナ環境側にある → claude-container への `gh issue`。
-sotlas-frontend 自身の問題 → 従来どおり `.claude/todo.md` / `.claude/plans/*.md`。
+sotlas-frontend 自身の問題 → 本リポジトリ（jj1xgo/sotlas-frontend）の GitHub Issues。
 
 **フロー**: 起票 → （claude-container 側が調査・実装・対応完了コメント）→ 対応待ち →
 **リビルド後**に動作確認 → 確認内容をコメントに付記してクローズ。
