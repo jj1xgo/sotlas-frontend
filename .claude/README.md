@@ -16,12 +16,12 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | **settings.local.json** | 存在しない | 存在しない（プロジェクト固有 permissions 未定義） |
 | **commands/** | 汎用 skill（handover / log-incident / claude-md-panel / update-best-practices） | 存在しない（ドメイン固有 skill なし） |
 | **rules/** | 存在しない | 存在しない |
-| **hooks/** | 汎用保護（Write/Edit 検証・注入防止） | [`session-start.sh`](#hooks)（SessionStart hook。handover・lessons.md 自動注入、インシデント検知、best_practices 更新推奨、claude-container 起票 issue 確認）+ [`lint-posttool.sh`](#hooks)（PostToolUse hook。`.js`/`.vue` 編集時の eslint 自動実行） |
+| **hooks/** | 汎用保護（Write/Edit 検証・注入防止） | [`session-start.sh`](#hooks)（SessionStart hook。handover・lessons.md 自動注入、インシデント検知、best_practices 更新推奨、sotlas-frontend 自身の open issue 確認、claude-container 起票 issue 確認）+ [`lint-posttool.sh`](#hooks)（PostToolUse hook。`.js`/`.vue` 編集時の eslint 自動実行） |
 | [**incidents/**](#incidents) | 存在しない | 存在しない（発生時に運用開始。手順は `/log-incident` 参照） |
 | [**handovers/**](#handovers) | 存在しない | セッション引き継ぎノート（このプロジェクト配下・git 管理外） |
 | [**lessons.md**](#lessonsmd) | 存在しない | 学びの記録（`.claude/` 直下・git 管理外） |
 | [**best_practices.md**](#best_practicesmdbest_practices_watermark) | 存在しない | `/update-best-practices` が lessons.md から再合成する原則集（`.claude/` 直下・git 管理対象。未生成） |
-| [**plans/・todo.md**](#planstodomd) | `~/.claude/plans/`（本プロジェクトでは不使用） | 計画・タスク運用ファイル（git 管理対象。plans/ は `plansDirectory` 設定による生成先） |
+| [**plans/**](#plans) | `~/.claude/plans/`（本プロジェクトでは不使用） | Plan Mode の計画ファイル運用（git 管理対象。`plansDirectory` 設定による生成先）。軽微タスクの管理は GitHub Issues（`jj1xgo/sotlas-frontend`）へ移行済み |
 
 ---
 
@@ -46,6 +46,9 @@ sotlas-frontend 向けに移植・アレンジ）。
   実行を促す
 - `.claude/lessons.md` の増加件数を `.claude/best_practices_watermark` と比較し、閾値（10件）超過で
   初回返答時に `AskUserQuestion` による `/update-best-practices` 実行可否確認を Claude へ指示
+- （コンテナ内・`gh` 認証済みの場合）`jj1xgo/sotlas-frontend` 自身の open issue を確認し注入
+  （fail-soft。`gh` 不在・API 失敗時は一行メッセージのみでスキップ）。ラベル付きで一覧表示し、
+  claude-container 向けのようなリビルド前提の対応方針指示は行わない
 - （コンテナ内・`gh` 認証済みの場合）`jj1xgo/claude-container` への起票 issue の open 状態を確認し注入
   （fail-soft。`gh` 不在・API 失敗時は一行メッセージのみでスキップ）。`jq` が使えれば各 issue に
   最終コメントの最終非空行（署名行想定）も添え、コンテナ内 gh が `comments` フィールド未対応の場合は
@@ -108,17 +111,17 @@ permissions.allow は未定義。
 `hooks/session-start.sh` が増加量の閾値判定に使う。いずれも git 管理対象（`lessons.md` と異なり除外しない）。
 lessons.md が未蓄積のため、このプロジェクトではまだ生成されていない。
 
-### plans/・todo.md
+### plans/
 
-Plan Mode の plan ファイル（`.claude/plans/<slug>.md`）と、Plan Mode を伴わない軽微な実装タスクの管理リスト
-（`.claude/todo.md`）。
+Plan Mode の plan ファイル（`.claude/plans/<slug>.md`）。`plansDirectory: ".claude/plans"` により
+最初からリポジトリ内に生成される（以前はデフォルトの `~/.claude/plans/`（ホーム配下・グローバル）に
+生成され、承認後に `.claude/plan-<slug>.md` へ `mv` する運用だったが、mv 忘れが claude-container で
+実際に発生したため設定で根治した、2026-07-04）。作業完了時は `git rm` で削除しコミット、中断・
+持ち越し時は残す（リポジトリルート [CLAUDE.md](../CLAUDE.md)「計画・タスク管理」参照）。git 管理対象。
 
-| ファイル | 役割 |
-|---|---|
-| `plans/<slug>.md` | Plan Mode の plan ファイルの生成先。`settings.json` の `plansDirectory: ".claude/plans"` により最初からリポジトリ内に生成される（以前はデフォルトの `~/.claude/plans/`（ホーム配下・グローバル）に生成され、承認後に `.claude/plan-<slug>.md` へ `mv` する運用だったが、mv 忘れが claude-container で実際に発生したため設定で根治した、2026-07-04）。作業完了時は `git rm` で削除しコミット、中断・持ち越し時は残す（リポジトリルート [CLAUDE.md](../CLAUDE.md)「計画・タスク管理」参照） |
-| `todo.md` | Plan Mode を伴わない軽微な実装タスクの管理リスト。完了した項目は消す（履歴は git で追える） |
-
-いずれも git 管理対象。
+Plan Mode を伴わない軽微な実装タスクの管理は、以前は `.claude/todo.md` で行っていたが
+GitHub Issues（`jj1xgo/sotlas-frontend`）へ移行済み（リポジトリルート [CLAUDE.md](../CLAUDE.md)
+「課題管理（GitHub Issues）」参照、2026-07-04）。
 
 ---
 
