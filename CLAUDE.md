@@ -53,9 +53,9 @@
 
 - Plan Mode 承認済みの計画は `.claude/plan-<slug>.md` に置く。`<slug>` は `/plan` が
   `~/.claude/plans/<slug>.md` に生成するファイル名をそのまま流用する
+- `.claude/plan-<slug>.md` は作成・更新・削除のいずれも、そのターン内にコミットする
+  （削除は完了後、区切りがついたら `git rm` で行う。作業が中断・持ち越しで handover を書く場合は残す）
 - 軽微な実装タスクは `.claude/todo.md` に直接書く。完了したものは消す（履歴は git で追える）
-- 計画完了後、区切りがついたら `.claude/plan-<slug>.md` を `git rm` で削除する（作業が中断・持ち越しで
-  handover を書く場合は残す）
 - handover ファイル名の日時は `date '+%Y-%m-%d_%H%M'` で実時刻を取得する（推測しない）
 
 ## コンテナ開発
