@@ -30,3 +30,6 @@ src/compiled-icons
 .claude/incidents/
 .claude/bash_history
 .claude/lessons.md
+
+# claude-container runtime settings (may contain host-specific paths)
+.claude-container.d/env
