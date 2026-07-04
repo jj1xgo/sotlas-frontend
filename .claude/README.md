@@ -21,7 +21,7 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | [**handovers/**](#handovers) | 存在しない | セッション引き継ぎノート（このプロジェクト配下・git 管理外） |
 | [**lessons.md**](#lessonsmd) | 存在しない | 学びの記録（`.claude/` 直下・git 管理外） |
 | [**best_practices.md**](#best_practicesmdbest_practices_watermark) | 存在しない | `/update-best-practices` が lessons.md から再合成する原則集（`.claude/` 直下・git 管理対象。未生成） |
-| [**plan-\*.md・todo.md**](#plan-mdtodomd) | 存在しない | plan承認後の運用ファイル（`.claude/` 直下・git 管理対象） |
+| [**plans/・todo.md**](#planstodomd) | `~/.claude/plans/`（本プロジェクトでは不使用） | 計画・タスク運用ファイル（git 管理対象。plans/ は `plansDirectory` 設定による生成先） |
 
 ---
 
@@ -106,14 +106,14 @@ permissions.allow は未定義。
 `hooks/session-start.sh` が増加量の閾値判定に使う。いずれも git 管理対象（`lessons.md` と異なり除外しない）。
 lessons.md が未蓄積のため、このプロジェクトではまだ生成されていない。
 
-### plan-\*.md・todo.md
+### plans/・todo.md
 
-Plan Mode で承認された計画（`.claude/plan-<slug>.md`）と、Plan Mode を伴わない軽微な実装タスクの管理リスト
-（`.claude/todo.md`）。ともに `.claude/` 直下に置かれている。
+Plan Mode の plan ファイル（`.claude/plans/<slug>.md`）と、Plan Mode を伴わない軽微な実装タスクの管理リスト
+（`.claude/todo.md`）。
 
 | ファイル | 役割 |
 |---|---|
-| `plan-<slug>.md` | Plan Mode で承認された計画の保存先。`/plan` コマンドがシステムの都合で `~/.claude/plans/<slug>.md`（ホーム配下・グローバル）に自動生成するため、`ExitPlanMode` 承認後に同じ `<slug>` を使って `mv`（または `cp`）で `.claude/plan-<slug>.md` へ移動する。作業完了時は `git rm` で削除しコミット、中断・持ち越し時は残す（リポジトリルート [CLAUDE.md](../CLAUDE.md)「計画・タスク管理」参照） |
+| `plans/<slug>.md` | Plan Mode の plan ファイルの生成先。`settings.json` の `plansDirectory: ".claude/plans"` により最初からリポジトリ内に生成される（以前はデフォルトの `~/.claude/plans/`（ホーム配下・グローバル）に生成され、承認後に `.claude/plan-<slug>.md` へ `mv` する運用だったが、mv 忘れが claude-container で実際に発生したため設定で根治した、2026-07-04）。作業完了時は `git rm` で削除しコミット、中断・持ち越し時は残す（リポジトリルート [CLAUDE.md](../CLAUDE.md)「計画・タスク管理」参照） |
 | `todo.md` | Plan Mode を伴わない軽微な実装タスクの管理リスト。完了した項目は消す（履歴は git で追える） |
 
 いずれも git 管理対象。
