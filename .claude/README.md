@@ -42,8 +42,10 @@ sotlas-frontend 向けに移植・アレンジ）。
 - 最新 handover 1件・`.claude/lessons.md` の未蒸留分（`.claude/best_practices_watermark` 以降のエントリ）
   をセッション開始時に自動注入。蒸留済み分は CLAUDE.md 側の `@.claude/best_practices.md` インポートで
   自動注入されるため、lessons.md 全文はここでは注入せず必要時に都度 Read する
-- 未解決インシデント（`.claude/incidents/`）・handover 記載のインシデントを検知し、環境確認チェックリスト
-  実行を促す
+- 未解決インシデント（`.claude/incidents/[0-9]*.md`。`known-patterns.md` 等の非インシデントファイルは
+  glob で除外）・handover 記載のインシデントを検知し、環境確認チェックリスト実行を促す
+- プロジェクト外層（ホスト層/Anthropic層）の既知パターン台帳（`~/.claude/global-incidents/known-patterns.md`）
+  が存在すれば、パターン見出し＋再発ログ件数のダイジェストを注入（全文は注入しない。fail-soft）
 - `.claude/lessons.md` の増加件数を `.claude/best_practices_watermark` と比較し、閾値（10件）超過で
   初回返答時に `AskUserQuestion` による `/update-best-practices` 実行可否確認を Claude へ指示
 - （コンテナ内・`gh` 認証済みの場合）`jj1xgo/sotlas-frontend` 自身の open issue を確認し注入
