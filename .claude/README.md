@@ -44,6 +44,10 @@ sotlas-frontend 向けに移植・アレンジ）。
   自動注入されるため、lessons.md 全文はここでは注入せず必要時に都度 Read する
 - 未解決インシデント（`.claude/incidents/[0-9]*.md`。`known-patterns.md` 等の非インシデントファイルは
   glob で除外）・handover 記載のインシデントを検知し、環境確認チェックリスト実行を促す
+- **handoverチェーン検証**: 最新handoverの本文に直前handoverのファイル名が含まれるかを確認し、含まれ
+  なければ「未消化」とみなして直前分（最大3世代）の「次にやること」を追加注入する（`/handover` 側で
+  「引き継ぎ元handover」フィールドへの記載と前回分の消化を必須化しており、正しく運用されていれば
+  チェーンは途切れない）
 - プロジェクト外層（ホスト層/Anthropic層）の既知パターン台帳（`~/.claude/global-incidents/known-patterns.md`）
   が存在すれば、パターン見出し＋再発ログ件数のダイジェストを注入（全文は注入しない。fail-soft）
 - `.claude/lessons.md` の増加件数を `.claude/best_practices_watermark` と比較し、閾値（10件）超過で
