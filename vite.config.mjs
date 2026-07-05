@@ -4,8 +4,24 @@ import fs from 'fs';
 import path from 'path';
 import eslint from 'vite-plugin-eslint'
 import { execSync } from 'child_process';
+import { createRequire } from 'module';
 
 const COMMITHASH = JSON.stringify(execSync('git rev-parse HEAD').toString().trim());
+
+// FontAwesome Pro icons are optional (see README.md "FontAwesome Pro"): when
+// NPM_FONTAWESOME_TOKEN isn't set, postinstall skips the pro packages and we
+// alias their imports to the free-icon fallback in src/fa-pro-fallback/.
+const require = createRequire(import.meta.url);
+
+const fontAwesomeProAvailable = () => {
+  try {
+    require.resolve('@fortawesome/pro-regular-svg-icons/package.json');
+    require.resolve('@fortawesome/pro-solid-svg-icons/package.json');
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 // Auto-load plugins from vite-plugins directory
 
@@ -45,6 +61,10 @@ export default defineConfig(async ({ mode }) => {
   const customPlugins = await loadCustomPlugins();
   const env = loadEnv(mode, process.cwd(), '');
   const base = env.PUBLIC_PATH || '/';
+  const useProIcons = fontAwesomeProAvailable();
+  console.log(useProIcons
+    ? '✨ FontAwesome Pro packages found — using Pro icons'
+    : '✨ FontAwesome Pro packages not found — using free icon fallback (see README.md)');
 
   return {
     base,
@@ -60,7 +80,11 @@ export default defineConfig(async ({ mode }) => {
         // @vitejs/plugin-vue2's automatic 'vue' alias (prefix-matched) rewrites
         // into a nonexistent path. Pin the exact id first so it resolves to
         // the real file instead.
-        'vue/dist/vue.esm': 'vue/dist/vue.esm.js'
+        'vue/dist/vue.esm': 'vue/dist/vue.esm.js',
+        ...(useProIcons ? {} : {
+          '@fortawesome/pro-regular-svg-icons': path.resolve(__dirname, 'src/fa-pro-fallback/regular.js'),
+          '@fortawesome/pro-solid-svg-icons': path.resolve(__dirname, 'src/fa-pro-fallback/solid.js')
+        })
       },
     },
     optimizeDeps: {
