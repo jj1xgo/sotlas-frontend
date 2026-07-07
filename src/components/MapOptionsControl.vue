@@ -75,6 +75,11 @@
           <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="current" :disabled="!mapOptions.webcams" @input="setMapOption('webcamsType', $event)">Current</b-radio>
         </b-field>
       </div>
+      <div class="map-option">
+        <b-field grouped>
+          <b-checkbox v-model="mapOptions.terminator" size="is-small" @input="setMapOption('terminator', $event)">Day/night terminator</b-checkbox>
+        </b-field>
+      </div>
     </div>
   </div>
 </template>

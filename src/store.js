@@ -35,6 +35,7 @@ let mapOptions = {
   inactive: false,
   webcams: false,
   webcamsType: 'daylight',
+  terminator: false,
   alertDays: 7
 }
 let mapOptionsSettings = localStorage.getItem('mapOptions')
