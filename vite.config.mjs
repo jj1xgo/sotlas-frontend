@@ -55,7 +55,12 @@ export default defineConfig(async ({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src')
+        '@': path.resolve(__dirname, 'src'),
+        // vue-filepond imports the extension-less 'vue/dist/vue.esm', which
+        // @vitejs/plugin-vue2's automatic 'vue' alias (prefix-matched) rewrites
+        // into a nonexistent path. Pin the exact id first so it resolves to
+        // the real file instead.
+        'vue/dist/vue.esm': 'vue/dist/vue.esm.js'
       },
     },
     optimizeDeps: {
