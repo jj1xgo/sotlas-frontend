@@ -35,6 +35,9 @@
             <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click.native="showSnowDepthInfo" />
           </b-checkbox>
         </b-field>
+        <b-field grouped>
+          <b-checkbox v-model="mapOptions.terminator" size="is-small" @input="setMapOption('terminator', $event)">Day/night terminator</b-checkbox>
+        </b-field>
       </div>
       <div class="map-option" v-if="mapTypes[mapType].difficulty">
         <b-field grouped>
@@ -73,11 +76,6 @@
         <b-field grouped>
           <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="daylight" :disabled="!mapOptions.webcams" @input="setMapOption('webcamsType', $event)">Daylight</b-radio>
           <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="current" :disabled="!mapOptions.webcams" @input="setMapOption('webcamsType', $event)">Current</b-radio>
-        </b-field>
-      </div>
-      <div class="map-option">
-        <b-field grouped>
-          <b-checkbox v-model="mapOptions.terminator" size="is-small" @input="setMapOption('terminator', $event)">Day/night terminator</b-checkbox>
         </b-field>
       </div>
     </div>
