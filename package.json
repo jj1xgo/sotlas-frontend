@@ -9,16 +9,16 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint --ext .js,.vue src",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "postinstall": "node tools/install-fontawesome-pro.mjs"
   },
   "dependencies": {
     "@dsb-norge/vue-keycloak-js": "github:manuelkasper/vue-keycloak-js#sotlas3",
     "@dwayneparton/geojson-to-gpx": "^0.0.30",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/pro-regular-svg-icons": "^5.15.4",
-    "@fortawesome/pro-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^2.0.10",
     "@gaviti/vue-turnstile": "^0.6.5",
     "@mapbox/mapbox-gl-draw": "github:manuelkasper/mapbox-gl-draw#sotlas2",
