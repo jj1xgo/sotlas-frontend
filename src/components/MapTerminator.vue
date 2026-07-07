@@ -32,7 +32,11 @@ export default {
         type: 'fill',
         paint: {
           'fill-color': 'rgb(0, 0, 30)',
-          'fill-opacity': 0.09
+          'fill-opacity': 0.09,
+          // ポリゴンは経度±180°で極点まわりに折り返して閉じるため、その2辺は地理的に
+          // 同一の子午線上で重なる。fill-outline-colorを既定(fill-colorと同色)のままにすると
+          // このアウトライン同士が重なって縦線状に見えてしまうため、透明にして無効化する。
+          'fill-outline-color': 'rgba(0, 0, 0, 0)'
         }
       }
     }
