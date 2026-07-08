@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
 import fs from 'fs';
 import path from 'path';
 import eslint from 'vite-plugin-eslint'
@@ -76,11 +76,6 @@ export default defineConfig(async ({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
-        // vue-filepond imports the extension-less 'vue/dist/vue.esm', which
-        // @vitejs/plugin-vue2's automatic 'vue' alias (prefix-matched) rewrites
-        // into a nonexistent path. Pin the exact id first so it resolves to
-        // the real file instead.
-        'vue/dist/vue.esm': 'vue/dist/vue.esm.js',
         ...(useProIcons ? {} : {
           '@fortawesome/pro-regular-svg-icons': path.resolve(__dirname, 'src/fa-pro-fallback/regular.js'),
           '@fortawesome/pro-solid-svg-icons': path.resolve(__dirname, 'src/fa-pro-fallback/solid.js')
