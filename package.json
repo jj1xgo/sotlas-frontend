@@ -20,7 +20,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.3.0",
-    "@gaviti/vue-turnstile": "^0.6.5",
+    "@gaviti/vue-turnstile": "^1.1.4",
     "@mapbox/mapbox-gl-draw": "github:manuelkasper/mapbox-gl-draw#sotlas2",
     "@maptiler/sdk": "^2.0.3",
     "@tmcw/togeojson": "^3.2.0",
