@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-// import Buefy from 'buefy'
+import Buefy from 'buefy'
 // import vueDebounce from 'vue2-debounce'
 // import VueClipboard from 'vue-clipboard2'
 import MatchMedia from './matchmedia'
@@ -43,14 +43,10 @@ app.component('font-awesome-layers', FontAwesomeLayers)
 // are temporarily unavailable, silently no-op in templates) until replaced (Phase 4).
 // app.use(vueDebounce)
 // app.use(VueClipboard)
-// Buefy 0.8's install() writes to Vue.prototype (Vue 2-only; Vue 3 apps have no
-// .prototype), so app.use(Buefy, ...) throws immediately and prevents any page
-// from rendering. Disabled until the Buefy 3 upgrade (Phase 2); <b-*> components
-// render as unstyled/unrecognized elements in the meantime.
-// app.use(Buefy, {
-//   defaultIconComponent: 'font-awesome-icon',
-//   defaultIconPack: 'far'
-// })
+app.use(Buefy, {
+  defaultIconComponent: 'font-awesome-icon',
+  defaultIconPack: 'far'
+})
 app.use(MatchMedia)
 app.use(store)
 app.use(router)
@@ -97,10 +93,7 @@ axios.interceptors.response.use(response => {
   return response
 }, error => {
   if (!error.config.ignoreError && (!lastError || new Date().getTime() - lastError > 9000) && (!error.response || error.response.status !== 404) && mounted) {
-    // SnackbarProgrammatic.open doesn't work with Webpack 5
-    // See https://github.com/buefy/buefy/issues/2299
-    // $buefy is unavailable until the Buefy 3 upgrade (Phase 2, see app.use(Buefy) above).
-    app.config.globalProperties.$buefy?.snackbar.open({
+    app.config.globalProperties.$buefy.snackbar.open({
       duration: 9000,
       message: 'Network or server error while loading data, try again later',
       type: 'is-danger',

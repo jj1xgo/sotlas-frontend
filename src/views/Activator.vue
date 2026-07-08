@@ -19,7 +19,7 @@
       </div>
     </template>
 
-    <template>
+    <template v-slot:default>
       <section v-if="recentSpots.length > 0 || $store.state.spots.length === 0" class="section">
         <div class="container">
 

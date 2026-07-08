@@ -20,7 +20,7 @@
         </b-dropdown>
       </b-field>
     </template>
-    <template>
+    <template v-slot:default>
       <section v-if="summits !== null && summits.length > 0" class="section">
         <div class="container">
           <SummitPhotos v-for="summit in summits" :key="summit.code" :summit="summit" :minDate="minDate" :showSummitName="true" />

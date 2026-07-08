@@ -12,20 +12,18 @@
           <FilterInput v-model="filter" ref="filter" />
         </b-field>
         <b-table class="auto-width" default-sort="code" :narrowed="true" :striped="true" :data="filteredAssociations" :mobile-cards="false">
-          <template v-slot="props">
-            <b-table-column field="code" label="Identifier" class="nowrap" sortable>
-              <router-link :to="associationLink(props.row)">{{ props.row.code }}</router-link>
-            </b-table-column>
-            <b-table-column field="name" label="Name" sortable>
-              <router-link :to="associationLink(props.row)">{{ props.row.name }}</router-link>
-            </b-table-column>
-            <b-table-column field="summitCount" label="Summits" sortable>
-              {{ props.row.summitCount }}
-            </b-table-column>
-            <b-table-column v-if="myActivationsPerAssociation" :label="$mq.mobile ? 'Act. by me' : 'Activated by me'" numeric>
-              {{ myActivationsPerAssociation[props.row.code] }}
-            </b-table-column>
-          </template>
+          <b-table-column field="code" label="Identifier" class="nowrap" sortable v-slot="props">
+            <router-link :to="associationLink(props.row)">{{ props.row.code }}</router-link>
+          </b-table-column>
+          <b-table-column field="name" label="Name" sortable v-slot="props">
+            <router-link :to="associationLink(props.row)">{{ props.row.name }}</router-link>
+          </b-table-column>
+          <b-table-column field="summitCount" label="Summits" sortable v-slot="props">
+            {{ props.row.summitCount }}
+          </b-table-column>
+          <b-table-column v-if="myActivationsPerAssociation" :label="$mq.mobile ? 'Act. by me' : 'Activated by me'" numeric v-slot="props">
+            {{ myActivationsPerAssociation[props.row.code] }}
+          </b-table-column>
         </b-table>
       </div>
     </section>

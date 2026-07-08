@@ -25,8 +25,8 @@
     "@maptiler/sdk": "^2.0.3",
     "@tmcw/togeojson": "^3.2.0",
     "axios": "^1.16.0",
-    "buefy": "^0.8.20",
-    "bulma": "^0.7.5",
+    "buefy": "^3.0.8",
+    "bulma": "^1.0.4",
     "cheap-ruler": "^2.5.1",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.5",
@@ -59,9 +59,6 @@
     "vite-plugin-eslint": "^1.8.1"
   },
   "overrides": {
-    "buefy": {
-      "vue": "$vue"
-    },
     "vue-mapbox": {
       "vue": "$vue"
     },

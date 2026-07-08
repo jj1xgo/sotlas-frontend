@@ -2,7 +2,7 @@
   <PageLayout>
     <template v-slot:title>Not Found</template>
 
-    <template>
+    <template v-slot:default>
       <section class="section">
         <div class="container">
           <b-message title="Not Found" type="is-danger">

@@ -1,12 +1,12 @@
 <template>
-  <b-input :value="value" ref="filter" :placeholder="placeholder" type="search" icon-pack="far" icon="search" :class="{ filter: true, invalid }" :size="size" rounded @input="updateValue" />
+  <b-input :model-value="modelValue" ref="filter" :placeholder="placeholder" type="search" icon-pack="far" icon="search" :class="{ filter: true, invalid }" :size="size" rounded @update:model-value="updateValue" />
 </template>
 
 <script>
 export default {
   name: 'FilterInput',
   props: {
-    value: String,
+    modelValue: String,
     size: String,
     placeholder: {
       type: String,
@@ -14,6 +14,7 @@ export default {
     },
     isRegex: Boolean
   },
+  emits: ['update:modelValue'],
   computed: {
     invalid () {
       if (!this.isRegex) {
@@ -21,7 +22,7 @@ export default {
       }
 
       try {
-        RegExp(this.value)
+        RegExp(this.modelValue)
         return false
       } catch (e) {
         return true
@@ -30,7 +31,7 @@ export default {
   },
   methods: {
     updateValue (value) {
-      this.$emit('input', value)
+      this.$emit('update:modelValue', value)
     },
     focus () {
       this.$refs.filter.focus()

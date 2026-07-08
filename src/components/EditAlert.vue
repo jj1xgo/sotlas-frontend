@@ -34,7 +34,7 @@
       </b-field>
 
       <b-field label="Frequency-Mode(s)">
-        <b-taginput v-model="freqMode" ref="freqMode" autocomplete rounded :data="freqModeSuggestions" :confirm-key-codes="[9,13,32,188]" @typing="updateFreqModeSuggestions" @input="onFreqModeInput" @blur="onFreqModeBlur" @keydown="onFreqModeKeyDown" append-to-body />
+        <b-taginput v-model="freqMode" ref="freqMode" autocomplete rounded :data="freqModeSuggestions" :confirm-key-codes="[9,13,32,188]" @typing="updateFreqModeSuggestions" @update:model-value="onFreqModeInput" @blur="onFreqModeBlur" @keydown="onFreqModeKeyDown" append-to-body />
         <template v-slot:message>
           Format: <em>freq-mode, ...</em> (e.g. <em>7.030-cw, 14.250-ssb</em>)
         </template>

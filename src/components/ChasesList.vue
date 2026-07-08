@@ -1,19 +1,17 @@
 <template>
   <b-table :narrowed="true" :paginated="true" :striped="true" :default-sort="['activationDate', 'desc']" :per-page="15" :data="data" :mobile-cards="false">
-    <template v-slot="props">
-      <b-table-column field="activationDate" label="Date" sortable>
-        {{ formatActivationDate(props.row.activationDate) }}
-      </b-table-column>
-      <b-table-column field="otherCallsign" label="Activator" sortable>
-        <router-link :to="makeActivatorLink(props.row.otherCallsign.toUpperCase())">{{ props.row.otherCallsign.toUpperCase() }}</router-link>
-      </b-table-column>
-      <b-table-column field="band" label="Band" :custom-sort="sortBand" sortable numeric>
-        {{ bandForDbFrequency(props.row.band) }}
-      </b-table-column>
-      <b-table-column field="mode" label="Mode" sortable>
-        <ModeLabel :mode="props.row.mode" />
-      </b-table-column>
-    </template>
+    <b-table-column field="activationDate" label="Date" sortable v-slot="props">
+      {{ formatActivationDate(props.row.activationDate) }}
+    </b-table-column>
+    <b-table-column field="otherCallsign" label="Activator" sortable v-slot="props">
+      <router-link :to="makeActivatorLink(props.row.otherCallsign.toUpperCase())">{{ props.row.otherCallsign.toUpperCase() }}</router-link>
+    </b-table-column>
+    <b-table-column field="band" label="Band" :custom-sort="sortBand" sortable numeric v-slot="props">
+      {{ bandForDbFrequency(props.row.band) }}
+    </b-table-column>
+    <b-table-column field="mode" label="Mode" sortable v-slot="props">
+      <ModeLabel :mode="props.row.mode" />
+    </b-table-column>
   </b-table>
 </template>
 

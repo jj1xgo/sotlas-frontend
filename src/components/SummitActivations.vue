@@ -58,14 +58,12 @@
               Modes
             </h4>
             <b-table :default-sort="['qsos', 'desc']" :narrowed="true" :striped="true" :data="modes" :mobile-cards="false">
-              <template v-slot="props">
-                <b-table-column field="mode" label="Mode" sortable>
-                  {{ props.row.mode.toUpperCase() }}
-                </b-table-column>
-                <b-table-column field="qsos" label="QSOs" sortable numeric>
-                  {{ props.row.qsos }}
-                </b-table-column>
-              </template>
+              <b-table-column field="mode" label="Mode" sortable v-slot="props">
+                {{ props.row.mode.toUpperCase() }}
+              </b-table-column>
+              <b-table-column field="qsos" label="QSOs" sortable numeric v-slot="props">
+                {{ props.row.qsos }}
+              </b-table-column>
             </b-table>
           </div>
         </div>
