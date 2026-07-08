@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <NavBar />
-    <keep-alive include="Map">
-      <router-view />
-    </keep-alive>
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Map">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
     <vue-turnstile v-if="!authenticated" :site-key="siteKey" @verified="turnstileVerified" />
   </div>
 </template>

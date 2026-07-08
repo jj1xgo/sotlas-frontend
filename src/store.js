@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VueNativeSock from 'vue-native-websocket'
+import { createStore } from 'vuex'
 import EventBus from './event-bus'
 import { decompressKeys } from './keyzipper'
 import axios from 'axios'
 
-Vue.use(Vuex)
+// vue-native-websocket install() is Vue 2-only (relies on Vue.use/Vue.mixin) and
+// isn't called here until it's replaced with a Vue 3-compatible package (Phase 4).
+// Live spot updates over WebSocket are temporarily unavailable until then.
+let socket = null
 
 const MAX_SPOT_AGE = 86400000
 const ALERT_UPDATE_INTERVAL = 300000
@@ -47,7 +48,7 @@ if (mapOptionsSettings) {
   } catch (e) {}
 }
 
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     socket: {
       isConnected: false,
@@ -73,7 +74,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     SOCKET_ONOPEN (state, event) {
-      Vue.prototype.$socket = event.currentTarget
+      socket = event.currentTarget
       state.socket.isConnected = true
       event.currentTarget.sendObj({ rbnFilter: state.rbnFilter })
     },
@@ -92,9 +93,9 @@ const store = new Vuex.Store({
       } else if (message.deleteSpot) {
         deleteSpotById(state, message.deleteSpot.id)
       } else if (message.rbnSpot) {
-        EventBus.$emit('rbnSpot', decompressKeys(message.rbnSpot))
+        EventBus.emit('rbnSpot', decompressKeys(message.rbnSpot))
       } else if (message.rbnSpotHistory) {
-        EventBus.$emit('rbnSpotHistory', decompressKeys(message.rbnSpotHistory), message.viewId)
+        EventBus.emit('rbnSpotHistory', { rbnSpots: decompressKeys(message.rbnSpotHistory), viewId: message.viewId })
       }
     },
     SOCKET_RECONNECT (state, count) {
@@ -106,7 +107,7 @@ const store = new Vuex.Store({
     setRbnFilter (state, newRbnFilter) {
       state.rbnFilter = newRbnFilter
       if (state.socket.isConnected) {
-        Vue.prototype.$socket.sendObj({ rbnFilter: state.rbnFilter })
+        socket.sendObj({ rbnFilter: state.rbnFilter })
       }
     },
     setAlerts (state, newAlerts) {
@@ -187,7 +188,7 @@ function updateSpot (state, spot) {
     state.spots.splice(existingSpotIndex, 1, spot)
   } else {
     state.spots.push(spot)
-    EventBus.$emit('sotaSpot', spot)
+    EventBus.emit('sotaSpot', spot)
   }
   removeExpiredSpots(state)
 }
@@ -226,11 +227,7 @@ function loadAlerts (noCache) {
 loadAlerts(false)
 setInterval(loadAlerts, ALERT_UPDATE_INTERVAL)
 
-Vue.use(VueNativeSock, import.meta.env.VITE_WSS_URL + '/ws', {
-  format: 'json',
-  store,
-  reconnection: true,
-  reconnectionDelay: 1000
-})
+// WebSocket connection setup (vue-native-websocket) is temporarily disabled,
+// see the `socket` variable comment above.
 
 export default store
