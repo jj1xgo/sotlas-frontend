@@ -13,66 +13,66 @@
       </div>
       <div class="map-option">
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.regions" size="is-small" @input="setMapOption('regions', $event)">Regions</b-checkbox>
+          <b-checkbox v-model="mapOptions.regions" size="is-small" @update:model-value="setMapOption('regions', $event)">Regions</b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].contours" grouped>
-          <b-checkbox v-model="mapOptions.contours" size="is-small" @input="setMapOption('contours', $event)">Contour lines</b-checkbox>
+          <b-checkbox v-model="mapOptions.contours" size="is-small" @update:model-value="setMapOption('contours', $event)">Contour lines</b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].hillshading" grouped>
-          <b-checkbox v-model="mapOptions.hillshading" size="is-small" @input="setMapOption('hillshading', $event)">Hillshading</b-checkbox>
+          <b-checkbox v-model="mapOptions.hillshading" size="is-small" @update:model-value="setMapOption('hillshading', $event)">Hillshading</b-checkbox>
         </b-field>
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.az" size="is-small" @input="setMapOption('az', $event)">
+          <b-checkbox v-model="mapOptions.az" size="is-small" @update:model-value="setMapOption('az', $event)">
             Activation zones
             <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showActivationZoneInfo" />
           </b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].slope_classes" grouped>
-          <b-checkbox v-model="mapOptions.slope_classes" size="is-small" @input="setMapOption('slope_classes', $event)">Slope classes</b-checkbox>
+          <b-checkbox v-model="mapOptions.slope_classes" size="is-small" @update:model-value="setMapOption('slope_classes', $event)">Slope classes</b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].snow_depth" grouped>
-          <b-checkbox v-model="mapOptions.snow_depth" size="is-small" @input="setMapOption('snow_depth', $event)">Snow depth
+          <b-checkbox v-model="mapOptions.snow_depth" size="is-small" @update:model-value="setMapOption('snow_depth', $event)">Snow depth
             <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showSnowDepthInfo" />
           </b-checkbox>
         </b-field>
       </div>
       <div class="map-option" v-if="mapTypes[mapType].difficulty">
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.difficulty" size="is-small" @input="setMapOption('difficulty', $event)">
+          <b-checkbox v-model="mapOptions.difficulty" size="is-small" @update:model-value="setMapOption('difficulty', $event)">
             Hiking difficulty
             <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showHikingDifficultyInfo" />
           </b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].skiing" grouped>
-          <b-checkbox v-model="mapOptions.skiing" size="is-small" @input="setMapOption('skiing', $event)">Ski routes</b-checkbox>
+          <b-checkbox v-model="mapOptions.skiing" size="is-small" @update:model-value="setMapOption('skiing', $event)">Ski routes</b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].snowshoe" grouped>
-          <b-checkbox v-model="mapOptions.snowshoe" size="is-small" @input="setMapOption('snowshoe', $event)">Snowshoe routes</b-checkbox>
+          <b-checkbox v-model="mapOptions.snowshoe" size="is-small" @update:model-value="setMapOption('snowshoe', $event)">Snowshoe routes</b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].wildlife" grouped>
-          <b-checkbox v-model="mapOptions.wildlife" size="is-small" @input="setMapOption('wildlife', $event)">Wildlife reserves and areas</b-checkbox>
+          <b-checkbox v-model="mapOptions.wildlife" size="is-small" @update:model-value="setMapOption('wildlife', $event)">Wildlife reserves and areas</b-checkbox>
         </b-field>
       </div>
       <div class="map-option">
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.spots" size="is-small" @input="setMapOption('spots', $event)">Recent spots</b-checkbox>
+          <b-checkbox v-model="mapOptions.spots" size="is-small" @update:model-value="setMapOption('spots', $event)">Recent spots</b-checkbox>
         </b-field>
         <b-field class="alert-days" grouped>
-          <b-checkbox v-model="mapOptions.alerts" size="is-small" @input="setMapOption('alerts', $event)">Alerts for next</b-checkbox>
-          <b-input v-model="mapOptions.alertDays" size="is-small" type="number" min="1" :disabled="!mapOptions.alerts" @input="setMapOption('alertDays', $event)" />
+          <b-checkbox v-model="mapOptions.alerts" size="is-small" @update:model-value="setMapOption('alerts', $event)">Alerts for next</b-checkbox>
+          <b-input v-model="mapOptions.alertDays" size="is-small" type="number" min="1" :disabled="!mapOptions.alerts" @update:model-value="setMapOption('alertDays', $event)" />
           <div class="tlabel">day(s)</div>
         </b-field>
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.inactive" size="is-small" @input="setMapOption('inactive', $event)">Inactive summits</b-checkbox>
+          <b-checkbox v-model="mapOptions.inactive" size="is-small" @update:model-value="setMapOption('inactive', $event)">Inactive summits</b-checkbox>
         </b-field>
       </div>
       <div class="map-option">
         <b-field grouped>
-          <b-checkbox v-model="mapOptions.webcams" size="is-small" @input="setMapOption('webcams', $event)"><b-icon pack="fas" icon="camera-home" size="is-small" /> Webcams</b-checkbox>
+          <b-checkbox v-model="mapOptions.webcams" size="is-small" @update:model-value="setMapOption('webcams', $event)"><b-icon pack="fas" icon="camera-home" size="is-small" /> Webcams</b-checkbox>
         </b-field>
         <b-field grouped>
-          <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="daylight" :disabled="!mapOptions.webcams" @input="setMapOption('webcamsType', $event)">Daylight</b-radio>
-          <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="current" :disabled="!mapOptions.webcams" @input="setMapOption('webcamsType', $event)">Current</b-radio>
+          <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="daylight" :disabled="!mapOptions.webcams" @update:model-value="setMapOption('webcamsType', $event)">Daylight</b-radio>
+          <b-radio v-model="mapOptions.webcamsType" size="is-small" native-value="current" :disabled="!mapOptions.webcams" @update:model-value="setMapOption('webcamsType', $event)">Current</b-radio>
         </b-field>
       </div>
     </div>

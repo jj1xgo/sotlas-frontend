@@ -2,7 +2,7 @@
   <PageLayout>
     <template v-slot:title>Settings</template>
 
-    <template>
+    <template v-slot:default>
       <section class="section">
         <div class="container content">
           <b-field label="Units">

@@ -8,7 +8,7 @@
       </div>
     </template>
 
-    <template>
+    <template v-slot:default>
       <section class="section">
         <div class="container">
           <div class="tabs">

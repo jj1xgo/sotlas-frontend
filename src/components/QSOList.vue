@@ -1,23 +1,21 @@
 <template>
   <b-table class="auto-width" :narrowed="true" :striped="true" :data="data" :mobile-cards="false">
-    <template v-slot="props">
-      <b-table-column field="TimeOfDay" label="Time" class="nowrap" sortable>
-        {{ props.row.TimeOfDay }}
-      </b-table-column>
-      <b-table-column field="OtherCallsign" label="Callsign" class="nowrap" sortable>
-        <CountryFlag :country="isoCodeForCallsign(props.row.OtherCallsign.trim())" class="flag" />
-        <router-link :to="makeActivatorLink(props.row.OtherCallsign.trim())">{{ props.row.OtherCallsign.trim() }}</router-link>
-      </b-table-column>
-      <b-table-column field="Band" label="Band" :custom-sort="sortBand" class="nowrap" sortable numeric>
-        {{ bandForDbFrequency(props.row.Band) }}
-      </b-table-column>
-      <b-table-column field="Mode" label="Mode" class="mode nowrap" sortable>
-        <ModeLabel :mode="props.row.Mode" />
-      </b-table-column>
-      <b-table-column field="Notes" label="Notes" class="nowrap">
-        <span v-html="formatNotes(props.row.Notes)" />
-      </b-table-column>
-    </template>
+    <b-table-column field="TimeOfDay" label="Time" class="nowrap" sortable v-slot="props">
+      {{ props.row.TimeOfDay }}
+    </b-table-column>
+    <b-table-column field="OtherCallsign" label="Callsign" class="nowrap" sortable v-slot="props">
+      <CountryFlag :country="isoCodeForCallsign(props.row.OtherCallsign.trim())" class="flag" />
+      <router-link :to="makeActivatorLink(props.row.OtherCallsign.trim())">{{ props.row.OtherCallsign.trim() }}</router-link>
+    </b-table-column>
+    <b-table-column field="Band" label="Band" :custom-sort="sortBand" class="nowrap" sortable numeric v-slot="props">
+      {{ bandForDbFrequency(props.row.Band) }}
+    </b-table-column>
+    <b-table-column field="Mode" label="Mode" class="mode nowrap" sortable v-slot="props">
+      <ModeLabel :mode="props.row.Mode" />
+    </b-table-column>
+    <b-table-column field="Notes" label="Notes" class="nowrap" v-slot="props">
+      <span v-html="formatNotes(props.row.Notes)" />
+    </b-table-column>
   </b-table>
 </template>
 

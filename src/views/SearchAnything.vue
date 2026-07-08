@@ -1,7 +1,7 @@
 <template>
   <PageLayout>
     <template v-slot:title>Search results</template>
-    <template>
+    <template v-slot:default>
       <section v-if="summits !== null && summits.length > 0" class="section">
         <div class="container">
           <h4 class="title is-4"><b-icon icon="mountains" />Summits</h4>
@@ -22,26 +22,24 @@
           <h4 class="title is-4"><b-icon icon="user" />Activators</h4>
 
           <b-table class="auto-width" default-sort="callsign" :narrowed="true" :striped="true" :data="activators" :mobile-cards="false">
-            <template v-slot="props">
-              <b-table-column field="callsign" label="Callsign" sortable>
-                <router-link :to="makeActivatorLink(props.row.callsign)">{{ props.row.callsign }}</router-link>
-              </b-table-column>
-              <b-table-column field="summits" label="Summits" numeric sortable>
-                {{ props.row.summits }}
-              </b-table-column>
-              <b-table-column field="points" :label="$mq.mobile ? 'Pts.' : 'Points'" numeric sortable>
-                {{ props.row.points }}
-              </b-table-column>
-              <b-table-column field="bonusPoints" :label="$mq.mobile ? 'Bonus' : 'Bonus points'" numeric sortable>
-                {{ props.row.bonusPoints }}
-              </b-table-column>
-              <b-table-column field="score" label="Score" numeric sortable>
-                {{ props.row.score }}
-              </b-table-column>
-              <b-table-column v-if="!$mq.mobile" field="avgPoints" label="Avg. points" numeric sortable>
-                {{ props.row.avgPoints }}
-              </b-table-column>
-            </template>
+            <b-table-column field="callsign" label="Callsign" sortable v-slot="props">
+              <router-link :to="makeActivatorLink(props.row.callsign)">{{ props.row.callsign }}</router-link>
+            </b-table-column>
+            <b-table-column field="summits" label="Summits" numeric sortable v-slot="props">
+              {{ props.row.summits }}
+            </b-table-column>
+            <b-table-column field="points" :label="$mq.mobile ? 'Pts.' : 'Points'" numeric sortable v-slot="props">
+              {{ props.row.points }}
+            </b-table-column>
+            <b-table-column field="bonusPoints" :label="$mq.mobile ? 'Bonus' : 'Bonus points'" numeric sortable v-slot="props">
+              {{ props.row.bonusPoints }}
+            </b-table-column>
+            <b-table-column field="score" label="Score" numeric sortable v-slot="props">
+              {{ props.row.score }}
+            </b-table-column>
+            <b-table-column v-if="!$mq.mobile" field="avgPoints" label="Avg. points" numeric sortable v-slot="props">
+              {{ props.row.avgPoints }}
+            </b-table-column>
           </b-table>
 
           <b-message v-if="activators !== null && activators.length === this.limit" type="is-warning" has-icon>
@@ -55,15 +53,13 @@
           <h4 class="title is-4"><b-icon icon="map-marker-alt" pack="fas" />Places</h4>
 
           <b-table class="auto-width" :narrowed="true" :striped="true" :data="places" :mobile-cards="false">
-            <template v-slot="props">
-              <b-table-column field="label" label="Name">
-                <b-icon :icon="iconForFeatureClass(props.row.featureClass)" size="is-small" class="has-text-grey search-result-icon" pack="fas" />
-                <a @click="goToPlace(props.row)">{{ props.row.label }}</a>
-              </b-table-column>
-              <b-table-column field="detail" label="Detail">
-                {{ props.row.detail }}
-              </b-table-column>
-            </template>
+            <b-table-column field="label" label="Name" v-slot="props">
+              <b-icon :icon="iconForFeatureClass(props.row.featureClass)" size="is-small" class="has-text-grey search-result-icon" pack="fas" />
+              <a @click="goToPlace(props.row)">{{ props.row.label }}</a>
+            </b-table-column>
+            <b-table-column field="detail" label="Detail" v-slot="props">
+              {{ props.row.detail }}
+            </b-table-column>
           </b-table>
         </div>
       </section>
