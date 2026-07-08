@@ -6,7 +6,7 @@ module.exports = {
     browser: true
   },
   extends: [
-    'plugin:vue/essential'
+    'plugin:vue/vue3-essential'
   ],
   rules: {
     'vue/multi-word-component-names': 'off',
