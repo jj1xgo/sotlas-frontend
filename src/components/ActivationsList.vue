@@ -6,9 +6,9 @@
       </template>
     </CardPagination>
     <b-table v-else class="auto-width" :narrowed="true" :paginated="true" :striped="true" :default-sort="['date', 'desc']" :per-page="perPage" :data="data" :row-class="rowClass">
-      <template slot-scope="props">
+      <template v-slot="props">
         <b-table-column field="date" label="Date" sortable>
-          {{ props.row.date | formatActivationDate }}
+          {{ formatActivationDate(props.row.date) }}
         </b-table-column>
         <b-table-column field="summit.code" label="Summit" class="code" sortable>
           <CountryFlag v-if="props.row.summit.isoCode" :country="props.row.summit.isoCode" class="flag" />

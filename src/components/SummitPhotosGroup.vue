@@ -109,14 +109,14 @@ export default {
     mouseoverPicture (picture) {
       this.photos.forEach(photo => {
         if (photo.filename === picture.filename && !photo.highlight) {
-          this.$set(photo, 'highlight', true)
+          photo.highlight = true
         } else if (photo.highlight) {
-          this.$set(photo, 'highlight', false)
+          photo.highlight = false
         }
       })
     },
     mouseleavePicture (picture) {
-      this.$set(this.photos.find(photo => photo.filename === picture.filename), 'highlight', false)
+      this.photos.find(photo => photo.filename === picture.filename).highlight = false
     },
     onEditPicture (picture) {
       this.$emit('editPhoto', picture)

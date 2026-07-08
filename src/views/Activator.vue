@@ -319,7 +319,7 @@ export default {
         }
       }
     },
-    receiveRbnSpotHistory (rbnSpots, viewId) {
+    receiveRbnSpotHistory ({ rbnSpots, viewId }) {
       if (viewId === this.viewId) {
         this.rbnSpots = rbnSpots
       }
@@ -381,7 +381,7 @@ export default {
 
       Promise.all(loads)
         .then(() => {
-          this.$root.$emit('triggerScroll')
+          EventBus.emit('triggerScroll')
         })
 
       this.$store.commit('setRbnFilter', { homeCallsign: this.homeCallsign(this.callsign), maxAge: 86400000, viewId: this.viewId })
@@ -389,13 +389,13 @@ export default {
   },
   mounted () {
     this.updateCallsign()
-    EventBus.$on('rbnSpot', this.receiveRbnSpot)
-    EventBus.$on('rbnSpotHistory', this.receiveRbnSpotHistory)
+    EventBus.on('rbnSpot', this.receiveRbnSpot)
+    EventBus.on('rbnSpotHistory', this.receiveRbnSpotHistory)
   },
-  destroyed () {
+  unmounted () {
     this.$store.commit('setRbnFilter', {})
-    EventBus.$off('rbnSpot', this.receiveRbnSpot)
-    EventBus.$off('rbnSpotHistory', this.receiveRbnSpotHistory)
+    EventBus.off('rbnSpot', this.receiveRbnSpot)
+    EventBus.off('rbnSpotHistory', this.receiveRbnSpotHistory)
   },
   data () {
     return {

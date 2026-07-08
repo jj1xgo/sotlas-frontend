@@ -1,6 +1,6 @@
 <template>
   <b-table :class="{ 'auto-width': autoWidth, summits: true }" default-sort="code" :narrowed="true" :striped="true" :data="data" :mobile-cards="false" :row-class="(row, index) => !row.isValid && 'is-invalid'">
-    <template slot-scope="props">
+    <template v-slot="props">
       <b-table-column field="code" label="Reference" class="nowrap" sortable>
         <router-link :to="makeSummitLink(props.row.code)">{{ props.row.code }}</router-link>
       </b-table-column>
@@ -21,7 +21,7 @@
       </b-table-column>
     </template>
 
-    <template v-if="myActivatedSummits" slot="footer">
+    <template v-if="myActivatedSummits" v-slot:footer>
       <ul class="legend">
         <li><font-awesome-icon :icon="['far', 'chevron-circle-down']" :class="['activation-icon', 'chased']" /> Chased</li>
         <li><font-awesome-icon :icon="['far', 'chevron-circle-up']" :class="['activation-icon', 'activated']" /> Activated</li>

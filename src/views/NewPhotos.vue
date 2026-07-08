@@ -4,14 +4,16 @@
     <template v-slot:title-right>
       <b-field>
         <b-dropdown class="control" v-model="selectedAssociations" multiple aria-role="list" position="is-bottom-left" :scrollable="$mq.desktop" @change="loadNewPhotos">
-          <b-button icon-left="globe" icon-right="angle-down" slot="trigger">
-            <template v-if="$mq.mobile">
-              {{ selectedAssociations.length > 0 ? (selectedAssociations.length) : '' }}
-            </template>
-            <template v-else>
-              Associations {{ selectedAssociations.length > 0 ? ('(' + selectedAssociations.length + ')') : '' }}
-            </template>
-          </b-button>
+          <template v-slot:trigger>
+            <b-button icon-left="globe" icon-right="angle-down">
+              <template v-if="$mq.mobile">
+                {{ selectedAssociations.length > 0 ? (selectedAssociations.length) : '' }}
+              </template>
+              <template v-else>
+                Associations {{ selectedAssociations.length > 0 ? ('(' + selectedAssociations.length + ')') : '' }}
+              </template>
+            </b-button>
+          </template>
           <b-dropdown-item v-for="association in associations" :key="association.code" :value="association.code" aria-role="listitem">
             {{ association.code }} – {{ association.name }}
           </b-dropdown-item>

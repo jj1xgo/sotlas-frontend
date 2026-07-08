@@ -73,7 +73,7 @@ export default {
       }
     }
   },
-  destroyed () {
+  unmounted () {
     if (this.objectUrl) {
       URL.revokeObjectURL(this.objectUrl)
       this.objectUrl = null

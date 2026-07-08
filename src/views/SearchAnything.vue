@@ -22,7 +22,7 @@
           <h4 class="title is-4"><b-icon icon="user" />Activators</h4>
 
           <b-table class="auto-width" default-sort="callsign" :narrowed="true" :striped="true" :data="activators" :mobile-cards="false">
-            <template slot-scope="props">
+            <template v-slot="props">
               <b-table-column field="callsign" label="Callsign" sortable>
                 <router-link :to="makeActivatorLink(props.row.callsign)">{{ props.row.callsign }}</router-link>
               </b-table-column>
@@ -55,7 +55,7 @@
           <h4 class="title is-4"><b-icon icon="map-marker-alt" pack="fas" />Places</h4>
 
           <b-table class="auto-width" :narrowed="true" :striped="true" :data="places" :mobile-cards="false">
-            <template slot-scope="props">
+            <template v-slot="props">
               <b-table-column field="label" label="Name">
                 <b-icon :icon="iconForFeatureClass(props.row.featureClass)" size="is-small" class="has-text-grey search-result-icon" pack="fas" />
                 <a @click="goToPlace(props.row)">{{ props.row.label }}</a>

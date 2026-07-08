@@ -162,7 +162,7 @@ export default {
       immediate: true
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.cleanup()
   },
   data () {

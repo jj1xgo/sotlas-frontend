@@ -13,8 +13,8 @@
         </SpotCard>
       </template>
     </CardPagination>
-    <b-table v-else :default-sort="['timeStamp', 'desc']" :narrowed="true" :striped="true" :data="data" :paginated="paginated" :per-page="perPage" :current-page.sync="curPage" :row-class="rowClass">
-      <template slot-scope="props">
+    <b-table v-else :default-sort="['timeStamp', 'desc']" :narrowed="true" :striped="true" :data="data" :paginated="paginated" :per-page="perPage" v-model:current-page="curPage" :row-class="rowClass">
+      <template v-slot="props">
         <b-table-column field="timeStamp" class="timestamp" label="Time" sortable>
           <span v-html="formatTimeDay(props.row.timeStamp)" />
         </b-table-column>
@@ -27,7 +27,7 @@
           </template>
         </b-table-column>
         <b-table-column field="frequency" label="Frequency" sortable :custom-sort="sortFrequency" numeric>
-          <span v-if="!props.row.type || props.row.type === 'NORMAL'">{{ props.row.frequency | formatFrequency }}</span>
+          <span v-if="!props.row.type || props.row.type === 'NORMAL'">{{ formatFrequency(props.row.frequency) }}</span>
         </b-table-column>
         <b-table-column field="mode" label="Mode" sortable>
           <ModeLabel :mode="props.row.mode" :type="props.row.type" />
@@ -56,7 +56,9 @@
           <div class="comments-cell">
             <b-tooltip class="comments-tooltip" :label="props.row.comments" position="is-left" multilined :active="!$mq.fullhd"><div>{{ props.row.comments }}</div></b-tooltip>
             <b-dropdown v-if="canEditSpot(props.row)" class="actions" aria-role="list">
-              <b-button size="is-small" slot="trigger" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
+              <template v-slot:trigger>
+                <b-button size="is-small" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
+              </template>
 
               <b-dropdown-item aria-role="listitem" @click="editSpot(props.row)"><b-icon icon="edit" size="is-small" /><span class="dropdown-label">Edit</span></b-dropdown-item>
               <b-dropdown-item aria-role="listitem" @click="cloneSpot(props.row)"><b-icon icon="clone" size="is-small" /><span class="dropdown-label">Clone</span></b-dropdown-item>

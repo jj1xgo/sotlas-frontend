@@ -1,6 +1,6 @@
 <template>
   <b-table class="auto-width" :narrowed="true" :striped="true" :data="data" :mobile-cards="false">
-    <template slot-scope="props">
+    <template v-slot="props">
       <b-table-column field="TimeOfDay" label="Time" class="nowrap" sortable>
         {{ props.row.TimeOfDay }}
       </b-table-column>

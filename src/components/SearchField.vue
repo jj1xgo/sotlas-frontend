@@ -20,14 +20,14 @@
       @select="onSelect"
       @focus="searchFocus"
       @blur="searchBlur"
-      @keydown.native.enter="doSearch"
+      @keydown.enter="doSearch"
     >
-      <template slot="empty">
+      <template v-slot:empty>
         <span v-if="isLoading">Searching...</span>
         <span v-else-if="showNoResults">No results found</span>
         <span v-else>Type some more to search...</span>
       </template>
-      <template slot="default" slot-scope="props">
+      <template v-slot:default="props">
         <span v-if="props.option.type === 'geoname'">
           <b-icon
             :icon="iconForFeatureClass(props.option.featureClass)"

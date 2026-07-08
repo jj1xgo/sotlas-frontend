@@ -3,22 +3,28 @@
     <MglGeojsonLayer v-if="trackSource" :sourceId="sourceId + '_trk'" :source="trackSource" :layerId="sourceId + '_trk'" :layer="trackLayer" before="summits_selected" />
     <MglGeojsonLayer v-if="waypointSource" :sourceId="sourceId + '_wpt'" :source="waypointSource" :layerId="sourceId + '_wpt'" :layer="waypointLayer" before="summits_selected" />
     <MglMarker v-if="startCoordinates" :coordinates="startCoordinates">
-      <font-awesome-layers slot="marker" class="fa-2x">
-        <font-awesome-icon icon="circle" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
-        <font-awesome-icon :icon="['fas', 'hiking']" transform="shrink-6" :style="{ color: 'white' }" />
-      </font-awesome-layers>
+      <template v-slot:marker>
+        <font-awesome-layers class="fa-2x">
+          <font-awesome-icon icon="circle" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
+          <font-awesome-icon :icon="['fas', 'hiking']" transform="shrink-6" :style="{ color: 'white' }" />
+        </font-awesome-layers>
+      </template>
     </MglMarker>
     <MglMarker v-if="parkingCoordinates" :coordinates="parkingCoordinates">
-      <font-awesome-layers slot="marker" class="fa-2x">
-        <font-awesome-icon icon="square" :style="{ color: 'white' }" />
-        <font-awesome-icon :icon="['fas', 'parking']" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
-      </font-awesome-layers>
+      <template v-slot:marker>
+        <font-awesome-layers class="fa-2x">
+          <font-awesome-icon icon="square" :style="{ color: 'white' }" />
+          <font-awesome-icon :icon="['fas', 'parking']" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
+        </font-awesome-layers>
+      </template>
     </MglMarker>
     <MglMarker v-if="publicTransportCoordinates" :coordinates="publicTransportCoordinates">
-      <font-awesome-layers slot="marker" class="fa-2x">
-        <font-awesome-icon icon="square" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
-        <font-awesome-icon :icon="['fas', 'bus']" transform="shrink-6" :style="{ color: 'white' }" />
-      </font-awesome-layers>
+      <template v-slot:marker>
+        <font-awesome-layers class="fa-2x">
+          <font-awesome-icon icon="square" :style="{ color: route.highlight ? '#ee0000' : '#0000ee' }" />
+          <font-awesome-icon :icon="['fas', 'bus']" transform="shrink-6" :style="{ color: 'white' }" />
+        </font-awesome-layers>
+      </template>
     </MglMarker>
   </div>
 </template>

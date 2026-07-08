@@ -4,7 +4,7 @@
       <template v-slot="{ row, prevRow }">
         <AlertCard :alert="row" :callsignLink="callsignLink" :showSummitInfo="showSummitInfo">
           <template v-if="needDateHeader(row, prevRow)" v-slot:header>
-            {{ row.dateActivated | formatAlertDate }}
+            {{ formatAlertDate(row.dateActivated) }}
           </template>
           <template v-if="canEditAlert(row)" v-slot:actions>
             <div class="actions">
@@ -17,8 +17,8 @@
       </template>
     </CardPagination>
     <p v-else-if="!$mq.desktop && cardAlerts.length === 0">No matching alerts found.</p>
-    <b-table v-else default-sort="dateActivated" :narrowed="true" :striped="true" :data="data" :paginated="paginated" :per-page="perPage" :current-page.sync="curPage" :row-class="rowClass">
-      <template slot-scope="props">
+    <b-table v-else default-sort="dateActivated" :narrowed="true" :striped="true" :data="data" :paginated="paginated" :per-page="perPage" v-model:current-page="curPage" :row-class="rowClass">
+      <template v-slot="props">
         <b-table-column field="dateActivated" class="timestamp" label="Date/Time" sortable>
           <span v-html="formatDateTimeRelative(props.row.dateActivated)" />
         </b-table-column>
@@ -54,7 +54,9 @@
               <span class="comments-text">{{ props.row.comments }} ({{ props.row.posterCallsign }})</span>
             </div>
             <b-dropdown v-if="canEditAlert(props.row)" class="actions" aria-role="list">
-              <b-button size="is-small" slot="trigger" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
+              <template v-slot:trigger>
+                <b-button size="is-small" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
+              </template>
 
               <b-dropdown-item aria-role="listitem" @click="editAlert(props.row)"><b-icon icon="edit" size="is-small" /><span class="dropdown-label">Edit</span></b-dropdown-item>
               <b-dropdown-item aria-role="listitem" @click="makeSpot(props.row)"><b-icon icon="plus" size="is-small" /><span class="dropdown-label">Spot</span></b-dropdown-item>
@@ -126,12 +128,10 @@ export default {
       default: true
     }
   },
-  filters: {
+  methods: {
     formatAlertDate (date) {
       return moment.utc(date).format('dddd, DD MMM YYYY')
-    }
-  },
-  methods: {
+    },
     needDateHeader (row, prevRow) {
       return (!prevRow || !moment.utc(prevRow.dateActivated).isSame(moment.utc(row.dateActivated), 'day'))
     },
