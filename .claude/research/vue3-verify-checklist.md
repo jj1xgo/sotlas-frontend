@@ -116,3 +116,40 @@
   移行完了後に `feat/night-terminator` の内容を Vue 3 版として作り直す
 - solar_history のサマリ表示リンクについて「久々に出てきた」というコメントあり
   （データ条件依存の表示と推測されるが未確認・バグではない旨の指摘なし。特記事項として記録のみ）
+
+## Phase 1 完了確認（2026-07-08、ホスト側 `npm run dev`、実ブラウザで検証）
+
+Phase 1（コア差し替え）完了時点での実ブラウザ確認結果。当初計画の「ビルドが通り
+最低1ページ表示」というゴールは、実装中に以下2件の**起動時ハードクラッシュ**が
+判明したため、それらの解消をもって達成した:
+
+1. **Buefy 0.8 の `app.use(Buefy, ...)` が即座に例外を投げる**: `registerComponentProgrammatic`
+   が `Vue.prototype.$buefy` に書き込む Vue2専用実装のため、`app.prototype` が存在しない
+   Vue3では `install()` の最初の呼び出しで必ずクラッシュしていた（Buefyの一部でなく全体が
+   起動不能）。Node上の事前検証（`app.use(Buefy,...)` は警告のみでthrowしない）は
+   Node/Viteの解決経路の違いによる偽陰性で、実ブラウザで確認するまで検知できなかった
+   （lessons.md に記録済み）。`app.use(Buefy, ...)` を一時無効化して解消（Phase 2 で本対応）
+2. **`@gaviti/vue-turnstile` 0.6.5 が render 関数実行時にクラッシュ**: 内部にVue2.7.16を
+   直接依存として同梱しており、`this._c`（Vue2専用の内部API）にアクセスして例外。
+   App.vue で `v-if="!authenticated"` により未ログイン時は常時描画されるため、
+   ほぼ全ユーザーで再現する。Phase 4 予定だったバージョンアップ（1.1.4、Vue3対応確認済み、
+   API完全互換）を前倒しして解消
+
+上記2件を解消後、白画面から「崩れているが表示される」状態に到達し、ブラウザ
+コンソールにアプリ由来の `Uncaught` エラーが無いことを確認。残る警告は全て
+既知・想定内:
+- `Failed to resolve component: b-*` 多数: Buefy 未対応のため想定どおり
+  （Phase 2 で解消）
+- `Property "$keycloak" was accessed during render but is not defined on instance`:
+  SSO 未使用時（`wantSso` 未設定）は `$keycloak` が未インストールなため。既存コードの
+  一部がオプショナルチェイン無しで参照しているのが原因だが、クラッシュはしないため
+  Phase 1 では未対応（必要なら別途対応）
+- `content.js` の `Uncaught (in promise) The message port closed...`: ブラウザ拡張機能由来の
+  ノイズで本アプリとは無関係
+
+**Phase 1 の教訓**: 計画時点の想定（「Buefy・地図は壊れていて良い」）は、実際には
+NavBar 等が全ページで Buefy に依存しているため成立せず、「ビルドが通る」だけでなく
+「起動時にクラッシュしない」までを Phase 1 の実質ゴールとして扱う必要があった。
+$mq（vue-match-media）・vue-filepond・vue-lazy-youtube-video・vue-turnstile は
+いずれも当初 Phase 2〜4 予定だったが、起動時クラッシュの原因だったため Phase 1 中に
+前倒しで対応した。
