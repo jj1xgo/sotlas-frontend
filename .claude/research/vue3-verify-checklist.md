@@ -97,6 +97,22 @@
 | X7 | WebSocket 経由のライブ更新（Spots系・LiveFeedIndicator） | vue-native-websocket fork（Phase 4） | 接続・再接続・データ反映 |
 | X8 | EventBus 通知（RBNSpots/SotaSpots/Activator/Summit/NavBar） | event-bus.js → mitt（Phase 1） | 各種イベント連携（トリガースクロール等） |
 
+## Phase 2 固有の確認観点（Buefy 0.8→3.0 + bulma 0.7→1.0 移行）
+
+Phase 2 では実装中の調査で判明した以下の破壊的変更に対応した。通常のルート別確認（上記）に加え、
+**修正の効果を狙い撃ちで確認する**観点として使う。
+
+| # | 要素 | 確認内容 | 対応した破壊的変更 |
+|---|---|---|---|
+| B1 | MapOptionsControl（`/map`）のチェックボックス群 | 各オプション（Regions/Contours/Hillshading/AZ 等）をON/OFF→ページを**リロード**して設定が保持されているか | `b-checkbox`/`b-radio`/`b-input` が `input` イベントを廃止し `update:modelValue` のみemitするようになったため、`@input` で行っていた localStorage 永続化（`setMapOption` mutation）が発火しなくなっていた（`@update:model-value` へ修正済み） |
+| B2 | FilterInput 使用箇所（`/activators`、`/alerts`、`/spots/rbn`、`/summits/`、Region/Association 一覧、Activator 詳細のアクティベーション絞り込み等） | 検索欄に文字を入力→リストが即座に絞り込まれるか | `FilterInput.vue`/`FrequencyInput.vue` が独自にVue2方式のv-model契約（`props:{value}`+`$emit('input')`）のままPhase1から取り残されており、Buefy3のb-inputと組み合わせで入力値の伝播が機能しない状態だった（`modelValue`/`update:modelValue` へ修正済み） |
+| B3 | EditSpot のFrequencyInput（周波数手入力） | Alert/Spot編集画面で周波数欄に手入力→値が反映されるか | 同上（B2と同じ根本原因） |
+| B4 | EditAlert のfreqMode タグ入力 | Alert編集で周波数/モードのタグ追加・カンマ区切り分割が機能するか | b-taginput が `input` イベントを廃止（`@update:model-value` へ修正済み） |
+| B5 | 全 b-table ページ（R7,R12,R15〜R17,R20 等）のソート・ページネーション | ヘッダクリックでソート、ページ送りが機能するか | コード変更なし（既にv-slot構文でAPI互換）だが実機での回帰確認は未実施 |
+| B6 | `$buefy` 経由のダイアログ/トースト/スナックバー/ローディング（Alert削除確認、写真アップロードエラー、ネットワークエラー通知、各ページのローディング表示等） | 表示・ボタン動作・自動消去のタイミング | コード変更なし（オプションキー互換確認済み）だが実機での回帰確認は未実施 |
+| B7 | navbar・モーダル・ドロップダウン・フォーム部品全般の見た目 | 色・枠線・背景等がbulma 0.7時代と大きく破綻していないか | bulma 0.7.5→1.0.4へ更新（CSS変数ベースのテーマ機構への移行に伴う） |
+| B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。これが効いているかの確認 |
+
 ## 運用メモ
 
 - Phase 0 時点では「Vue2 現状」を記録する運用に空欄で用意した。Phase 1 着手前にホスト側で
