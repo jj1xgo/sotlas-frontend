@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import LazyYoutubeVideo from 'vue-lazy-youtube-video'
-import 'vue-lazy-youtube-video/dist/style.css'
+import LazyYoutubeVideo from './LazyYoutubeVideo.vue'
 
 export default {
   name: 'SummitVideosGroup',
