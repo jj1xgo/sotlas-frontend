@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-table :narrowed="true" :paginated="true" :striped="true" :default-sort="['activationDate', 'desc']" :per-page="15" :data="data" :mobile-cards="false">
-      <template slot-scope="props">
+      <template v-slot="props">
         <b-table-column field="activationDate" label="Date" sortable>
-          {{ props.row.activationDate | formatActivationDate }}
+          {{ formatActivationDate(props.row.activationDate) }}
         </b-table-column>
         <b-table-column field="ownCallsign" label="Activator" sortable>
           <router-link :to="makeActivatorLinkUserId(props.row.userId)">{{ props.row.ownCallsign.toUpperCase() }}</router-link>

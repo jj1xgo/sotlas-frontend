@@ -1,7 +1,9 @@
 <template>
   <div class="action-button download-button">
     <b-dropdown>
-      <b-button slot="trigger" type="is-info" size="is-small" outlined icon-left="file-download" icon-right="angle-down">Download</b-button>
+      <template v-slot:trigger>
+        <b-button type="is-info" size="is-small" outlined icon-left="file-download" icon-right="angle-down">Download</b-button>
+      </template>
       <b-dropdown-item has-link><a :href="makeUrlForType('gpx')">GPX file</a></b-dropdown-item>
       <b-dropdown-item has-link><a :href="makeUrlForType('kml')">KML file</a></b-dropdown-item>
       <b-dropdown-item has-link><a :href="makeUrlForType('geojson')">GeoJSON file</a></b-dropdown-item>

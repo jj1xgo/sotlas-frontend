@@ -9,8 +9,8 @@
             <FilterInput v-model="filter" ref="filter" v-debounce:500ms="onFilterChanged" />
           </b-field>
 
-          <b-table class="auto-width" :narrowed="true" :striped="true" :data="activators" :loading="loading" paginated backend-pagination :total="total" :per-page="perPage" :current-page.sync="curPage" backend-sorting :default-sort="[sortField, sortDirection]" @sort="onSort" :mobile-cards="false">
-            <template slot-scope="props">
+          <b-table class="auto-width" :narrowed="true" :striped="true" :data="activators" :loading="loading" paginated backend-pagination :total="total" :per-page="perPage" v-model:current-page="curPage" backend-sorting :default-sort="[sortField, sortDirection]" @sort="onSort" :mobile-cards="false">
+            <template v-slot="props">
               <b-table-column field="callsign" label="Callsign" class="nowrap" sortable>
                 <CountryFlag :country="country(props.row.callsign)" class="flag" />
                 <router-link :to="makeActivatorLink(props.row.callsign)">{{ props.row.callsign }}</router-link>

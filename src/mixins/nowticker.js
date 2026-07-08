@@ -6,7 +6,7 @@ export default {
       this.now = moment()
     }, 60000)
   },
-  destroyed () {
+  unmounted () {
     clearInterval(this.nowticker)
   },
   methods: {

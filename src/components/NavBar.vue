@@ -1,5 +1,5 @@
 <template>
-  <b-navbar wrapper-class="container" :class="{ 'search-focused': searchFocused }" :fixed-top="true" :close-on-click="false" :isActive.sync="burgerActive">
+  <b-navbar wrapper-class="container" :class="{ 'search-focused': searchFocused }" :fixed-top="true" :close-on-click="false" v-model:isActive="burgerActive">
     <template #brand>
       <b-navbar-item tag="router-link" to="/about">
         <img v-if="$mq.widescreen" src="../assets/sotlas.svg" alt="Logo">
@@ -18,12 +18,12 @@
       </b-navbar-item>
     </template>
     <template #end>
-      <b-navbar-item v-for="link in links" tag="router-link" :key="link.target" :to="link.target" :title="link.title" @click.native="closeBurger">
+      <b-navbar-item v-for="link in links" tag="router-link" :key="link.target" :to="link.target" :title="link.title" @click="closeBurger">
         <b-icon v-if="link.icon" :pack="link.iconPack" :icon="link.icon" />
         {{ link.text }}
       </b-navbar-item>
       <b-navbar-dropdown label="More">
-        <b-navbar-item v-for="link in moreLinks" tag="router-link" :key="link.target" :to="link.target" :title="link.title" @click.native="closeBurger">
+        <b-navbar-item v-for="link in moreLinks" tag="router-link" :key="link.target" :to="link.target" :title="link.title" @click="closeBurger">
           <b-icon v-if="link.icon" :pack="link.iconPack" :icon="link.icon" />{{ link.text }}
         </b-navbar-item>
       </b-navbar-dropdown>
@@ -62,10 +62,10 @@ export default {
   },
   watch: {
     burgerActive () {
-      EventBus.$emit(this.burgerActive ? 'navbarMenuOpened' : 'navbarMenuClosed')
+      EventBus.emit(this.burgerActive ? 'navbarMenuOpened' : 'navbarMenuClosed')
     }
   },
-  destroyed () {
+  unmounted () {
     clearInterval(this.clockInterval)
   },
   methods: {

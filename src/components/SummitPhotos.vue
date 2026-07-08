@@ -12,7 +12,7 @@
         </template>
       </SummitPhotosGroup>
     </div>
-    <b-modal :active.sync="isEditorActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
+    <b-modal v-model:active="isEditorActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
       <EditPhoto v-if="editingPhoto" :photo="editingPhoto" :summitCode="summit.code" @photoEdited="$emit('photoEdited')" />
     </b-modal>
   </div>

@@ -24,7 +24,7 @@
         <b-field grouped>
           <b-checkbox v-model="mapOptions.az" size="is-small" @input="setMapOption('az', $event)">
             Activation zones
-            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click.native="showActivationZoneInfo" />
+            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showActivationZoneInfo" />
           </b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].slope_classes" grouped>
@@ -32,7 +32,7 @@
         </b-field>
         <b-field v-if="mapTypes[mapType].snow_depth" grouped>
           <b-checkbox v-model="mapOptions.snow_depth" size="is-small" @input="setMapOption('snow_depth', $event)">Snow depth
-            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click.native="showSnowDepthInfo" />
+            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showSnowDepthInfo" />
           </b-checkbox>
         </b-field>
       </div>
@@ -40,7 +40,7 @@
         <b-field grouped>
           <b-checkbox v-model="mapOptions.difficulty" size="is-small" @input="setMapOption('difficulty', $event)">
             Hiking difficulty
-            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click.native="showHikingDifficultyInfo" />
+            <b-icon pack="fas" icon="info-circle" size="is-small" type="is-info" @click="showHikingDifficultyInfo" />
           </b-checkbox>
         </b-field>
         <b-field v-if="mapTypes[mapType].skiing" grouped>

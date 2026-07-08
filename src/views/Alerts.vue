@@ -24,17 +24,21 @@
           <b-field grouped group-multiline>
             <FilterInput class="control" v-model="alertFilter" placeholder="Summit or callsign" :is-regex="true" />
             <b-dropdown class="control" v-model="selectedModes" multiple aria-role="list">
-              <b-button icon-right="angle-down" slot="trigger">
-                  Modes {{ selectedModes.length > 0 ? ('(' + selectedModes.length + ')') : '' }}
-              </b-button>
+              <template v-slot:trigger>
+                <b-button icon-right="angle-down">
+                    Modes {{ selectedModes.length > 0 ? ('(' + selectedModes.length + ')') : '' }}
+                </b-button>
+              </template>
               <b-dropdown-item v-for="(mode, key) in modes" :key="key" :value="key" aria-role="listitem">
                 {{ mode }}
               </b-dropdown-item>
             </b-dropdown>
             <b-dropdown class="control" v-model="selectedContinents" multiple aria-role="list">
-              <b-button icon-right="angle-down" slot="trigger">
-                  Continents {{ selectedContinents.length > 0 ? ('(' + selectedContinents.length + ')') : '' }}
-              </b-button>
+              <template v-slot:trigger>
+                <b-button icon-right="angle-down">
+                    Continents {{ selectedContinents.length > 0 ? ('(' + selectedContinents.length + ')') : '' }}
+                </b-button>
+              </template>
               <b-dropdown-item v-for="(continent, code) in continents" :key="code" :value="code" aria-role="listitem">
                 {{ continent }}
               </b-dropdown-item>

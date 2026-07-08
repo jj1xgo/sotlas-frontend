@@ -5,7 +5,7 @@
     </template>
   </CardPagination>
   <b-table v-else :default-sort="['timeStamp', 'desc']" :narrowed="true" :striped="true" :data="data" :paginated="paginated" :per-page="perPage" :row-class="rowClass">
-    <template slot-scope="props">
+    <template v-slot="props">
       <b-table-column field="timeStamp" class="timestamp" label="Time" sortable>
         <span v-html="formatTimeDay(props.row.timeStamp)" />
       </b-table-column>
@@ -13,7 +13,7 @@
         <CountryFlag :country="country(props.row.callsign)" class="flag" /><template v-if="callsignLink"><router-link :to="makeActivatorLink(props.row.callsign)">{{ props.row.callsign }}</router-link></template><template v-else>{{ props.row.callsign }}</template>
       </b-table-column>
       <b-table-column field="frequency" label="Frequency" sortable numeric>
-        {{ props.row.frequency | formatFrequency }}
+        {{ formatFrequency(props.row.frequency) }}
       </b-table-column>
       <b-table-column field="mode" label="Mode" sortable>
         <ModeLabel :mode="props.row.mode" />

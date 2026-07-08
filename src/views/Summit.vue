@@ -34,7 +34,7 @@
       </p>
 
       <b-message v-if="!isValid" type="is-warning" has-icon>
-        This summit is currently not valid (valid from {{ summit.validFrom | formatActivationDate }} to {{ summit.validTo | formatActivationDate }}).
+        This summit is currently not valid (valid from {{ formatActivationDate(summit.validFrom) }} to {{ formatActivationDate(summit.validTo) }}).
       </b-message>
 
       <b-message v-else-if="activations !== null && activations.length == 0" type="is-info" has-icon>
@@ -66,7 +66,7 @@
               <span v-if="firstActivations.activators.length > 1"> (with
                 <span v-for="(activator, index) in firstActivations.activators.slice(1)" :key="activator.userId"><FirstActivator :callsign="activator.callsign" :userId="activator.userId" />{{ index !== firstActivations.activators.length - 2 ? ' & ' : '' }}</span>)
               </span>
-            <span class="has-text-grey"> on {{ firstActivations.date | formatActivationDate }}</span></div>
+            <span class="has-text-grey"> on {{ formatActivationDate(firstActivations.date) }}</span></div>
 
             <SummitAttributes :summit-code="summit.code" />
 
@@ -353,10 +353,10 @@ export default {
   },
   mounted () {
     this.updateSummit()
-    EventBus.$on('navbarMenuOpened', this.navbarMenuOpened)
+    EventBus.on('navbarMenuOpened', this.navbarMenuOpened)
   },
-  destroyed () {
-    EventBus.$off('navbarMenuOpened', this.navbarMenuOpened)
+  unmounted () {
+    EventBus.off('navbarMenuOpened', this.navbarMenuOpened)
   },
   methods: {
     updateSummit (force = false) {
@@ -469,20 +469,20 @@ export default {
       this.isAddSpotActive = true
     },
     routeDetailsOpen (route) {
-      this.$set(route, 'highlight', true)
+      route.highlight = true
       this.routes.forEach(curRoute => {
         if (curRoute.highlight !== true) {
-          this.$set(curRoute, 'highlight', false)
+          curRoute.highlight = false
         }
       })
     },
     routeDetailsClose (route) {
-      this.$set(route, 'highlight', false)
+      route.highlight = false
 
       // If all route highlights are false, set them all to null
       if (this.routes.every(curRoute => curRoute.highlight === false)) {
         this.routes.forEach(curRoute => {
-          this.$set(curRoute, 'highlight', null)
+          curRoute.highlight = null
         })
       }
     },

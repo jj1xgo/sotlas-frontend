@@ -16,7 +16,7 @@
         <div class="columns">
           <div class="column">
             <b-table default-sort="code" :narrowed="true" :striped="true" :data="filteredRegions" :mobile-cards="false">
-              <template slot-scope="props">
+              <template v-slot="props">
                 <b-table-column field="code" label="Identifier" class="nowrap" sortable>
                   <router-link :to="regionLink(props.row)">{{ props.row.code }}</router-link>
                 </b-table-column>
@@ -45,6 +45,7 @@
 import axios from 'axios'
 import utils from '../mixins/utils.js'
 import sotadb from '../mixins/sotadb.js'
+import EventBus from '../event-bus'
 
 import SummitDatabasePageLayout from '../components/SummitDatabasePageLayout.vue'
 import FilterInput from '../components/FilterInput.vue'
@@ -84,7 +85,7 @@ export default {
           this.association = response.data
           document.title = this.association.name + ' (' + this.associationCode + ') - SOTLAS'
           this.loadingComponent.close()
-          this.$root.$emit('triggerScroll')
+          EventBus.emit('triggerScroll')
         })
         .catch(error => {
           this.loadingComponent.close()

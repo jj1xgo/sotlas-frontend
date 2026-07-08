@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-content">
-      <div class="freqmode">{{ spot.frequency | formatFrequency }} <ModeLabel :mode="spot.mode" /></div>
+      <div class="freqmode">{{ formatFrequency(spot.frequency) }} <ModeLabel :mode="spot.mode" /></div>
       <div class="time" v-html="formatTimeDay(spot.timeStamp)" />
       <div class="callsign">
         <CountryFlag :country="country(spot.callsign)" class="flag" />
