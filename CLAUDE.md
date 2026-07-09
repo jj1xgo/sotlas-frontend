@@ -5,7 +5,7 @@
 [SOTA (Summits On The Air)](https://www.sota.org.uk/) の地図・データベース Web フロントエンド。
 [manuelkasper/sotlas-frontend](https://github.com/manuelkasper/sotlas-frontend) の fork で、
 機能追加・修正は上流への Pull Request を前提に進める。上流への投稿は非署名
-（グローバル CLAUDE.md の署名ルールに従う。詳細は「環境課題の連携」ルール3参照）。
+（グローバル CLAUDE.md の署名ルールに従う。詳細は `report-container-issue` skill 参照）。
 
 - 技術スタック: Vue（バージョンと可否は当該ブランチの `package.json` を正とする。`master` は **2.7**・EOL で
   Vue 3 専用 API・Vue 3 前提の依存やコードは提案しない。`feat/vue3-migration` は Vue 3 移行中で本制約の対象外）
@@ -18,8 +18,10 @@
   `git fetch upstream && git rebase upstream/master && git push --force-with-lease origin master`
   で行う（GitHub の "Sync fork" ボタンは merge コミットを作ってしまうため使わない）。force push 前に
   必ずユーザーへ確認する
-- **ローカルパッチ**（上流には出さない master 固有の差分）: 現在はコンテナ/セッション運用整備一式
-  （`.claude/`・`.claude-container.d/`・`.gitignore`・本ファイル自身）のみ（→「FontAwesome Pro 事情」）
+- **ローカルパッチ**（上流には出さない master 固有の差分）: コンテナ/セッション運用整備関連
+  （`.claude/` 配下の research/plans 等を含む・`.claude-container.d/`・`.gitignore`・本ファイル自身）。
+  網羅列挙はしない。実態は `git diff upstream/master --stat -- .` 等で都度確認する
+  （→「FontAwesome Pro 事情」）
 - **機能開発・PR**: `master` から `feat/<slug>` を切って実装する。上流への PR を出す前に
   `git rebase --onto upstream/master master feat/<slug>` でローカルパッチ分を除いた状態にしてから出す
 - **push・PR 作成はホスト側で行う**（コンテナ内の PAT は Issues 限定スコープで push 不可。詳細は
@@ -47,9 +49,9 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
   `plansDirectory: ".claude/plans"` により plan ファイルは最初からリポジトリ内に生成されるため、
   承認後の `mv` は不要。万一 `~/.claude/plans/`（ホーム配下・グローバル）に生成された場合は
   設定が効いていないサインなので、異常として報告した上で `mv` で `.claude/plans/` へ移動する
-- `.claude/plans/<slug>.md` は承認後の作成・更新・削除のいずれも、そのターン内にコミットする
-  （削除は完了後、区切りがついたら `git rm` で行う。作業が中断・持ち越しで handover を書く場合は残す。
-  承認に至らず放棄された下書きが未追跡ファイルとして残っていたら、気づいた時点で削除してよい）
+- 計画ファイルのコミット・削除タイミングは `~/.claude/CLAUDE.md`「1. 計画を優先する」節の
+  全プロジェクト共通ルールに従う（承認に至らず放棄された下書きが未追跡ファイルとして残っていたら、
+  気づいた時点で削除してよい）
 - 軽微な実装タスクの管理は GitHub Issues で行う（→「課題管理（GitHub Issues）」節参照）
 
 ## コンテナ開発
@@ -69,7 +71,6 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
 軽微な実装タスク・バックログの管理は `jj1xgo/sotlas-frontend` への GitHub Issues で行う
 （グローバル CLAUDE.md「GitHub Issues による課題管理（opt-in）」節参照）。
 
-- **対象リポジトリ**: `jj1xgo/sotlas-frontend`
 - **ラベル体系**: `enhancement`（GitHub 既定）・`on-hold`（保留。本文に再検討トリガーを明記する
   ものだけに使う）
 - **署名**: 自リポジトリ（ユーザー所有）への投稿のためモデル名のみ（例: `— <実行中のモデル名>`）
@@ -81,26 +82,9 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
 ## 環境課題の連携（claude-container への issue 起票）
 
 sotlas-frontend 自体の仕様・実装ではなく、コンテナ環境（claude-container）に起因する問題・要望は
-本リポジトリ（jj1xgo/sotlas-frontend）の GitHub Issues ではなく `jj1xgo/claude-container` への
-GitHub issue で起票する。
-
-**フロー**: 起票 → （claude-container 側が調査・実装・対応完了コメント）→ 対応待ち →
-**リビルド後**に動作確認 → 確認内容をコメントに付記してクローズ。
-
-**ルール**:
-
-1. クローズは原則起票側（sotlas-frontend）が動作確認後に行う。例外: 調査の結果「仕様どおり・
-   対応不要」と判明した場合は、対応側（claude-container）が説明コメント付きでクローズすることがある
-2. 動作確認は稼働中コンテナでは不十分になりうるため、リビルド（`-b`）後に行う
-3. AI が起票・コメント・クローズする場合は、本文の**末尾に署名**として記入する。claude-container は
-   sotlas-frontend 作業中のセッションから見て異なるリポジトリ（クロスリポジトリ連携）にあたるため、
-   グローバル CLAUDE.md の署名ルールに従いモデル名に `(sotlas-frontend)` を付記する
-   （例: `— <実行中のモデル名> (sotlas-frontend)`）。経緯の説明文は書かない
-   （署名ルールの適用範囲・上流への非署名は「プロジェクト概要」節参照）
-4. 起票先リポジトリ名・仕様は推測せず、不明な場合はユーザーに確認してから起票する
-5. 1 issue 1 論点
-
-**注記**: `gh` の利用可否・session-start hook の挙動は「課題管理（GitHub Issues）」節を参照。
+本リポジトリの GitHub Issues ではなく **`jj1xgo/claude-container` に起票する**（誤ったリポジトリへの
+起票が最悪の失敗パターンのため、これだけは本文に残す）。起票・署名・クローズの具体的な手順は
+`report-container-issue` skill を参照する。
 
 ## Best Practices（教訓蒸留）運用ルール
 
@@ -109,3 +93,6 @@ GitHub issue で起票する。
   `.claude/best_practices.md`（git 管理対象）を再合成する。蒸留観点・原則数の既定と
   watermark 更新・コミットはコマンド側で完結する
 - lessons.md が一定量増えるとセッション開始時に実行が自動的に推奨される（hooks 側で検知）
+- `.claude/best_practices.md` が新規生成された時点で、本ファイル（CLAUDE.md）冒頭に
+  `@.claude/best_practices.md` のインポート行を追記する（ファイルは存在するのに読み込まれない
+  サイレント失効を防ぐため）
