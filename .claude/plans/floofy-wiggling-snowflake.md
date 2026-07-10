@@ -115,8 +115,20 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 
 ## 既知リスク（実装では解決せず検証で確認）
 
-- **mapbox-gl-draw fork**（`#sotlas2`、MapDraw.vue のみ）: dist は self-contained で maplibre 4.7 実績あり。
-  maplibre 5 でホスト検証。壊れた場合のみ別途対応（fork の open/save 独自コントロールは維持必須）
+- ~~**mapbox-gl-draw fork**（`#sotlas2`、MapDraw.vue のみ）...~~ **解決済み**。ホスト検証で発覚した
+  3件の不具合を修正しコミット済み（詳細は次回 handover / git log 参照）:
+  - `906e449`: `MapDraw.vue` が自前 provide('map', computed(...))（load後にしか解決しない）に依存して
+    いたため、addControl 時点で mapbox-gl-draw 内部が「map.loaded()==false→16msポーリング待ち」に
+    落ち、クリックしても描画されなかった。`@indoorequal/vue-maplibre-gl` が公開する `mapSymbol`
+    （load前から解決済みのShallowRef）から直接injectし、load前にaddControlする方式へ変更
+  - `150fd68`: 標高API(`VITE_ELEVATION_API_URL`)呼び出しにtimeout未設定で、応答が無いと永久に
+    ローディングスピナーが残る不具合。`timeout: 10000` を追加
+  - `fbee667`: `this.$buefy.loading.open()` を引数無しで呼んでおり、Buefy 3.0の内部実装が
+    close時に`params.onClose`を参照するため`undefined`アクセスで例外→スピナーが閉じない不具合。
+    他の呼び出し箇所と同様に `{}` を渡すよう修正
+  - ホスト実機（Claude in Chrome 併用）で LineString描画・標高グラフ・save(gpx生成)まで
+    end-to-endで動作確認済み。openアイコンのOSファイル選択ダイアログ表示自体は自動化ツールの
+    制約で未検証（ユーザー目視のみ、リスクは低いと判断）
 - **maplibre-gl 5 は WebGL2 必須**（WebGL1 のみの古い端末で地図が出なくなる）。完了報告で Manuel に明示
 - webglcontextlost 時の新ライブラリの自動再初期化で `reportMapSession` が再 POST される（軽微・許容）
 
@@ -124,15 +136,24 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 
 - コンテナ内: `npm install` 後 `npm run lint`（警告ゼロ）・`npm run build`
 - ホスト側ブラウザ（ユーザー実施、`npm run dev`）:
-  1. Map ページ基本表示 → summit クリック / SummitPopup（幅 600px 相当で崩れない）
+  1. Map ページ基本表示 → summit クリック / SummitPopup（幅 600px 相当で崩れない）**OK**
   2. filter・options（spots/alerts ハイライト）・スタイル切替（maptiler_outdoor/winter + swisstopo 等
-     ローカル、切替後にルート線・オプションレイヤーが残るか）
-  3. draw（open/save 含む）/ PNG ダウンロード / webcams
+     ローカル、切替後にルート線・オプションレイヤーが残るか）**スタイル切替・残存はOK。filter自体が
+     反映されない不具合が別途報告されており未調査**（フィルタ後に極小アイコンになるケースの報告もあり、
+     関連の可能性。次回セッションで調査）
+  3. draw（open/save 含む）/ PNG ダウンロード / webcams **OK**（上記「既知リスク」参照。openダイアログの
+     目視確認のみ未実施）
   4. MiniMap 4 ページ（Summit/Activator/Association/Region）: enlarge・zoom-warning の位置、
-     photo マーカー、Activator で一覧更新時に地図が勝手に動かないか（C4）
-  5. URL 同期（地図移動で /map/coordinates/... が replace される）・localStorage bounds 復元
+     photo マーカー、Activator で一覧更新時に地図が勝手に動かないか（C4）**未実施**
+  5. URL 同期（地図移動で /map/coordinates/... が replace される）・localStorage bounds 復元 **未実施**
   6. Network タブ: api.maptiler.com リクエストに `mtsid` 付与・`key` 二重付与なし・`/mapsession` POST 1回
-  7. 長押し座標ポップアップ・geolocate・scale 単位・attribution（モバイル compact）
+     **未実施**
+  7. 長押し座標ポップアップ・geolocate・scale 単位・attribution（モバイル compact）**未実施**
+
+  **別途報告済みの追加不具合（要調査、優先度は次回相談）**:
+  - 地図種類アイコンがポップアップ表示後に下へ位置ずれ（C3のfragment render問題で説明可能、C3待ち）
+  - solar_history等へのリンク(SFI)が見た目上表示されないが実際はリンクとして機能する（Phase2の
+    Buefy/bulma移行絡みの可能性、CSS調査が必要）
 
 ## スコープ外（このタスクではやらない）
 
