@@ -95,7 +95,7 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 - マーカー内ポップアップ構造（MglMarker default スロット内の MglPopup）は互換、維持
 - `@open` / `@close` イベントは同名で存在、維持
 
-### C3: fragment render 対応（表示調整）
+### C3: fragment render 対応（表示調整）**完了**（コミット `7f734ce`）
 
 新 MglMap は fragment（div + スロット）を render するため class 継承・scoped CSS が効かない:
 - `Map.vue`: `class="map"` を MglMap から外し、`.map :deep(.maplibregl-popup) { max-width: 600px !important }`
@@ -104,7 +104,8 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 - `MiniMap.vue`: ルート div に `position: relative` を追加（スロット直書きの zoom-warning /
   MapEnlargeControl の absolute 基準が map div の兄弟化で外へ飛ぶため）。
   死んでいる `.map :deep(...)` ルール（現行でも無効）は削除
-- dev の「Extraneous non-props attributes」警告ゼロを確認
+- dev の「Extraneous non-props attributes」警告ゼロを確認 **OK**（ホスト実機・Claude in Chrome併用で
+  SummitPopup幅・zoom-warning/enlargeボタン位置・警告消失を確認済み）
 
 ### C4: cleanup・低リスク改善
 
@@ -138,22 +139,38 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 - ホスト側ブラウザ（ユーザー実施、`npm run dev`）:
   1. Map ページ基本表示 → summit クリック / SummitPopup（幅 600px 相当で崩れない）**OK**
   2. filter・options（spots/alerts ハイライト）・スタイル切替（maptiler_outdoor/winter + swisstopo 等
-     ローカル、切替後にルート線・オプションレイヤーが残るか）**スタイル切替・残存はOK。filter自体が
-     反映されない不具合が別途報告されており未調査**（フィルタ後に極小アイコンになるケースの報告もあり、
-     関連の可能性。次回セッションで調査）
-  3. draw（open/save 含む）/ PNG ダウンロード / webcams **OK**（上記「既知リスク」参照。openダイアログの
-     目視確認のみ未実施）
+     ローカル、切替後にルート線・オプションレイヤーが残るか）**OK**。filterが反映されないという報告は
+     再現せず（`points`条件でsetFilter・getFilterとも正常）、「極小アイコン」は`summits_circles_all`
+     による意図的な仕様（フィルタ対象外サミットを薄く小さく常時表示、upstream #18）と判明、バグではない
+  3. draw（open/save 含む）/ PNG ダウンロード / webcams **OK**（上記「既知リスク」参照）。openダイアログの
+     目視確認も完了（ユーザー実施、保存→選択→開くの一連の流れ正常）
   4. MiniMap 4 ページ（Summit/Activator/Association/Region）: enlarge・zoom-warning の位置、
-     photo マーカー、Activator で一覧更新時に地図が勝手に動かないか（C4）**未実施**
-  5. URL 同期（地図移動で /map/coordinates/... が replace される）・localStorage bounds 復元 **未実施**
+     photo マーカー、Activator で一覧更新時に地図が勝手に動かないか（C4）**OK**。Summitページのみ
+     enlarge・写真マーカー表示（設計通り、`canEnlarge`propはSummit.vueのみ付与）、zoom-warningは
+     Activatorページのみ・zoom<3でのみ表示（設計通り、今回未達だが仕様確認済み）、Activatorで地図が
+     勝手に動く挙動なし
+  5. URL 同期（地図移動で /map/coordinates/... が replace される）・localStorage bounds 復元 **OK**。
+     ドラッグ・ズームでURL/localStorage(`bounds`キー)とも正しく更新、リロード後の復元も確認
+     （復元時に一瞬白画面になる体感の待ち時間はあるが軽微）
   6. Network タブ: api.maptiler.com リクエストに `mtsid` 付与・`key` 二重付与なし・`/mapsession` POST 1回
-     **未実施**
-  7. 長押し座標ポップアップ・geolocate・scale 単位・attribution（モバイル compact）**未実施**
+     **OK**
+  7. 長押し座標ポップアップ・geolocate・scale 単位・attribution（モバイル compact）**OK**（座標ポップアップ・
+     geolocate・scale単位切替は正常。attributionのモバイルcompact表示は`@indoorequal/vue-maplibre-gl`の
+     `useControl`が`compact`propの変更を監視しない不具合と判明、`:key="$mq.mobile"`で再生成させる形で
+     修正・検証済み、コミット`5956f8c`）
 
   **別途報告済みの追加不具合（要調査、優先度は次回相談）**:
-  - 地図種類アイコンがポップアップ表示後に下へ位置ずれ（C3のfragment render問題で説明可能、C3待ち）
+  - 地図種類アイコンがポップアップ表示後に下へ位置ずれ（C3のfragment render問題で説明可能と見ていたが、
+    C3完了後の再検証は未実施）
   - solar_history等へのリンク(SFI)が見た目上表示されないが実際はリンクとして機能する（Phase2の
     Buefy/bulma移行絡みの可能性、CSS調査が必要）
+  - Summitページの写真ギャラリー（`SummitPhotosGroup`/`PictureSwipe`、`vuedraggable`使用）で、
+    地図ドラッグ時にvuedraggable由来のConsole例外（`getSlot`のTypeError・patch処理の`__vnode`エラー）
+    が発生。Vue2専用の`vuedraggable ^2.24.3`をそのまま使っていることが原因とみられ、Phase 4
+    （小物ライブラリのVue3対応）の対象。並び替え機能自体が壊れている可能性が高く、優先度は
+    「中〜低」→「中」への引き上げを検討（Fableサブエージェントの評価）
+  - Summitページで`svgicon`コンポーネント未解決の警告あり（`Failed to resolve component: svgicon`）、
+    未調査
 
 ## スコープ外（このタスクではやらない）
 
