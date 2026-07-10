@@ -195,7 +195,7 @@ export default {
       this.map.on('draw.save', e => {
         let all = this.draw.getAll()
         if (all && all.features && all.features.length > 0) {
-          const loadingComponent = this.$buefy.loading.open()
+          const loadingComponent = this.$buefy.loading.open({})
           this.addElevations(all)
             .then(() => {
               loadingComponent.close()
