@@ -4,7 +4,7 @@
       <MglGeolocateControl :positionOptions="{ enableHighAccuracy: true }" :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
       <MglNavigationControl position="top-right" :showCompass="false" />
       <MglScaleControl position="bottom-left" :unit="mapUnits" />
-      <MglAttributionControl :compact="$mq.mobile" position="bottom-right" />
+      <MglAttributionControl :key="$mq.mobile" :compact="$mq.mobile" position="bottom-right" />
 
       <!-- Note: these are not true Mapbox GL controls that get added via addControl(), as those don't mix well with Vue.js templating.
            Instead, we simply put all our custom non-Mapbox controls in the top left corner where they don't clash with any builtin controls. -->

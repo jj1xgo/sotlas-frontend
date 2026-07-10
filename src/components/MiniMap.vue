@@ -11,7 +11,7 @@
       <div v-if="canEnlarge" class="maplibregl-ctrl-top-left">
         <MapEnlargeControl :isEnlarged="isEnlarged" @enlarge="$emit('enlarge')" />
       </div>
-      <MglAttributionControl :compact="$mq.mobile" position="bottom-right" />
+      <MglAttributionControl :key="$mq.mobile" :compact="$mq.mobile" position="bottom-right" />
 
       <MapRoute v-for="route in routes" :key="route.id" :route="route" />
       <MapPhoto v-for="photo in mapPhotos" :key="photo.filename" :summit="summit" :photo="photo"
