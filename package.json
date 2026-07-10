@@ -21,8 +21,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.3.0",
     "@gaviti/vue-turnstile": "^1.1.4",
+    "@indoorequal/vue-maplibre-gl": "^8.4.2",
     "@mapbox/mapbox-gl-draw": "github:manuelkasper/mapbox-gl-draw#sotlas2",
-    "@maptiler/sdk": "^2.0.3",
     "@tmcw/togeojson": "^3.2.0",
     "axios": "^1.16.0",
     "buefy": "^3.0.8",
@@ -34,6 +34,7 @@
     "frappe-charts": "github:manuelkasper/frappe-charts#line-chart-y-axis-intervals-based-on-range",
     "haversine-distance": "^1.2.1",
     "maidenhead": "^1.0.7",
+    "maplibre-gl": "^5.0.0",
     "mitt": "^3.0.1",
     "moment": "^2.29.4",
     "node-vincenty": "0.0.6",
@@ -43,7 +44,6 @@
     "vue-clipboard2": "^0.3.1",
     "vue-filepond": "^8.0.0",
     "vue-infinite-loading": "^2.4.5",
-    "vue-mapbox": "github:manuelkasper/vue-mapbox#10cb772",
     "vue-native-websocket": "github:nathantsoi/vue-native-websocket#a265da6",
     "vue-router": "^4.6.4",
     "vue2-debounce": "^1.0.1",
@@ -59,9 +59,6 @@
     "vite-plugin-eslint": "^1.8.1"
   },
   "overrides": {
-    "vue-mapbox": {
-      "vue": "$vue"
-    },
     "vue-infinite-loading": {
       "vue": "$vue"
     },

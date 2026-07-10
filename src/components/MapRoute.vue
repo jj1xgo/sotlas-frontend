@@ -1,7 +1,11 @@
 <template>
   <div>
-    <MglGeojsonLayer v-if="trackSource" :sourceId="sourceId + '_trk'" :source="trackSource" :layerId="sourceId + '_trk'" :layer="trackLayer" before="summits_selected" />
-    <MglGeojsonLayer v-if="waypointSource" :sourceId="sourceId + '_wpt'" :source="waypointSource" :layerId="sourceId + '_wpt'" :layer="waypointLayer" before="summits_selected" />
+    <MglGeoJsonSource v-if="trackSource" :source-id="sourceId + '_trk'" :data="trackSource.data">
+      <MglLineLayer :layer-id="sourceId + '_trk'" :layout="trackLayer.layout" :paint="trackLayer.paint" before="summits_selected" />
+    </MglGeoJsonSource>
+    <MglGeoJsonSource v-if="waypointSource" :source-id="sourceId + '_wpt'" :data="waypointSource.data">
+      <MglSymbolLayer :layer-id="sourceId + '_wpt'" :layout="waypointLayer.layout" :paint="waypointLayer.paint" before="summits_selected" />
+    </MglGeoJsonSource>
     <MglMarker v-if="startCoordinates" :coordinates="startCoordinates">
       <template v-slot:marker>
         <font-awesome-layers class="fa-2x">
@@ -32,7 +36,7 @@
 <script>
 import axios from 'axios'
 import { gpx } from '@tmcw/togeojson'
-import { MglGeojsonLayer, MglMarker } from 'vue-mapbox'
+import { MglGeoJsonSource, MglLineLayer, MglSymbolLayer, MglMarker } from '@indoorequal/vue-maplibre-gl'
 import haversineDistance from 'haversine-distance'
 import tracks from '../mixins/tracks.js'
 
@@ -42,7 +46,7 @@ export default {
     route: Object
   },
   components: {
-    MglGeojsonLayer, MglMarker
+    MglGeoJsonSource, MglLineLayer, MglSymbolLayer, MglMarker
   },
   mixins: [tracks],
   computed: {

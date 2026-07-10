@@ -10,7 +10,7 @@
           </font-awesome-layers>
         </div>
       </template>
-      <MglPopup :closeButton="false" @added="popupAdded">
+      <MglPopup :closeButton="false" :focusAfterOpen="false">
         <div class="thumbwrapper">
           <img class="thumb" :src="photoSrc(photo, 'thumb')" @click="$emit('photoClicked', photo)" />
           <div v-if="photo.title" class="caption">{{ photo.title }}</div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { MglMarker, MglPopup } from 'vue-mapbox'
+import { MglMarker, MglPopup } from '@indoorequal/vue-maplibre-gl'
 import photos from '../mixins/photos.js'
 
 export default {
@@ -42,9 +42,6 @@ export default {
   methods: {
     markerClicked (e) {
       e.hitMarker = true
-    },
-    popupAdded (popup) {
-      popup.popup.options.focusAfterOpen = false
     }
   }
 }

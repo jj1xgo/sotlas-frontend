@@ -45,6 +45,6 @@ $fp-4x3-path: "../node_modules/flagpack/flags/4x3/";
 
 @import "buefy/src/scss/buefy";
 @import "flagpack/src/flagpack.scss";
-@import '@maptiler/sdk/dist/maptiler-sdk.css';
+@import 'maplibre-gl/dist/maplibre-gl.css';
 @import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 </style>
