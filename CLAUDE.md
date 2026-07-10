@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+@.claude/best_practices.md
+
 ## プロジェクト概要
 
 [SOTA (Summits On The Air)](https://www.sota.org.uk/) の地図・データベース Web フロントエンド。
@@ -22,7 +24,12 @@
   （`.claude/` 配下の research/plans 等を含む・`.claude-container.d/`・`.gitignore`・本ファイル自身）。
   網羅列挙はしない。実態は `git diff upstream/master --stat -- .` 等で都度確認する
   （→「FontAwesome Pro 事情」）
-- **機能開発・PR**: `master` から `feat/<slug>` を切って実装する。上流への PR を出す前に
+- **機能開発・PR**: `master` から `feat/<slug>` を切って実装する。upstream への PR 提出を前提とする
+  ブランチのため、コミットメッセージは最初から英語で書く（グローバル CLAUDE.md のコミット日本語
+  規約の例外。書き直し工数・書き直し漏れを避けるため。ローカルパッチ相当のコミットは対象外で
+  従来どおり日本語 → 「ローカルパッチ」項参照）。本ルールは新規に切る `feat/<slug>` から適用し、
+  `feat/vue3-migration` 等の既存進行中ブランチは現行の日本語コミットのまま継続する（遡及的な
+  書き直しはしない）。上流への PR を出す前に
   `git rebase --onto upstream/master master feat/<slug>` でローカルパッチ分を除いた状態にしてから出す
 - **push・PR 作成はホスト側で行う**（コンテナ内の PAT は Issues 限定スコープで push 不可。詳細は
   「コンテナ開発」参照）。PR 作成は `git push` 後に GitHub の Web UI（Compare & pull request）で行う
@@ -31,6 +38,11 @@
 
 `npm install` に `NPM_FONTAWESOME_TOKEN` は不要（Pro トークン非保持でも free フォールバックでビルドできる
 upstream 本体の機能。fork 独自パッチではない。機構詳細は README.md「FontAwesome Pro (optional)」節を参照）。
+
+## コーディング規約
+
+- **コード内コメント**: 英語で統一する（upstream メンテナが PR 化の有無に関わらず読む可能性が
+  あるため）。既存の日本語コメントは気づいた範囲で修正してよい（大規模な一括置換はしない）
 
 ## lint
 
