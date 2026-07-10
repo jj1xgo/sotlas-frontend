@@ -211,6 +211,15 @@ export default {
               document.body.removeChild(link)
               window.URL.revokeObjectURL(url)
             })
+            .catch((error) => {
+              loadingComponent.close()
+              console.error(error)
+              this.$buefy.snackbar.open({
+                message: 'Could not load elevation data, try again later',
+                type: 'is-warning',
+                position: 'is-bottom'
+              })
+            })
         } else {
           alert('Draw at least one line or point before saving your drawing.')
         }
