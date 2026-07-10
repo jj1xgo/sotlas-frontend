@@ -18,7 +18,7 @@ export default {
         link.click()
         document.body.removeChild(link)
       })
-      this.map._render()
+      this.map.redraw()
     }
   }
 }
