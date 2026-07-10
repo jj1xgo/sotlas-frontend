@@ -15,6 +15,7 @@
 
 <script>
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
+import { mapSymbol } from '@indoorequal/vue-maplibre-gl'
 import haversineDistance from 'haversine-distance'
 import cheapRuler from 'cheap-ruler'
 import GeoJsonToGpx from '@dwayneparton/geojson-to-gpx'
@@ -27,7 +28,14 @@ import { gpx, kml } from '@tmcw/togeojson'
 
 export default {
   components: { LineChart, DistanceLabel },
-  inject: ['map'],
+  // mapSymbol (@indoorequal/vue-maplibre-gl の内部map ShallowRef) を使うことで、
+  // アプリ側 provide('map', computed(...)) が load 後まで解決しないのに対し、
+  // load 前(map生成直後)の時点で addControl できる。これにより mapbox-gl-draw の
+  // onAdd 内 map.loaded() チェックが load イベントより先に走り、'load' リスナーが
+  // 確実に発火する(現行の onAdd 後に load が既発火済みで16msポーリング頼みになる問題を回避)
+  inject: {
+    map: { from: mapSymbol }
+  },
   mixins: [utils],
   mounted () {
     this.setupDraw()
