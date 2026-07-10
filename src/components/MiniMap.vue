@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;">
     <MglMap v-if="(mapCenter || bounds) && mapStyle" :key="mapKey"
-      :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="mapCenter" :zoom="12.5"
+      :mapStyle="mapStyle" :bounds="stableBounds" :fitBoundsOptions="fitBoundsOptions" :center="mapCenter" :zoom="12.5"
       :attributionControl="false" :transformRequest="transformRequest" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked"
       @map:idle="onMapIdle">
       <MglGeolocateControl v-if="!$mq.mobile || isEnlarged" :positionOptions="{ enableHighAccuracy: true }"
@@ -72,6 +72,11 @@ export default {
         this.updateLayers(this.map)
       },
       deep: true
+    },
+    bounds (newBounds) {
+      if (JSON.stringify(newBounds) !== JSON.stringify(this.stableBounds)) {
+        this.stableBounds = newBounds
+      }
     }
   },
   computed: {
@@ -258,7 +263,12 @@ export default {
     return {
       map: null,
       infoCoordinates: null,
-      zoomWarningVisible: false
+      zoomWarningVisible: false,
+      // Snapshot of the bounds prop, only updated when the value actually
+      // changes (not merely the array reference). Avoids unwanted fitBounds
+      // calls when a parent computed (e.g. Activator.vue's activationsMapBounds)
+      // recomputes to an equal-but-new array on every infinite-scroll page load.
+      stableBounds: this.bounds
     }
   }
 }
