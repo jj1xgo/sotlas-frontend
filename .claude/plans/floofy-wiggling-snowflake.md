@@ -107,12 +107,28 @@ Vue 3 移行の Phase 3（地図ライブラリ）。upstream #44 で manuelkasp
 - dev の「Extraneous non-props attributes」警告ゼロを確認 **OK**（ホスト実機・Claude in Chrome併用で
   SummitPopup幅・zoom-warning/enlargeボタン位置・警告消失を確認済み）
 
-### C4: cleanup・低リスク改善
+### C4: cleanup・低リスク改善 **完了**（コミット `7977570`）
 
 - `MapDownloadControl.vue`: プライベート API `this.map._render()` → 公開 API `this.map.redraw()`
-  （maplibre 5 の d.ts で実在確認は実装時に行う）
+  （maplibre 5 の d.ts で実在確認は実装時に行う）**完了**。`redraw()`は内部で`_render(0)`を
+  同期呼び出しするため`render`イベントも従来通り発火することをdist本体で確認済み
 - Activator/Association/Region の MiniMap `:bounds`（computed が毎回新配列を返す）で地図が意図せず
-  リセンターされないかホスト検証し、問題があれば MiniMap 側で初期値を data に固定
+  リセンターされないかホスト検証し、問題があれば MiniMap 側で初期値を data に固定 →
+  **「初期値に一度だけ固定」から「値が実質同じ場合だけ古い参照を使い回す」方式へ変更**（設計判断の
+  逸脱、Fableサブエージェントでレビュー済み・妥当性確認済み）。理由: `App.vue`の`router-view`は
+  `:key`無しで`<component :is="Component" />`を使っており、Region/Association間のページ内遷移
+  （例: `/summits/JA/AC`→`/summits/JA/BC`）では同一コンポーネントインスタンスが再利用され、
+  `region.bounds`/`association.bounds`は`watch: { regionCode/associationCode() {...} }`経由で
+  正当に新しい値になる。一度きりの固定だとこの正当な地域変更に地図が追従しなくなる別の不具合を
+  作り込むため、`MiniMap.vue`に`stableBounds`data＋`bounds`propのJSON.stringify比較watchを追加し、
+  値が変わった時だけ`stableBounds`を更新してそちらを`MglMap`へbindする方式にする。**完了**。
+  なお実装当初の懸念（Activatorの一覧ページ送りで地図が勝手に元位置へ戻る）は、Claude in Chrome
+  拡張の合成マウスイベントによるパン操作がMapLibreのdragPanハンドラに実際にはコミットされていな
+  かったテスト手法側のアーティファクトと判明（ユーザーによる手動操作では再現せず）。3ラウンドの
+  切り分け（Network・`bounds`watchへのデバッグログ・`onMapLoaded`再マウント検出）でいずれも
+  該当コードパスが実行されていないことを確認し、`stableBounds`自体の対策（本来の懸念である
+  スプリアスな同値再フィット防止）は理屈上妥当なため採用、ページ送り時の見かけ上の現象は
+  実機再現せずクローズ
 
 ## 既知リスク（実装では解決せず検証で確認）
 
