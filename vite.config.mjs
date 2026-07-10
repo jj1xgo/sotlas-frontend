@@ -84,8 +84,6 @@ export default defineConfig(async ({ mode }) => {
     },
     optimizeDeps: {
       include: [
-        'map-promisified',
-        'events',
         'maplibre-gl'
       ]
     },

@@ -10,7 +10,7 @@
           <div v-if="webcam.clusterSize > 1" class="clustersize">+{{ webcam.clusterSize - 1 }}</div>
         </div>
       </template>
-      <MglPopup :closeButton="false" @added="popupAdded" @open="popupOpened" @close="popupClosed">
+      <MglPopup :closeButton="false" :focusAfterOpen="false" @open="popupOpened" @close="popupClosed">
         <div :class="['thumbwrapper', size]">
           <a :href="thumbnailHref" target="_blank">
             <img v-if="isPopupOpen && thumbnailSrc" class="thumb" :src="thumbnailSrc" />
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { MglMarker, MglPopup } from 'vue-mapbox'
+import { MglMarker, MglPopup } from '@indoorequal/vue-maplibre-gl'
 
 export default {
   name: 'MapWebcam',
@@ -65,9 +65,6 @@ export default {
   methods: {
     markerClicked (e) {
       e.hitMarker = true
-    },
-    popupAdded (popup) {
-      popup.popup.options.focusAfterOpen = false
     },
     popupOpened () {
       this.isPopupOpen = true
