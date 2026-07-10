@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative;">
     <MglMap v-if="(mapCenter || bounds) && mapStyle" :key="mapKey"
       :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="mapCenter" :zoom="12.5"
       :attributionControl="false" :transformRequest="transformRequest" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked"
@@ -267,9 +267,6 @@ export default {
 <style scoped>
 :deep(.maplibregl-canvas-container.maplibregl-interactive) {
   cursor: auto;
-}
-.map :deep(.maplibregl-popup) {
-  max-width: 400px !important;
 }
 .zoom-warning {
   position: absolute;

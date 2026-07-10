@@ -1,6 +1,6 @@
 <template>
   <div class="map-layout" ref="mapLayout">
-    <MglMap v-if="showMap && mapStyle" :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" :transformRequest="transformRequest" class="map" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked" @map:moveend="onMapMoveEnd">
+    <MglMap v-if="showMap && mapStyle" :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" :transformRequest="transformRequest" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked" @map:moveend="onMapMoveEnd">
       <MglGeolocateControl :positionOptions="{ enableHighAccuracy: true }" :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
       <MglNavigationControl position="top-right" :showCompass="false" />
       <MglScaleControl position="bottom-left" :unit="mapUnits" />
@@ -20,7 +20,7 @@
         </div>
       </MglPopup>
 
-      <SummitPopup v-if="summit" :summit="summit" :lastSpot="lastSummitSpot" :nextAlert="nextSummitAlert" @close="onPopupClosed" />
+      <SummitPopup v-if="summit" :summit="summit" :lastSpot="lastSummitSpot" :nextAlert="nextSummitAlert" :max-width="'600px'" @close="onPopupClosed" />
 
       <MapRoute v-for="route in persistentRoutes" :key="route.id" :route="route" />
 
@@ -449,9 +449,6 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-}
-.map :deep(.maplibregl-popup) {
-  max-width: 600px !important;
 }
 .loading-ring-wrapper {
   margin: 1rem 0.5rem 0.5rem 0.5rem;
