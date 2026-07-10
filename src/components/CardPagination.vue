@@ -1,12 +1,12 @@
 <template>
   <div class="card-list">
-    <b-pagination v-if="paginated && !infinite" :total="data.length" :current.sync="currentCardPage" :simple="true" size="is-small" :per-page="perPage" aria-next-label="Next page" aria-previous-label="Previous page" aria-page-label="Page" aria-current-label="Current page" />
+    <b-pagination v-if="paginated && !infinite" :total="data.length" v-model:current="currentCardPage" :simple="true" size="is-small" :per-page="perPage" aria-next-label="Next page" aria-previous-label="Previous page" aria-page-label="Page" aria-current-label="Current page" />
     <div v-for="(row, index) in pageData" :key="row[rowKey]">
       <slot :row="row" :prevRow="(index > 0 ? pageData[index-1] : null)"></slot>
     </div>
     <infinite-loading v-if="infinite" :identifier="infiniteIdentifier" @infinite="infiniteHandler">
-      <div slot="no-more"></div>
-      <div slot="no-results"></div>
+      <template v-slot:no-more><div></div></template>
+      <template v-slot:no-results><div></div></template>
     </infinite-loading>
   </div>
 </template>

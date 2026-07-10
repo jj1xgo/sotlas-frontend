@@ -6,7 +6,7 @@
         {{ activation.qsos }} QSOs
         <font-awesome-icon :icon="['far', 'th-list']" class="faicon" />
       </div>
-      <div class="date">{{ activation.date | formatActivationDate }}</div>
+      <div class="date">{{ formatActivationDate(activation.date) }}</div>
       <div class="summit"><router-link :class="{ invalid: activation.summit.invalid }" :to="makeSummitLink(activation.summit.code)">{{ activation.summit.name }} ({{ activation.summit.code }})</router-link><font-awesome-icon v-if="hasOwnPhotos(activation.summit)" class="photos-icon" :icon="['far', 'images']" /><font-awesome-icon v-else-if="activation.summit.photoAuthors && activation.summit.photoAuthors.length > 0" class="photos-icon-others" :icon="['far', 'images']" /><AltitudeLabel :altitude="activation.summit.altitude" /><ActivationCount :activationCount="activation.summit.activationCount" /></div>
     </div>
   </div>

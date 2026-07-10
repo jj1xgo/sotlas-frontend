@@ -1,27 +1,25 @@
 <template>
   <b-table :class="{ 'auto-width': autoWidth, summits: true }" default-sort="code" :narrowed="true" :striped="true" :data="data" :mobile-cards="false" :row-class="(row, index) => !row.isValid && 'is-invalid'">
-    <template slot-scope="props">
-      <b-table-column field="code" label="Reference" class="nowrap" sortable>
-        <router-link :to="makeSummitLink(props.row.code)">{{ props.row.code }}</router-link>
-      </b-table-column>
-      <b-table-column field="name" label="Name" class="summit-name" sortable>
-        <router-link :to="makeSummitLink(props.row.code)">{{ props.row.name }}</router-link>
-        <font-awesome-icon v-if="props.row.hasPhotos" class="photos-icon" :icon="['far', 'images']" />
-      </b-table-column>
-      <b-table-column field="altitude" :label="$mq.mobile ? 'Alt.' : 'Altitude'" class="nowrap" sortable numeric>
-        <AltitudeLabel :altitude="props.row.altitude" />
-      </b-table-column>
-      <b-table-column field="points" :label="$mq.mobile ? 'Pts.' : 'Points'" class="nowrap" sortable>
-        <SummitPointsLabel :points="props.row.points" :bonus="$mq.mobile ? null : props.row.bonusPoints" class="points" />
-      </b-table-column>
-      <b-table-column field="activationCount" :label="$mq.mobile ? 'Act.' : 'Activations'" class="nowrap" sortable numeric>
-        {{ props.row.activationCount }}
-        <font-awesome-icon v-if="myActivatedSummits" :icon="activationIcon(props.row)" :class="activationIconClass(props.row)" :label="activationIconLabel(props.row)" :title="activationIconLabel(props.row)" />
-        <font-awesome-icon v-if="myActivatedSummitsThisYear" :icon="['far', 'calendar-check']" :class="calendarIconClass(props.row)" :label="calendarIconLabel(props.row)" :title="calendarIconLabel(props.row)" />
-      </b-table-column>
-    </template>
+    <b-table-column field="code" label="Reference" class="nowrap" sortable v-slot="props">
+      <router-link :to="makeSummitLink(props.row.code)">{{ props.row.code }}</router-link>
+    </b-table-column>
+    <b-table-column field="name" label="Name" class="summit-name" sortable v-slot="props">
+      <router-link :to="makeSummitLink(props.row.code)">{{ props.row.name }}</router-link>
+      <font-awesome-icon v-if="props.row.hasPhotos" class="photos-icon" :icon="['far', 'images']" />
+    </b-table-column>
+    <b-table-column field="altitude" :label="$mq.mobile ? 'Alt.' : 'Altitude'" class="nowrap" sortable numeric v-slot="props">
+      <AltitudeLabel :altitude="props.row.altitude" />
+    </b-table-column>
+    <b-table-column field="points" :label="$mq.mobile ? 'Pts.' : 'Points'" class="nowrap" sortable v-slot="props">
+      <SummitPointsLabel :points="props.row.points" :bonus="$mq.mobile ? null : props.row.bonusPoints" class="points" />
+    </b-table-column>
+    <b-table-column field="activationCount" :label="$mq.mobile ? 'Act.' : 'Activations'" class="nowrap" sortable numeric v-slot="props">
+      {{ props.row.activationCount }}
+      <font-awesome-icon v-if="myActivatedSummits" :icon="activationIcon(props.row)" :class="activationIconClass(props.row)" :label="activationIconLabel(props.row)" :title="activationIconLabel(props.row)" />
+      <font-awesome-icon v-if="myActivatedSummitsThisYear" :icon="['far', 'calendar-check']" :class="calendarIconClass(props.row)" :label="calendarIconLabel(props.row)" :title="calendarIconLabel(props.row)" />
+    </b-table-column>
 
-    <template v-if="myActivatedSummits" slot="footer">
+    <template v-if="myActivatedSummits" v-slot:footer>
       <ul class="legend">
         <li><font-awesome-icon :icon="['far', 'chevron-circle-down']" :class="['activation-icon', 'chased']" /> Chased</li>
         <li><font-awesome-icon :icon="['far', 'chevron-circle-up']" :class="['activation-icon', 'activated']" /> Activated</li>

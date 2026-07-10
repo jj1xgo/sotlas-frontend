@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+import EventBus from './event-bus'
 import About from './views/About.vue'
 import Settings from './views/Settings.vue'
 import Map from './views/Map.vue'
@@ -19,11 +19,8 @@ import NewPhotos from './views/NewPhotos.vue'
 import SolarHistory from './views/SolarHistory.vue'
 import SearchAnything from './views/SearchAnything.vue'
 
-Vue.use(Router)
-
-let router = new Router({
-  mode: 'history',
-  base: import.meta.env.BASE_URL,
+let router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -50,7 +47,7 @@ let router = new Router({
     },
     {
       path: '/map/summits/:summitCode([A-Z0-9]+/[A-Z0-9]{2}-\\d{3})',
-      caseSensitive: true,
+      sensitive: true,
       component: Map,
       meta: { savePath: '/map' }
     },
@@ -77,7 +74,7 @@ let router = new Router({
     },
     {
       path: '/summits/:associationCode([A-Z0-9]+)',
-      caseSensitive: true,
+      sensitive: true,
       component: Association,
       props: true,
       meta: { savePath: null }
@@ -90,7 +87,7 @@ let router = new Router({
     },
     {
       path: '/summits/:regionCode([A-Z0-9]+/[A-Z0-9]{2})',
-      caseSensitive: true,
+      sensitive: true,
       component: Region,
       props: true,
       meta: { savePath: null }
@@ -103,7 +100,7 @@ let router = new Router({
     },
     {
       path: '/summits/:summitCode([A-Z0-9]+/[A-Z0-9]{2}-\\d{3})',
-      caseSensitive: true,
+      sensitive: true,
       component: Summit,
       props: true,
       meta: { savePath: null }
@@ -127,7 +124,7 @@ let router = new Router({
     },
     {
       path: '/activators/:callsign([A-Z0-9/]+)',
-      caseSensitive: true,
+      sensitive: true,
       component: Activator,
       props: true,
       meta: { savePath: null }
@@ -174,7 +171,7 @@ let router = new Router({
       meta: { savePath: null }
     },
     {
-      path: '*',
+      path: '/:pathMatch(.*)*',
       component: NotFound,
       meta: { savePath: null }
     }
@@ -184,9 +181,11 @@ let router = new Router({
       if (savedPosition) {
         let lastMatchedRoute = to.matched[to.matched.length - 1]
         if (lastMatchedRoute.components.default.delayScroll) {
-          this.app.$root.$once('triggerScroll', () => {
+          const onTriggerScroll = () => {
+            EventBus.off('triggerScroll', onTriggerScroll)
             resolve(savedPosition)
-          })
+          }
+          EventBus.on('triggerScroll', onTriggerScroll)
         } else {
           resolve(savedPosition)
         }

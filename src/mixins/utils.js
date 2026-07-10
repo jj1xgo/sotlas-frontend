@@ -45,7 +45,39 @@ let modes = {
 }
 
 export default {
-  filters: {
+  computed: {
+    authenticated () {
+      if (this.$keycloak) {
+        return this.$keycloak.authenticated
+      } else {
+        return undefined
+      }
+    },
+    myCallsign () {
+      if (!this.authenticated || !this.$keycloak.tokenParsed.callsign) {
+        return null
+      }
+      return this.homeCallsign(this.$keycloak.tokenParsed.callsign, false)
+    },
+    myUserId () {
+      if (!this.authenticated || !this.$keycloak.tokenParsed.userid) {
+        return null
+      }
+      return parseInt(this.$keycloak.tokenParsed.userid)
+    },
+    isTouchDevice () {
+      let prefixes = ' -webkit- -moz- -o- -ms- '.split(' ')
+      let mq = function (query) {
+        return window.matchMedia(query).matches
+      }
+      if (('ontouchstart' in window) || (window.DocumentTouch && document instanceof window.DocumentTouch)) {
+        return true
+      }
+      let query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('')
+      return mq(query)
+    }
+  },
+  methods: {
     formatActivationDate (date) {
       return moment.utc(date).format('DD MMM YYYY')
     },
@@ -85,43 +117,6 @@ export default {
       } else {
         return frequency
       }
-    }
-  },
-  computed: {
-    authenticated () {
-      if (this.$keycloak) {
-        return this.$keycloak.authenticated
-      } else {
-        return undefined
-      }
-    },
-    myCallsign () {
-      if (!this.authenticated || !this.$keycloak.tokenParsed.callsign) {
-        return null
-      }
-      return this.homeCallsign(this.$keycloak.tokenParsed.callsign, false)
-    },
-    myUserId () {
-      if (!this.authenticated || !this.$keycloak.tokenParsed.userid) {
-        return null
-      }
-      return parseInt(this.$keycloak.tokenParsed.userid)
-    },
-    isTouchDevice () {
-      let prefixes = ' -webkit- -moz- -o- -ms- '.split(' ')
-      let mq = function (query) {
-        return window.matchMedia(query).matches
-      }
-      if (('ontouchstart' in window) || (window.DocumentTouch && document instanceof window.DocumentTouch)) {
-        return true
-      }
-      let query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('')
-      return mq(query)
-    }
-  },
-  methods: {
-    formatActivationDate (date) {
-      return moment.utc(date).format('DD MMM YYYY')
     },
     formatTime (date) {
       return moment.utc(date).format('HH:mm') + 'z'

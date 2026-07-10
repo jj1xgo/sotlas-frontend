@@ -19,14 +19,14 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/vue-fontawesome": "^2.0.10",
-    "@gaviti/vue-turnstile": "^0.6.5",
+    "@fortawesome/vue-fontawesome": "^3.3.0",
+    "@gaviti/vue-turnstile": "^1.1.4",
     "@mapbox/mapbox-gl-draw": "github:manuelkasper/mapbox-gl-draw#sotlas2",
     "@maptiler/sdk": "^2.0.3",
     "@tmcw/togeojson": "^3.2.0",
     "axios": "^1.16.0",
-    "buefy": "^0.8.20",
-    "bulma": "^0.7.5",
+    "buefy": "^3.0.8",
+    "bulma": "^1.0.4",
     "cheap-ruler": "^2.5.1",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.5",
@@ -34,30 +34,40 @@
     "frappe-charts": "github:manuelkasper/frappe-charts#line-chart-y-axis-intervals-based-on-range",
     "haversine-distance": "^1.2.1",
     "maidenhead": "^1.0.7",
+    "mitt": "^3.0.1",
     "moment": "^2.29.4",
     "node-vincenty": "0.0.6",
     "photoswipe": "^4.1.3",
     "proj4": "^2.7.2",
-    "vue": "^2.7.16",
+    "vue": "^3.5.39",
     "vue-clipboard2": "^0.3.1",
-    "vue-filepond": "^6.0.2",
+    "vue-filepond": "^8.0.0",
     "vue-infinite-loading": "^2.4.5",
-    "vue-lazy-youtube-video": "^2.3.0",
     "vue-mapbox": "github:manuelkasper/vue-mapbox#10cb772",
-    "vue-match-media": "^1.0.3",
     "vue-native-websocket": "github:nathantsoi/vue-native-websocket#a265da6",
-    "vue-router": "^3.6.5",
+    "vue-router": "^4.6.4",
     "vue2-debounce": "^1.0.1",
     "vuedraggable": "^2.24.3",
-    "vuex": "^3.6.2"
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.3.3",
+    "@vitejs/plugin-vue": "^6.0.7",
     "eslint": "^8.57.1",
     "eslint-plugin-vue": "^9.24.0",
     "sass": "^1.77.0",
     "vite": "^6.3.5",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "overrides": {
+    "vue-mapbox": {
+      "vue": "$vue"
+    },
+    "vue-infinite-loading": {
+      "vue": "$vue"
+    },
+    "vue2-debounce": {
+      "vue": "$vue"
+    }
   },
   "browserslist": [
     "> 1%",

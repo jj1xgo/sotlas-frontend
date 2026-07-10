@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <NavBar />
-    <keep-alive include="Map">
-      <router-view />
-    </keep-alive>
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Map">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
     <vue-turnstile v-if="!authenticated" :site-key="siteKey" @verified="turnstileVerified" />
   </div>
 </template>
@@ -36,9 +38,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "bulma/bulma.sass";
+@use "bulma/versions/bulma-no-dark-mode";
 
-$link: $blue;
 $fp-enable-1x1: false;
 $fp-4x3-path: "../node_modules/flagpack/flags/4x3/";
 

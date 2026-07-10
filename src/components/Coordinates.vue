@@ -5,9 +5,11 @@
       <b-field>
         <p class="control">
           <b-dropdown aria-role="list">
-            <b-button type="is-info" outlined size="is-small" icon-right="angle-down" slot="trigger">
-              Open
-            </b-button>
+            <template v-slot:trigger>
+              <b-button type="is-info" outlined size="is-small" icon-right="angle-down">
+                Open
+              </b-button>
+            </template>
 
             <b-dropdown-item v-for="action in filteredActions" :key="action.name" :has-link="true" aria-role="listitem"><a :href="action.url()" target="_blank">{{ action.name }}</a></b-dropdown-item>
           </b-dropdown>
@@ -17,7 +19,9 @@
         </p>
         <p v-if="haveAz" class="control">
           <b-dropdown>
-            <b-button slot="trigger" type="is-info" outlined size="is-small" icon-left="file-download" icon-right="angle-down">AZ</b-button>
+            <template v-slot:trigger>
+              <b-button type="is-info" outlined size="is-small" icon-left="file-download" icon-right="angle-down">AZ</b-button>
+            </template>
             <b-dropdown-item custom disabled><b>Activation zone</b></b-dropdown-item>
             <b-dropdown-item has-link><a :href="makeAzUrlForType('gpx')">GPX file</a></b-dropdown-item>
             <b-dropdown-item has-link><a :href="makeAzUrlForType('geojson')">GeoJSON file</a></b-dropdown-item>

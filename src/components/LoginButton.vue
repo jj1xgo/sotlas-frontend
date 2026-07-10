@@ -3,7 +3,7 @@
     <template #trigger="{ active }">
       <b-button class="callsign" :icon-right="active ? 'angle-up' : 'angle-down'" :label="$keycloak.tokenParsed.callsign ? $keycloak.tokenParsed.callsign : $keycloak.userName"></b-button>
     </template>
-    <b-dropdown-item v-if="$keycloak.tokenParsed.callsign" has-link><router-link :to="'/activators/' + $keycloak.tokenParsed.callsign" @click.native="$emit('linkClicked')">My activator page</router-link></b-dropdown-item>
+    <b-dropdown-item v-if="$keycloak.tokenParsed.callsign" has-link><router-link :to="'/activators/' + $keycloak.tokenParsed.callsign" @click="$emit('linkClicked')">My activator page</router-link></b-dropdown-item>
     <b-dropdown-item @click="doAccountManagement">Manage account</b-dropdown-item>
     <b-dropdown-item @click="doLogout">Logout</b-dropdown-item>
   </b-dropdown>

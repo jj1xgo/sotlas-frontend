@@ -1,7 +1,7 @@
 <template>
   <PageLayout>
     <template v-slot:title>Solar Data</template>
-    <template>
+    <template v-slot:default>
       <section class="section">
         <div class="container content">
           <LineChart class="solar-chart" v-if="solarHistory !== null" :data="solarHistory" labelField="dateFormatted" valueField="sfi" valueFieldB="r" name="SFI" nameB="SN" :xIsSeries="true" :regionFill="false" spline="1" height="400" />

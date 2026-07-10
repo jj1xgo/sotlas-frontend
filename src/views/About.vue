@@ -2,7 +2,7 @@
   <PageLayout>
     <template v-slot:title>About</template>
 
-    <template>
+    <template v-slot:default>
       <section class="section">
         <div class="container content">
           <p>SOTA Atlas (SOTLAS) is created and maintained by Manuel Kasper, HB9DQM (<a href="mailto:mk@neon1.net">mk@neon1.net</a>).</p>

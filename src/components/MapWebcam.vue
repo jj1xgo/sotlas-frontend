@@ -1,13 +1,15 @@
 <template>
   <div>
     <MglMarker :coordinates="coordinates">
-      <div slot="marker" class="marker-icon" @click="markerClicked">
-        <font-awesome-layers slot="marker" class="fa-2x fa-fw">
-          <font-awesome-icon icon="circle" />
-          <font-awesome-icon :icon="['fas', 'camera-home']" transform="shrink-7 left-0.5" :style="{ color: 'white' }" />
-        </font-awesome-layers>
-        <div v-if="webcam.clusterSize > 1" class="clustersize">+{{ webcam.clusterSize - 1 }}</div>
-      </div>
+      <template v-slot:marker>
+        <div class="marker-icon" @click="markerClicked">
+          <font-awesome-layers class="fa-2x fa-fw">
+            <font-awesome-icon icon="circle" />
+            <font-awesome-icon :icon="['fas', 'camera-home']" transform="shrink-7 left-0.5" :style="{ color: 'white' }" />
+          </font-awesome-layers>
+          <div v-if="webcam.clusterSize > 1" class="clustersize">+{{ webcam.clusterSize - 1 }}</div>
+        </div>
+      </template>
       <MglPopup :closeButton="false" @added="popupAdded" @open="popupOpened" @close="popupClosed">
         <div :class="['thumbwrapper', size]">
           <a :href="thumbnailHref" target="_blank">

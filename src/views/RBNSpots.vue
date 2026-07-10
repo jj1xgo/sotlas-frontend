@@ -5,17 +5,21 @@
         <b-field grouped group-multiline>
           <FilterInput class="filter-input" v-model="spotFilter" placeholder="Callsign" :is-regex="true" />
           <b-dropdown class="control" v-model="selectedBands" multiple aria-role="list">
-            <b-button icon-right="angle-down" slot="trigger">
-                Bands {{ selectedBands.length > 0 ? ('(' + selectedBands.length + ')') : '' }}
-            </b-button>
+            <template v-slot:trigger>
+              <b-button icon-right="angle-down">
+                  Bands {{ selectedBands.length > 0 ? ('(' + selectedBands.length + ')') : '' }}
+              </b-button>
+            </template>
             <b-dropdown-item v-for="band in bands" :key="band" :value="band" aria-role="listitem">
               {{ band }}
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown class="control" v-model="selectedContinentsCS" multiple aria-role="list">
-            <b-button icon-right="angle-down" slot="trigger">
-                Continents {{ selectedContinentsCS.length > 0 ? ('(' + selectedContinentsCS.length + ')') : '' }}
-            </b-button>
+            <template v-slot:trigger>
+              <b-button icon-right="angle-down">
+                  Continents {{ selectedContinentsCS.length > 0 ? ('(' + selectedContinentsCS.length + ')') : '' }}
+              </b-button>
+            </template>
             <b-dropdown-item :custom="true" :disabled="true"><strong>Callsign</strong></b-dropdown-item>
             <b-dropdown-item v-for="(continent, code) in continents" :key="'callsign_' + code" :value="'callsign_' + code" aria-role="listitem">
               {{ continent }}
@@ -80,13 +84,13 @@ export default {
   mounted () {
     this.loadPrefs()
 
-    EventBus.$on('rbnSpot', this.receiveRbnSpot)
-    EventBus.$on('rbnSpotHistory', this.receiveRbnSpotHistory)
+    EventBus.on('rbnSpot', this.receiveRbnSpot)
+    EventBus.on('rbnSpotHistory', this.receiveRbnSpotHistory)
     this.$store.commit('setRbnFilter', { isActivator: true, maxAge: MAX_SPOT_AGE, viewId: this.viewId })
   },
-  destroyed () {
-    EventBus.$off('rbnSpot', this.receiveRbnSpot)
-    EventBus.$off('rbnSpotHistory', this.receiveRbnSpotHistory)
+  unmounted () {
+    EventBus.off('rbnSpot', this.receiveRbnSpot)
+    EventBus.off('rbnSpotHistory', this.receiveRbnSpotHistory)
     this.$store.commit('setRbnFilter', {})
   },
   methods: {
@@ -101,11 +105,11 @@ export default {
         this.removeExpiredSpots()
       }
     },
-    receiveRbnSpotHistory (rbnSpots, viewId) {
+    receiveRbnSpotHistory ({ rbnSpots, viewId }) {
       if (viewId === this.viewId) {
         this.loading = false
         this.rbnSpots = rbnSpots
-        this.$root.$emit('triggerScroll')
+        EventBus.emit('triggerScroll')
       }
     },
     removeExpiredSpots () {

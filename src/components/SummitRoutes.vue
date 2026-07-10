@@ -1,21 +1,19 @@
 <template>
   <b-table ref="routesTable" :data="routes" :narrowed="true" :striped="true" detailed @details-open="detailsOpen" @details-close="detailsClose">
-    <template slot-scope="props">
-      <b-table-column field="title" label="Title" :sortable="routes.length > 1">
-        <span><a @click="toggle(props.row)"><strong>{{ props.row.title }}</strong></a> <RouteAttributes class="route-attributes" :route="props.row" :summit="summit" @mapReposition="coordinates => $emit('mapReposition', coordinates)" /></span>
-      </b-table-column>
-      <b-table-column field="ascent" label="Ascent" numeric :sortable="routes.length > 1">
-        <span><AltitudeLabel v-if="props.row.ascent" :altitude="props.row.ascent" /></span>
-      </b-table-column>
-      <b-table-column field="descent" label="Descent" numeric :sortable="routes.length > 1">
-        <span><AltitudeLabel v-if="props.row.descent" :altitude="props.row.descent" /></span>
-      </b-table-column>
-      <b-table-column field="distance" label="Distance" numeric :sortable="routes.length > 1">
-        <DistanceLabel v-if="props.row.distance" :distance="props.row.distance" />
-      </b-table-column>
-    </template>
+    <b-table-column field="title" label="Title" :sortable="routes.length > 1" v-slot="props">
+      <span><a @click="toggle(props.row)"><strong>{{ props.row.title }}</strong></a> <RouteAttributes class="route-attributes" :route="props.row" :summit="summit" @mapReposition="coordinates => $emit('mapReposition', coordinates)" /></span>
+    </b-table-column>
+    <b-table-column field="ascent" label="Ascent" numeric :sortable="routes.length > 1" v-slot="props">
+      <span><AltitudeLabel v-if="props.row.ascent" :altitude="props.row.ascent" /></span>
+    </b-table-column>
+    <b-table-column field="descent" label="Descent" numeric :sortable="routes.length > 1" v-slot="props">
+      <span><AltitudeLabel v-if="props.row.descent" :altitude="props.row.descent" /></span>
+    </b-table-column>
+    <b-table-column field="distance" label="Distance" numeric :sortable="routes.length > 1" v-slot="props">
+      <DistanceLabel v-if="props.row.distance" :distance="props.row.distance" />
+    </b-table-column>
 
-    <template slot="detail" slot-scope="props">
+    <template v-slot:detail="props">
       <div v-if="(props.row.parking && props.row.parking.description) || (props.row.publicTransport && props.row.publicTransport.description)" class="add-description-wrapper">
         <div v-if="props.row.parking && props.row.parking.description" class="add-description">
           <font-awesome-icon class="fa-icon clickable" :icon="['fas', 'parking']" @click="$emit('mapReposition', props.row.parking.coordinates)" />
@@ -30,7 +28,7 @@
         </div>
       </div>
       <article class="routeDescr" v-html="linkifyCoordinates(props.row.htmlDescription ? props.row.htmlDescription : props.row.description)" />
-      <div class="author">Posted on {{ props.row.postedDate | formatActivationDate }} by {{ props.row.author }}</div>
+      <div class="author">Posted on {{ formatActivationDate(props.row.postedDate) }} by {{ props.row.author }}</div>
       <div class="track-download" v-if="props.row.track">
         <TrackLink :route="props.row" :summit="summit"><font-awesome-icon :icon="['far', 'file-download']" class="fa-icon" /> Download track (.gpx)</TrackLink>
       </div>

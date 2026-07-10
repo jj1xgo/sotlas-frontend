@@ -34,6 +34,7 @@ import moment from 'moment'
 import utils from '../mixins/utils.js'
 import prefs from '../mixins/prefs.js'
 import sotadb from '../mixins/sotadb.js'
+import EventBus from '../event-bus'
 
 import SummitDatabasePageLayout from '../components/SummitDatabasePageLayout.vue'
 import FilterInput from '../components/FilterInput.vue'
@@ -157,7 +158,7 @@ export default {
       Promise.all(loads)
         .then(() => {
           this.loadingComponent.close()
-          this.$root.$emit('triggerScroll')
+          EventBus.emit('triggerScroll')
         })
     }
   },

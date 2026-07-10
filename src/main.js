@@ -1,10 +1,10 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Buefy from 'buefy'
-import vueDebounce from 'vue2-debounce'
-import VueClipboard from 'vue-clipboard2'
-import MatchMedia from 'vue-match-media/src'
+// import vueDebounce from 'vue2-debounce'
+// import VueClipboard from 'vue-clipboard2'
+import MatchMedia from './matchmedia'
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCheck, faCheckCircle, faInfoCircle, faExclamationTriangle, faExclamationCircle, faArrowUp, faPlus, faCheckDouble,
@@ -35,17 +35,23 @@ library.add(faMap, fasCheckCircle, fasChevronCircleDown, fasChevronCircleUp, faP
   faFlag, faEnvelope, faLayerGroup, faCity, faBuilding, faHome, faLandmark, faMapMarkerAlt, fasUser, fasMountains,
   fasLocation, faWater, faTree, faRoad)
 library.add(faWikipediaW, faGoogle, faGithub)
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.component('font-awesome-layers', FontAwesomeLayers)
-Vue.use(vueDebounce)
-Vue.use(VueClipboard)
-Vue.use(Buefy, {
+
+const app = createApp(App)
+app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('font-awesome-layers', FontAwesomeLayers)
+// vue2-debounce and vue-clipboard2 are Vue 2-only (v-debounce/v-clipboard directives
+// are temporarily unavailable, silently no-op in templates) until replaced (Phase 4).
+// app.use(vueDebounce)
+// app.use(VueClipboard)
+app.use(Buefy, {
   defaultIconComponent: 'font-awesome-icon',
   defaultIconPack: 'far'
 })
-Vue.use(MatchMedia)
+app.use(MatchMedia)
+app.use(store)
+app.use(router)
 
-let myVue
+let mounted = false
 
 if (window.performance && performance.navigation.type === 1) {
   // Store last reload timestamp so user reloads can be detected despite SSO redirect
@@ -53,7 +59,7 @@ if (window.performance && performance.navigation.type === 1) {
 }
 
 if (sessionStorage.getItem('wantSso') || localStorage.getItem('wantSso')) {
-  Vue.use(VueKeyCloak, {
+  app.use(VueKeyCloak, {
     config: {
       realm: 'SOTA',
       url: 'https://sso.sota.org.uk/auth',
@@ -68,30 +74,26 @@ if (sessionStorage.getItem('wantSso') || localStorage.getItem('wantSso')) {
         sessionStorage.removeItem('wantSsoLogin')
         keycloak.login()
       } else {
-        startVue()
+        mountApp()
       }
     },
     onInitError: error => {
       console.error('Keycloak error: ' + error)
-      startVue()
+      mountApp()
     },
     autoUpdateToken: false
   })
 } else {
-  startVue()
+  mountApp()
 }
-
-Vue.config.productionTip = false
 
 // Axios error handling
 let lastError = null
 axios.interceptors.response.use(response => {
   return response
 }, error => {
-  if (!error.config.ignoreError && (!lastError || new Date().getTime() - lastError > 9000) && (!error.response || error.response.status !== 404) && myVue) {
-    // SnackbarProgrammatic.open doesn't work with Webpack 5
-    // See https://github.com/buefy/buefy/issues/2299
-    myVue.$buefy.snackbar.open({
+  if (!error.config.ignoreError && (!lastError || new Date().getTime() - lastError > 9000) && (!error.response || error.response.status !== 404) && mounted) {
+    app.config.globalProperties.$buefy.snackbar.open({
       duration: 9000,
       message: 'Network or server error while loading data, try again later',
       type: 'is-danger',
@@ -105,16 +107,7 @@ axios.interceptors.response.use(response => {
   return Promise.reject(error)
 })
 
-function startVue () {
-  myVue = new Vue({
-    store,
-    router,
-    render: h => h(App),
-    mq: {
-      mobile: '(max-width: 768px)',
-      desktop: '(min-width: 1024px)',
-      widescreen: '(min-width: 1216px)',
-      fullhd: '(min-width: 1408px)'
-    }
-  }).$mount('#app')
+function mountApp () {
+  app.mount('#app')
+  mounted = true
 }
