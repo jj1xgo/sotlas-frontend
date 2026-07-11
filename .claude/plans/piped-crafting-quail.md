@@ -23,34 +23,59 @@ Phase 3b（自前統合層 src/mapgl）のホスト側ブラウザ検証（Claud
    `isLoaded` で先に短絡（どちらも dispose が `map.value` 破棄前に false 化）、
    MglMarker/MglPopup は map 参照なし
 
-## 修正内容（1行）
+### 追記: 1回目修正（`?.` 追加のみ）は対症療法止まりだった
 
-`src/mapgl/MglGeoJsonSource.js:38`:
+1行修正（`map.value.off` → `map.value?.off`）を適用・コミット（`fa626b1`）したが、ホスト側
+再検証で **別文言のエラーで再クラッシュ**（`Cannot destructure property 'type' of 'vnode' as it
+is null`、`unmountComponent` 系スタック）。上位モデル（Fable）へのサブエージェント諮問で再調査した
+結果（upstream 実物 `map.component.ts`/`useSource.ts` を GitHub raw + npm tarball から再取得し
+比較、実際に `src/mapgl` の実コード + 実 vue-router + カスタムレンダラーで再現スクリプトを実行して
+検証）:
+
+- 真因は `MglMap.js` の `dispose()` が独自に追加した `map.value = undefined`。upstream の同等
+  dispose は map 参照を undefined 化せず、子の「dispose 済み map への `.off()` 無条件呼び出し」
+  という暗黙契約を守っている。SOTLAS 版がこの1行を足したことで契約が壊れていた
+- 2回目検証の「vnode is null」は、本アプリに `app.config.errorHandler` が未登録のため、1回のエラー
+  で unmount 中の vnode 木が不整合なまま残り、以降の**全ての**遷移で二次エラーが連鎖する症状
+  （Vue 3.5.39 のソース上で実証済み）。検証がクリーンなセッション（フルリロード）でなかった疑いが
+  濃厚（1回目修正自体は無害だが不十分ではなく、的外れではなかった）
+
+## 修正内容
+
+**`src/mapgl/MglMap.js` の `dispose()` から `map.value = undefined` を削除**（upstream 準拠）。
+ただし `map.value` を永久に truthy にすると `if (!map.value) return` という多重 dispose ガードが
+無効化されるため、ガード条件を `isInitialized.value` ベースに変更する:
 
 ```js
-map.value.off('style.load', addSource)
-```
-↓
-```js
-map.value?.off('style.load', addSource)
+function dispose () {
+  if (!isInitialized.value) return
+  map.value.getCanvas().removeEventListener('webglcontextlost', restart)
+  isInitialized.value = false
+  isLoaded.value = false
+  boundEvents.forEach(([type, handler]) => map.value.off(type, handler))
+  boundEvents.length = 0
+  map.value.remove()
+}
 ```
 
-（layers.js / controls.js のガードと同じ「親 dispose 先行」対策。コメント不要 — keys.js:12-15 に
-unmount 順序の説明が既にある）
+1回目修正の `MglGeoJsonSource.js:38` の `?.` はそのまま残す（無害、対症療法として二重の安全網）。
 
 ## コミット
 
-`fix: MiniMapアンマウント時のMglGeoJsonSourceクラッシュを修正`（日本語・既存ブランチ運用に従う）
+1. `fix: MiniMapアンマウント時のMglGeoJsonSourceクラッシュを修正`（`?.` 追加、済み・`fa626b1`）
+2. `fix: MglMapのdispose処理でmap参照をundefined化しないよう修正`（本命の修正、新規コミット）
 
 ## 検証
 
 **コンテナ内**: `npm run lint`（警告ゼロ）→ `npm run build`
 
-**ホスト側**（ユーザー手動を推奨。Claude in Chrome は MiniMap 検知が不安定な可能性の指摘あり +
-lessons 32 の合成イベント制約）:
-1. **クラッシュ再現シナリオの解消確認（必須）**: ルート表示のある Summit 詳細ページ
-   （例 /summits/JA/YN-001）→ 別ページ（More > New Photos 等）へ遷移。コンソールに TypeError が
-   出ず遷移が完了すること
+**ホスト側**（**フルリロードしたクリーンなセッションで実施**すること。HMR越しや、同一タブで
+先に一度クラッシュした後の状態で検証すると vnode 木汚染の残骸で誤判定しうる。Claude in Chrome は
+MiniMap 検知が不安定な可能性の指摘あり + lessons 32 の合成イベント制約もあるため、ユーザー手動を
+推奨）:
+1. **クラッシュ再現シナリオの解消確認（必須）**: ブラウザを一度フルリロードしてから、ルート表示の
+   ある Summit 詳細ページ（例 /summits/JA/YN-001）→ 別ページ（More > New Photos 等）へ遷移。
+   コンソールに TypeError が出ず遷移が完了すること。ページロード時点からのコンソール全量を確認する
 2. **Activator ページ「Show Map」（再確認）**: 前回「7秒スピナー」報告は検知アーティファクトの
    可能性あり。手動で /activators/OK2PDT 等の Show Map を開き、地図表示＋無限スクロールで地図が
    動かないことを確認

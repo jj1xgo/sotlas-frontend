@@ -89,14 +89,13 @@ export default defineComponent({
     }
 
     function dispose () {
-      if (!map.value) return
+      if (!isInitialized.value) return
       map.value.getCanvas().removeEventListener('webglcontextlost', restart)
       isInitialized.value = false
       isLoaded.value = false
       boundEvents.forEach(([type, handler]) => map.value.off(type, handler))
       boundEvents.length = 0
       map.value.remove()
-      map.value = undefined
     }
 
     function restart () {
