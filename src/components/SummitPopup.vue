@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { MglPopup } from '@indoorequal/vue-maplibre-gl'
+import { MglPopup } from '../mapgl'
 import ModeLabel from '../components/ModeLabel.vue'
 import AltitudeLabel from '../components/AltitudeLabel.vue'
 import SummitPointsLabel from '../components/SummitPointsLabel.vue'

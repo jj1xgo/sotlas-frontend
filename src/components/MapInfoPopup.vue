@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { MglPopup } from '@indoorequal/vue-maplibre-gl'
+import { MglPopup } from '../mapgl'
 import Coordinates from './Coordinates.vue'
 
 export default {

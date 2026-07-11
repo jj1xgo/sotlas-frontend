@@ -2,7 +2,7 @@
   <div style="position: relative;">
     <MglMap v-if="(mapCenter || bounds) && mapStyle" :key="mapKey"
       :mapStyle="mapStyle" :bounds="stableBounds" :fitBoundsOptions="fitBoundsOptions" :center="mapCenter" :zoom="12.5"
-      :attributionControl="false" :transformRequest="transformRequest" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked"
+      :attributionControl="false" :apiKey="mapTilerApiKey" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked"
       @map:idle="onMapIdle">
       <MglGeolocateControl v-if="!$mq.mobile || isEnlarged" :positionOptions="{ enableHighAccuracy: true }"
         :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
@@ -11,7 +11,7 @@
       <div v-if="canEnlarge" class="maplibregl-ctrl-top-left">
         <MapEnlargeControl :isEnlarged="isEnlarged" @enlarge="$emit('enlarge')" />
       </div>
-      <MglAttributionControl :key="$mq.mobile" :compact="$mq.mobile" position="bottom-right" />
+      <MglAttributionControl :compact="$mq.mobile" position="bottom-right" />
 
       <MapRoute v-for="route in routes" :key="route.id" :route="route" />
       <MapPhoto v-for="photo in mapPhotos" :key="photo.filename" :summit="summit" :photo="photo"
@@ -27,7 +27,7 @@
 
 <script>
 import { computed } from 'vue'
-import { MglMap, MglGeolocateControl, MglNavigationControl, MglScaleControl, MglAttributionControl } from '@indoorequal/vue-maplibre-gl'
+import { MglMap, MglGeolocateControl, MglNavigationControl, MglScaleControl, MglAttributionControl } from '../mapgl'
 import MapRoute from './MapRoute.vue'
 import MapPhoto from './MapPhoto.vue'
 import MapInfoPopup from './MapInfoPopup.vue'
@@ -37,7 +37,6 @@ import mapstyle from '../mixins/mapstyle.js'
 import utils from '../mixins/utils.js'
 import longtouch from '../mixins/longtouch.js'
 import reportMapSession from '../mapsession.js'
-import { transformRequest as maptilerTransformRequest, maptilerSessionId } from '../maptiler.js'
 import MapKeyFailedInfo from './MapKeyFailedInfo.vue'
 
 export default {
@@ -126,9 +125,6 @@ export default {
       } else {
         return undefined
       }
-    },
-    transformRequest () {
-      return maptilerTransformRequest
     }
   },
   provide () {
@@ -198,7 +194,7 @@ export default {
       }
       this.highlightCurrentSummit()
 
-      reportMapSession('mini', maptilerSessionId)
+      reportMapSession('mini', this.map.getMaptilerSessionId())
     },
     onMapClicked (event) {
       if (event.event.originalEvent.hitMarker) {
