@@ -35,7 +35,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      map.value.off('style.load', addSource)
+      map.value?.off('style.load', addSource)
       if (isLoaded.value) {
         registry.unmount()
         if (map.value.getSource(props.sourceId)) {
