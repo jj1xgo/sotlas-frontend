@@ -12,8 +12,8 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | 要素 | グローバル `~/.claude/` | このプロジェクト `.claude/` |
 |---|---|---|
 | [**CLAUDE.md**](#claudemd-の位置) | 全プロジェクト共通ガイドライン | リポジトリルートに配置 |
-| **settings.json** | 基盤設定一式 | `skipDangerousModePermissionPrompt: true` + SessionStart / PostToolUse hook 登録 |
-| **settings.local.json** | 存在しない | 存在しない（プロジェクト固有 permissions 未定義） |
+| **settings.json** | 基盤設定一式 | `plansDirectory` 設定 + SessionStart / PostToolUse hook 登録 |
+| **settings.local.json** | 存在しない | git 管理外・コンテナ環境固有（`skipDangerousModePermissionPrompt: true` + permissions.allow） |
 | **commands/** | 汎用 skill（handover / log-incident / claude-md-panel / update-best-practices） | 存在しない（ドメイン固有 skill なし） |
 | **rules/** | 存在しない | 存在しない |
 | **hooks/** | 汎用保護（Write/Edit 検証・注入防止） | [`session-start.sh`](#hooks)（SessionStart hook。handover・lessons.md 自動注入、インシデント検知、best_practices 更新推奨、sotlas-frontend 自身の open issue 確認、claude-container 起票 issue 確認）+ [`lint-posttool.sh`](#hooks)（PostToolUse hook。`.js`/`.vue` 編集時の eslint 自動実行） |
@@ -71,7 +71,7 @@ PreToolUse hook は未定義。
 
 ```json
 {
-  "skipDangerousModePermissionPrompt": true,
+  "plansDirectory": ".claude/plans",
   "hooks": {
     "PostToolUse": [
       {
@@ -94,6 +94,10 @@ PreToolUse hook は未定義。
 ```
 
 permissions.allow は未定義。
+
+`skipDangerousModePermissionPrompt: true` は共有設定に置くべきでない個人・環境依存設定
+（コンテナ内前提）のため、git 管理外の `settings.local.json` へ分離している
+（jj1xgo/sotlas-frontend#13）。
 
 ### incidents/
 
