@@ -6,3 +6,34 @@ registry.npmjs.org
 # package.json の github: 依存（vue-keycloak-js, mapbox-gl-draw, frappe-charts,
 # vue-mapbox, vue-native-websocket）の tarball 取得に必要。
 codeload.github.com
+
+# --- ここから Playwright MCP（.mcp.json）によるコンテナ内 WebUI 検証用 ---
+# アプリ実行時に叩く外部ドメイン。ワイルドカード非対応のため個別列挙。
+# Turnstile スクリプト（App.vue が未認証時に常時描画）。トークン→/mapkey/get→
+# MapTiler キー取得の連鎖の起点で、これが無いと地図が一切描画されない。
+challenges.cloudflare.com
+# 地図スタイル/タイル/グリフ/スプライト（src/mixins/mapstyle.js にハードコード）。
+api.maptiler.com
+# API ベース（VITE_API_URL）・/tracks・/sprites。
+sotl.as
+# SOTA DB API。
+api-db2.sota.org.uk
+api-db.sota.org.uk
+# 写真サムネイル（VITE_PHOTOS_URL）。
+photos.sotl.as
+# 写真オリジナル（VITE_PHOTOS_ORIGINAL_URL）。
+sotlas-photos.s3.eu-central-003.backblazeb2.com
+# 標高 API（summit 詳細ページで発火）。
+elevation.sotl.as
+# アクティベーションゾーン GeoJSON。
+az.sotl.as
+# 検索機能（SearchField.vue）。
+secure.geonames.org
+# ウェブカム一覧 API（既定 OFF の機能だが先回りで許可）。
+api.windy.com
+# 注: sso.sota.org.uk は追加しない（Keycloak init は wantSso フラグ時のみで、
+# SSO 検証は今回の対象外）。
+# 注: vue-native-websocket は Vue2 専用で install が無効化済み（store.js 参照）。
+# Phase 4 で live spot 更新を復活させる際は、接続先ホストを別途 allowlist 確認する。
+# 注: 代替ベースマップ（swisstopo 等）・Windy サムネイル画像ホストは、必要になった
+# 検証時に browser_network_requests で実ホストを確認してから追記する。

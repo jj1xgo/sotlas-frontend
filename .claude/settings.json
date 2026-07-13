@@ -1,6 +1,7 @@
 {
   "skipDangerousModePermissionPrompt": true,
   "plansDirectory": ".claude/plans",
+  "enableAllProjectMcpServers": true,
   "permissions": {
     "deny": ["Bash(env:*)", "Bash(printenv:*)"]
   },
