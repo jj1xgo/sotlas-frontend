@@ -1,7 +1,5 @@
 # sotlas-frontend 用の追加 apt パッケージ。
-# ベースイメージ（debian:stable）に Node.js が含まれないため明示的に追加する。
-# 実測: trixie の候補は nodejs 20.19.2 / npm 9.2.0（package.json の engines: 22.x とは
-# 一致しないが vite 6 の対応範囲内。Node 22 厳密化は claude-container 側への
-# ビルドフック追加 issue で別途対応予定）。
-nodejs
-npm
+# Node.js は node-version.txt（claude-container のビルドフック）で package.json の
+# engines と一致するバージョンを導入しており、PATH 優先順位
+# （/usr/local/bin が /usr/bin より先）により apt 版より常に優先される。
+# そのため nodejs/npm を apt でも入れる意味がなく、ここには置かない。
