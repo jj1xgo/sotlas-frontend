@@ -84,7 +84,7 @@ export default defineConfig(async ({ mode }) => {
     },
     optimizeDeps: {
       include: [
-        'maplibre-gl'
+        '@maptiler/sdk'
       ]
     },
     define: {
