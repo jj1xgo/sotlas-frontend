@@ -1,6 +1,9 @@
 {
   "skipDangerousModePermissionPrompt": true,
   "plansDirectory": ".claude/plans",
+  "permissions": {
+    "deny": ["Bash(env:*)", "Bash(printenv:*)"]
+  },
   "hooks": {
     "PostToolUse": [
       {
