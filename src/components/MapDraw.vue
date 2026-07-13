@@ -15,7 +15,7 @@
 
 <script>
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
-import { mapSymbol } from '@indoorequal/vue-maplibre-gl'
+import { mapSymbol } from '../mapgl'
 import haversineDistance from 'haversine-distance'
 import cheapRuler from 'cheap-ruler'
 import GeoJsonToGpx from '@dwayneparton/geojson-to-gpx'

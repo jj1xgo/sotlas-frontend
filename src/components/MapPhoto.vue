@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { MglMarker, MglPopup } from '@indoorequal/vue-maplibre-gl'
+import { MglMarker, MglPopup } from '../mapgl'
 import photos from '../mixins/photos.js'
 
 export default {

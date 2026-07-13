@@ -1,10 +1,10 @@
 <template>
   <div class="map-layout" ref="mapLayout">
-    <MglMap v-if="showMap && mapStyle" :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" :transformRequest="transformRequest" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked" @map:moveend="onMapMoveEnd">
+    <MglMap v-if="showMap && mapStyle" :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" :apiKey="mapTilerApiKey" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked" @map:moveend="onMapMoveEnd">
       <MglGeolocateControl :positionOptions="{ enableHighAccuracy: true }" :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
       <MglNavigationControl position="top-right" :showCompass="false" />
       <MglScaleControl position="bottom-left" :unit="mapUnits" />
-      <MglAttributionControl :key="$mq.mobile" :compact="$mq.mobile" position="bottom-right" />
+      <MglAttributionControl :compact="$mq.mobile" position="bottom-right" />
 
       <!-- Note: these are not true Mapbox GL controls that get added via addControl(), as those don't mix well with Vue.js templating.
            Instead, we simply put all our custom non-Mapbox controls in the top left corner where they don't clash with any builtin controls. -->
@@ -46,9 +46,8 @@ import smptracks from '../mixins/smptracks.js'
 import mapstyle from '../mixins/mapstyle.js'
 import longtouch from '../mixins/longtouch.js'
 import reportMapSession from '../mapsession.js'
-import { transformRequest as maptilerTransformRequest, maptilerSessionId } from '../maptiler.js'
 
-import { MglMap, MglPopup, MglNavigationControl, MglGeolocateControl, MglScaleControl, MglAttributionControl } from '@indoorequal/vue-maplibre-gl'
+import { MglMap, MglPopup, MglNavigationControl, MglGeolocateControl, MglScaleControl, MglAttributionControl } from '../mapgl'
 import MapFilterControl from '../components/MapFilterControl.vue'
 import MapOptionsControl from '../components/MapOptionsControl.vue'
 import MapDownloadControl from '../components/MapDownloadControl.vue'
@@ -209,9 +208,6 @@ export default {
     },
     mapOptions () {
       return this.$store.state.mapOptions
-    },
-    transformRequest () {
-      return maptilerTransformRequest
     }
   },
   methods: {
@@ -240,7 +236,7 @@ export default {
       })
       this.updateRoute()
 
-      reportMapSession('map', maptilerSessionId)
+      reportMapSession('map', this.map.getMaptilerSessionId())
     },
     onMapMoveEnd (event) {
       localStorage.setItem('bounds', JSON.stringify(event.map.getBounds().toArray()))

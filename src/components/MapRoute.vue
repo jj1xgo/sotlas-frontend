@@ -36,7 +36,7 @@
 <script>
 import axios from 'axios'
 import { gpx } from '@tmcw/togeojson'
-import { MglGeoJsonSource, MglLineLayer, MglSymbolLayer, MglMarker } from '@indoorequal/vue-maplibre-gl'
+import { MglGeoJsonSource, MglLineLayer, MglSymbolLayer, MglMarker } from '../mapgl'
 import haversineDistance from 'haversine-distance'
 import tracks from '../mixins/tracks.js'
 
