@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <MglMap v-if="(mapCenter || bounds) && mapStyle" :apiKey="mapTilerApiKey" :key="mapKey"
+  <div style="position: relative;">
+    <MglMap v-if="(mapCenter || bounds) && mapStyle" :key="mapKey"
       :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="mapCenter" :zoom="12.5"
-      :attributionControl="false" @load="onMapLoaded" @click="onMapClicked" @contextmenu="onMapRightClicked"
-      @idle="onMapIdle">
+      :attributionControl="false" :apiKey="mapTilerApiKey" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked"
+      @map:idle="onMapIdle">
       <MglGeolocateControl v-if="!$mq.mobile || isEnlarged" :positionOptions="{ enableHighAccuracy: true }"
         :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
       <MglNavigationControl v-if="!$mq.mobile" position="top-right" :showCompass="false" />
@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { MglMap, MglGeolocateControl, MglNavigationControl, MglScaleControl, MglAttributionControl } from 'vue-mapbox'
+import { computed } from 'vue'
+import { MglMap, MglGeolocateControl, MglNavigationControl, MglScaleControl, MglAttributionControl } from '../mapgl'
 import MapRoute from './MapRoute.vue'
 import MapPhoto from './MapPhoto.vue'
 import MapInfoPopup from './MapInfoPopup.vue'
@@ -121,6 +122,11 @@ export default {
       }
     }
   },
+  provide () {
+    return {
+      map: computed(() => this.map)
+    }
+  },
   methods: {
     highlightCurrentSummit () {
       if (!this.map || !this.summit || !this.summit.code) {
@@ -186,12 +192,12 @@ export default {
       reportMapSession('mini', this.map.getMaptilerSessionId())
     },
     onMapClicked (event) {
-      if (event.mapboxEvent.originalEvent.hitMarker) {
+      if (event.event.originalEvent.hitMarker) {
         return
       }
 
       // Search for summit circles with some padding/fuzz to make it easier to hit on mobile devices
-      let point = event.mapboxEvent.point
+      let point = event.event.point
       let bbox = [[point.x - 10, point.y - 10], [point.x + 10, point.y + 10]]
       let features = this.map.queryRenderedFeatures(bbox, { layers: ['summits_circles', 'summits_inactive_circles'] })
 
@@ -219,8 +225,8 @@ export default {
     },
     onMapRightClicked (event) {
       this.infoCoordinates = {
-        latitude: event.mapboxEvent.lngLat.lat,
-        longitude: event.mapboxEvent.lngLat.lng
+        latitude: event.event.lngLat.lat,
+        longitude: event.event.lngLat.lng
       }
     },
     onMapIdle () {
@@ -246,6 +252,7 @@ export default {
   },
   data () {
     return {
+      map: null,
       infoCoordinates: null,
       zoomWarningVisible: false
     }
@@ -256,9 +263,6 @@ export default {
 <style scoped>
 :deep(.maplibregl-canvas-container.maplibregl-interactive) {
   cursor: auto;
-}
-.map :deep(.maplibregl-popup) {
-  max-width: 400px !important;
 }
 .zoom-warning {
   position: absolute;

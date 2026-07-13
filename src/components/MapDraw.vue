@@ -15,6 +15,7 @@
 
 <script>
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
+import { mapSymbol } from '../mapgl'
 import haversineDistance from 'haversine-distance'
 import cheapRuler from 'cheap-ruler'
 import GeoJsonToGpx from '@dwayneparton/geojson-to-gpx'
@@ -27,7 +28,14 @@ import { gpx, kml } from '@tmcw/togeojson'
 
 export default {
   components: { LineChart, DistanceLabel },
-  inject: ['map'],
+  // mapSymbol (@indoorequal/vue-maplibre-gl の内部map ShallowRef) を使うことで、
+  // アプリ側 provide('map', computed(...)) が load 後まで解決しないのに対し、
+  // load 前(map生成直後)の時点で addControl できる。これにより mapbox-gl-draw の
+  // onAdd 内 map.loaded() チェックが load イベントより先に走り、'load' リスナーが
+  // 確実に発火する(現行の onAdd 後に load が既発火済みで16msポーリング頼みになる問題を回避)
+  inject: {
+    map: { from: mapSymbol }
+  },
   mixins: [utils],
   mounted () {
     this.setupDraw()
@@ -187,7 +195,7 @@ export default {
       this.map.on('draw.save', e => {
         let all = this.draw.getAll()
         if (all && all.features && all.features.length > 0) {
-          const loadingComponent = this.$buefy.loading.open()
+          const loadingComponent = this.$buefy.loading.open({})
           this.addElevations(all)
             .then(() => {
               loadingComponent.close()
@@ -202,6 +210,15 @@ export default {
               link.click()
               document.body.removeChild(link)
               window.URL.revokeObjectURL(url)
+            })
+            .catch((error) => {
+              loadingComponent.close()
+              console.error(error)
+              this.$buefy.snackbar.open({
+                message: 'Could not load elevation data, try again later',
+                type: 'is-warning',
+                position: 'is-bottom'
+              })
             })
         } else {
           alert('Draw at least one line or point before saving your drawing.')
@@ -293,7 +310,7 @@ export default {
       }
 
       this.loading = true
-      axios.post(import.meta.env.VITE_ELEVATION_API_URL, eleCoordinates)
+      axios.post(import.meta.env.VITE_ELEVATION_API_URL, eleCoordinates, { timeout: 10000 })
         .then(result => {
           this.chartData = result.data.map((elevation, i) => {
             return {
@@ -353,7 +370,7 @@ export default {
         }
 
         let coordsSwapped = feature.geometry.coordinates.map(coord => [coord[1], coord[0]])
-        return axios.post(import.meta.env.VITE_ELEVATION_API_URL, coordsSwapped)
+        return axios.post(import.meta.env.VITE_ELEVATION_API_URL, coordsSwapped, { timeout: 10000 })
           .then(result => {
             result.data.forEach((elevation, index) => {
               if (feature.geometry.coordinates[index].length === 2) {

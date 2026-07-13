@@ -24,19 +24,21 @@ export default {
         return null
       }
 
-      // Cloud styles: return UUID string so MapLibre GL fetches them internally.
-      // Language is applied post-load via applyLanguageToMap() in updateLayers().
+      // Cloud styles: return full style URL so MapLibre GL fetches them internally.
+      // The key is not included here; both the current SDK and the future
+      // transformRequest attach it automatically. Language is applied
+      // post-load via applyLanguageToMap() in updateLayers().
       if (this.mapType === 'maptiler_outdoor') {
         if (this.$store.state.altitudeUnits === 'ft') {
-          return 'dc9edd90-1320-4fa4-98ba-ad2d4efe5998'
+          return 'https://api.maptiler.com/maps/dc9edd90-1320-4fa4-98ba-ad2d4efe5998/style.json'
         } else {
-          return '3a0840d2-674e-4630-a70e-8fdb111259b9'
+          return 'https://api.maptiler.com/maps/3a0840d2-674e-4630-a70e-8fdb111259b9/style.json'
         }
       } else if (this.mapType === 'maptiler_winter') {
         if (this.$store.state.altitudeUnits === 'ft') {
-          return 'f5400991-e3f4-4734-a941-6be8d26381e7'
+          return 'https://api.maptiler.com/maps/f5400991-e3f4-4734-a941-6be8d26381e7/style.json'
         } else {
-          return '5e862436-7ea7-4102-8b56-d35df3a11c07'
+          return 'https://api.maptiler.com/maps/5e862436-7ea7-4102-8b56-d35df3a11c07/style.json'
         }
       }
 

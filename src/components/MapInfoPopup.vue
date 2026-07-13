@@ -1,5 +1,5 @@
 <template>
-  <MglPopup :coordinates="[coordinates.longitude, coordinates.latitude]" :showed="true" @close="$emit('close')">
+  <MglPopup :coordinates="[coordinates.longitude, coordinates.latitude]" @close="$emit('close')">
     <div class="popup-content">
       <Coordinates :latitude="latitude" :longitude="longitude" show-maidenhead show-elevation />
     </div>
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { MglPopup } from 'vue-mapbox'
+import { MglPopup } from '../mapgl'
 import Coordinates from './Coordinates.vue'
 
 export default {

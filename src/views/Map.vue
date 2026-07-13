@@ -1,6 +1,6 @@
 <template>
   <div class="map-layout" ref="mapLayout">
-    <MglMap v-if="showMap && mapStyle" :apiKey="mapTilerApiKey" :mapStyle="mapStyle" v-model:bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" class="map" @load="onMapLoaded" @click="onMapClicked" @contextmenu="onMapRightClicked">
+    <MglMap v-if="showMap && mapStyle" :mapStyle="mapStyle" :bounds="bounds" :fitBoundsOptions="fitBoundsOptions" :center="center" :zoom="zoom" :dragRotate="false" :attributionControl="false" :apiKey="mapTilerApiKey" @map:load="onMapLoaded" @map:click="onMapClicked" @map:contextmenu="onMapRightClicked" @map:moveend="onMapMoveEnd">
       <MglGeolocateControl :positionOptions="{ enableHighAccuracy: true }" :fitBoundsOptions="{ maxZoom: 12.5 }" :trackUserLocation="true" position="top-right" />
       <MglNavigationControl position="top-right" :showCompass="false" />
       <MglScaleControl position="bottom-left" :unit="mapUnits" />
@@ -8,19 +8,19 @@
 
       <!-- Note: these are not true Mapbox GL controls that get added via addControl(), as those don't mix well with Vue.js templating.
            Instead, we simply put all our custom non-Mapbox controls in the top left corner where they don't clash with any builtin controls. -->
-      <div class="maplibregl-ctrl-top-left">
+      <div v-if="map" class="maplibregl-ctrl-top-left">
         <MapFilterControl ref="filterControl" position="top-left" @startFiltering="filtering = true" @stopFiltering="filtering = false" />
         <MapOptionsControl ref="optionsControl" position="top-left" />
         <MapDownloadControl position="top-left" />
       </div>
 
-      <MglPopup v-if="loadingPopupCoordinates" key="loading" :coordinates="loadingPopupCoordinates" :showed="true" anchor="bottom" @added="onPopupAdded">
+      <MglPopup v-if="loadingPopupCoordinates" key="loading" :coordinates="loadingPopupCoordinates" anchor="bottom" :focusAfterOpen="false">
         <div class="loading-ring-wrapper">
           <LoadingRing />
         </div>
       </MglPopup>
 
-      <SummitPopup v-if="summit" :summit="summit" :lastSpot="lastSummitSpot" :nextAlert="nextSummitAlert" @close="onPopupClosed" />
+      <SummitPopup v-if="summit" :summit="summit" :lastSpot="lastSummitSpot" :nextAlert="nextSummitAlert" :max-width="'600px'" @close="onPopupClosed" />
 
       <MapRoute v-for="route in persistentRoutes" :key="route.id" :route="route" />
 
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import axios from 'axios'
 import utils from '../mixins/utils.js'
 import smptracks from '../mixins/smptracks.js'
@@ -46,7 +47,7 @@ import mapstyle from '../mixins/mapstyle.js'
 import longtouch from '../mixins/longtouch.js'
 import reportMapSession from '../mapsession.js'
 
-import { MglMap, MglPopup, MglNavigationControl, MglGeolocateControl, MglScaleControl, MglAttributionControl } from 'vue-mapbox'
+import { MglMap, MglPopup, MglNavigationControl, MglGeolocateControl, MglScaleControl, MglAttributionControl } from '../mapgl'
 import MapFilterControl from '../components/MapFilterControl.vue'
 import MapOptionsControl from '../components/MapOptionsControl.vue'
 import MapDownloadControl from '../components/MapDownloadControl.vue'
@@ -66,9 +67,6 @@ export default {
     MglMap, MglPopup, MglNavigationControl, MglGeolocateControl, MglScaleControl, MglAttributionControl, MapFilterControl, MapOptionsControl, MapDownloadControl, LoadingRing, SummitPopup, MapRoute, MapInfoPopup, MapDraw, MapWebcams, SwisstopoInfo, BasemapAtInfo, MapKeyFailedInfo
   },
   mixins: [utils, smptracks, mapstyle, longtouch],
-  created () {
-    this.map = null
-  },
   mounted () {
     // Check for summit code or coordinates first; if present, start map right there
     if (this.$route.params.summitCode) {
@@ -123,6 +121,7 @@ export default {
   },
   data () {
     return {
+      map: null,
       showMap: false,
       bounds: undefined,
       fitBoundsOptions: undefined,
@@ -138,16 +137,6 @@ export default {
     }
   },
   watch: {
-    bounds (val) {
-      localStorage.setItem('bounds', JSON.stringify(Array.isArray(val) ? val : val.toArray()))
-      this.updateMapURL()
-      if (this.map) {
-        const center = this.map.getCenter()
-        this.$store.commit('setMapCenter', { latitude: center.lat, longitude: center.lng })
-
-        this.zoomWarning = (this.map.getZoom() < 3 && (this.$refs.filterControl.isActive() || this.$refs.optionsControl.spotsShown()))
-      }
-    },
     '$route' (to, from) {
       this.updateRoute()
     },
@@ -249,13 +238,22 @@ export default {
 
       reportMapSession('map', this.map.getMaptilerSessionId())
     },
+    onMapMoveEnd (event) {
+      localStorage.setItem('bounds', JSON.stringify(event.map.getBounds().toArray()))
+      this.updateMapURL()
+
+      const center = event.map.getCenter()
+      this.$store.commit('setMapCenter', { latitude: center.lat, longitude: center.lng })
+
+      this.zoomWarning = (event.map.getZoom() < 3 && (this.$refs.filterControl?.isActive() || this.$refs.optionsControl?.spotsShown()))
+    },
     onMapClicked (event) {
-      if (this.$refs.draw.isDrawing() || event.mapboxEvent.originalEvent.hitMarker) {
+      if (this.$refs.draw.isDrawing() || event.event.originalEvent.hitMarker) {
         return
       }
 
       // Search for summit circles with some padding/fuzz to make it easier to hit on mobile devices
-      let point = event.mapboxEvent.point
+      let point = event.event.point
       let bbox = [[point.x - this.clickFuzz, point.y - this.clickFuzz], [point.x + this.clickFuzz, point.y + this.clickFuzz]]
       let features = this.map.queryRenderedFeatures(bbox, { layers: ['summits_circles_all', 'summits_circles', 'summits_inactive_circles'] })
 
@@ -287,8 +285,8 @@ export default {
     },
     onMapRightClicked (event) {
       this.infoCoordinates = {
-        latitude: event.mapboxEvent.lngLat.lat,
-        longitude: event.mapboxEvent.lngLat.lng
+        latitude: event.event.lngLat.lat,
+        longitude: event.event.lngLat.lng
       }
     },
     updateRoute () {
@@ -335,9 +333,6 @@ export default {
     onPopupClosed () {
       this.summit = null
       this.updateMapURL()
-    },
-    onPopupAdded (popup) {
-      popup.popup.options.focusAfterOpen = false
     },
     handleSummitClick (feature) {
       this.loadingPopupCoordinates = feature.geometry.coordinates
@@ -424,7 +419,7 @@ export default {
   },
   provide () {
     return {
-      map: this.map
+      map: computed(() => this.map)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -450,9 +445,6 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-}
-.map :deep(.maplibregl-popup) {
-  max-width: 600px !important;
 }
 .loading-ring-wrapper {
   margin: 1rem 0.5rem 0.5rem 0.5rem;

@@ -1,5 +1,5 @@
 <template>
-  <MglPopup v-if="summit" key="summitinfo" :coordinates="[summit.coordinates.longitude, summit.coordinates.latitude]" :showed="true" anchor="bottom" :closeButton="false" @close="$emit('close')" @added="popupAdded">
+  <MglPopup v-if="summit" key="summitinfo" :coordinates="[summit.coordinates.longitude, summit.coordinates.latitude]" anchor="bottom" :closeButton="false" :focusAfterOpen="false" @close="$emit('close')">
     <div :class="{ summitPopup: true, minimize: minimizePopup }">
       <div v-if="coverPhoto" class="photo">
         <div style="text-align: center"><a :href="coverPhoto.mediaLink" target="_blank"><img :src="coverPhoto.src" /></a></div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { MglPopup } from 'vue-mapbox'
+import { MglPopup } from '../mapgl'
 import ModeLabel from '../components/ModeLabel.vue'
 import AltitudeLabel from '../components/AltitudeLabel.vue'
 import SummitPointsLabel from '../components/SummitPointsLabel.vue'
@@ -43,11 +43,6 @@ export default {
   mixins: [utils, coverphoto],
   components: {
     MglPopup, ModeLabel, AltitudeLabel, SummitPointsLabel
-  },
-  methods: {
-    popupAdded (popup) {
-      popup.popup.options.focusAfterOpen = false
-    }
   },
   data () {
     return {
