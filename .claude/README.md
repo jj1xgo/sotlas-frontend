@@ -12,7 +12,7 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | 要素 | グローバル `~/.claude/` | このプロジェクト `.claude/` |
 |---|---|---|
 | [**CLAUDE.md**](#claudemd-の位置) | 全プロジェクト共通ガイドライン | リポジトリルートに配置 |
-| **settings.json** | 基盤設定一式 | `skipDangerousModePermissionPrompt: true` + SessionStart / PostToolUse hook 登録 |
+| **settings.json** | 基盤設定一式 | `skipDangerousModePermissionPrompt: true` + `permissions.deny`（秘密情報の生値露出防止） + SessionStart / PostToolUse hook 登録 |
 | **settings.local.json** | 存在しない | 存在しない（プロジェクト固有 permissions 未定義） |
 | **commands/** | 汎用 skill（handover / log-incident / claude-md-panel / update-best-practices） | 存在しない（ドメイン固有 skill なし） |
 | **rules/** | 存在しない | 存在しない |
@@ -72,6 +72,9 @@ PreToolUse hook は未定義。
 ```json
 {
   "skipDangerousModePermissionPrompt": true,
+  "permissions": {
+    "deny": ["Bash(env:*)", "Bash(printenv:*)"]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -93,7 +96,9 @@ PreToolUse hook は未定義。
 }
 ```
 
-permissions.allow は未定義。
+`permissions.deny` は `env`/`printenv` の丸ごと実行を禁止する（`env | grep ...` で秘密情報の生値が
+出力される事故が発生したための再発防止策。値の存在確認は `[ -n "$VAR" ] && echo set` 等、値を含まない
+形で行う）。permissions.allow は未定義。
 
 ### incidents/
 
