@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "env": {
+        "XDG_CONFIG_HOME": "/home/node/.cache/xdg-config"
+      },
+      "args": [
+        "-y", "@playwright/mcp@0.0.78",
+        "--browser", "chromium",
+        "--executable-path", "/usr/bin/chromium",
+        "--headless",
+        "--no-sandbox",
+        "--isolated",
+        "--viewport-size", "1280x800",
+        "--caps", "vision",
+        "--output-dir", ".claude/playwright-mcp"
+      ]
+    }
+  }
+}
