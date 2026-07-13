@@ -62,7 +62,7 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
   - セッション異常終了で headless chromium が残ることがある。`pkill -f chromium` で掃除できる
   - **既知の制約**: Turnstile（`challenges.cloudflare.com`、地図描画に必要な MapTiler キー取得の前提）が
     ヘッドレスブラウザの bot 検知で通過できない場合がある。地図が描画されない場合は非地図箇所の検証に
-    留め、地図の見た目確認は下記のホスト側手段を使う
+    留め、地図の見た目確認は下記のホスト側手段を使う（恒久策は issue #18 で調査中）
   - ホスト側で `claude` を起動した場合、`/usr/bin/chromium`（コンテナ専用に導入）が無いため MCP の
     ブラウザ起動はエラーになる
 - **ホスト側での動作確認**: 上記で確認できない場合（ヘッドフル確認・Turnstile 不通過時の地図確認等）の
@@ -90,7 +90,8 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
   `packages.txt` に `nodejs`/`npm` を追加しても PATH 優先順位（`/usr/local/bin` が `/usr/bin` より先）で
   常に上書きされ無意味なので置かない
 - コンテナはポートを公開しない。ブラウザ確認の方法は上記「検証方法」を参照
-- issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す
+- issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す。
+  この PAT は Issues 限定スコープで push 権限を持たない
 
 ## 課題管理（GitHub Issues）
 
@@ -99,7 +100,8 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
 
 - **ラベル体系**: `enhancement`（GitHub 既定）・`on-hold`（保留。本文に再検討トリガーを明記する
   ものだけに使う）
-- **署名**: 自リポジトリ（ユーザー所有）への投稿のためモデル名のみ（例: `— <実行中のモデル名>`）
+- **署名**: グローバル CLAUDE.md の署名ルールに従い、自リポジトリ内投稿でも省略せずモデル名に
+  続けてリポジトリ名を括弧書きで付記する（例: `— <実行中のモデル名> (sotlas-frontend)`）
 - `.claude/plans/<slug>.md` の実装計画ファイル運用は本節の対象外。「計画・タスク管理」節のとおり
   Plan Mode 承認後の個別タスクに引き続き使う
 - session-start hook が open issue の状態を自動確認し注入する（フェイルソフト。`gh` 不在・API 失敗時は
