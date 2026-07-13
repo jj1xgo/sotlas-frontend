@@ -31,6 +31,7 @@ src/compiled-icons
 .claude/bash_history
 .claude/lessons.md
 .claude/pr-drafts/
+.claude/playwright-mcp/
 
 # claude-container runtime settings (may contain host-specific paths)
 .claude-container.d/env

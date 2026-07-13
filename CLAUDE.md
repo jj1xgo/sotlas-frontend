@@ -51,9 +51,23 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
 
 ## 検証方法
 
-- ブラウザでの動作確認（dev サーバ）は**ホスト側**で `npm run dev` を実行する。コンテナはポートを
-  公開していないため、コンテナ内で dev サーバを起動してもホストのブラウザからは届かない
-- コンテナ内では `npm run lint` / `npm run build` / curl 等での疎通確認までを行う
+- **コンテナ内での WebUI 動作確認**: Playwright MCP（リポジトリルート `.mcp.json`、コンテナ内 headless
+  Chromium）を第一手段とする。`npm run dev` を run_in_background で起動 → MCP のブラウザツールで対象
+  ページへ navigate → スクリーンショット・console/network を実データで確認する。dev サーバとブラウザを
+  両方コンテナ内で動かすため、ポート非公開は支障にならない
+  - コンテナリビルド直後（npx キャッシュが空の最初のセッション）は
+    `npx -y @playwright/mcp@<.mcp.json記載バージョン> --help` で warmup してから使う
+    （初回ダウンロード分のタイムアウト回避）
+  - MCP バージョン更新は `.mcp.json` の `@x.x.x` を手動で上げてから動作確認する
+  - セッション異常終了で headless chromium が残ることがある。`pkill -f chromium` で掃除できる
+  - **既知の制約**: Turnstile（`challenges.cloudflare.com`、地図描画に必要な MapTiler キー取得の前提）が
+    ヘッドレスブラウザの bot 検知で通過できない場合がある。地図が描画されない場合は非地図箇所の検証に
+    留め、地図の見た目確認は下記のホスト側手段を使う
+  - ホスト側で `claude` を起動した場合、`/usr/bin/chromium`（コンテナ専用に導入）が無いため MCP の
+    ブラウザ起動はエラーになる
+- **ホスト側での動作確認**: 上記で確認できない場合（ヘッドフル確認・Turnstile 不通過時の地図確認等）の
+  補助手段として、ホスト側で `npm run dev` を実行し実ブラウザで確認する
+- コンテナ内では上記に加え `npm run lint` / `npm run build` / curl 等での疎通確認も行う
 
 ## 計画・タスク管理
 
@@ -75,7 +89,7 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
   claude-container の専用機構）で `package.json` の `engines`（22.x）と一致するバージョンを指定している。
   `packages.txt` に `nodejs`/`npm` を追加しても PATH 優先順位（`/usr/local/bin` が `/usr/bin` より先）で
   常に上書きされ無意味なので置かない
-- コンテナはポートを公開しない。ブラウザ確認は上記「検証方法」のとおりホスト側で行う
+- コンテナはポートを公開しない。ブラウザ確認の方法は上記「検証方法」を参照
 - issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す
 
 ## 課題管理（GitHub Issues）

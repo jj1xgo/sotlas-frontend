@@ -3,3 +3,12 @@
 # package.json の engines と一致するバージョンを導入しており、PATH 優先順位
 # （/usr/local/bin が /usr/bin より先）により apt 版より常に優先される。
 # そのため nodejs/npm を apt でも入れる意味がなく、ここには置かない。
+
+# Playwright MCP（.mcp.json）のヘッドレス検証用ブラウザ。実行時 apt は不可なため
+# ビルド時に導入する。apt の依存解決で CDP/レンダリングに必要な共有ライブラリ一式
+# （libnss3, libatk, libgbm 等）が自動的に揃う。
+chromium
+# 上記ブラウザでのスクリーンショットが豆腐化しないためのフォント。
+fonts-liberation
+fonts-noto-core
+fonts-noto-cjk

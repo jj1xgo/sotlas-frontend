@@ -12,8 +12,9 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | 要素 | グローバル `~/.claude/` | このプロジェクト `.claude/` |
 |---|---|---|
 | [**CLAUDE.md**](#claudemd-の位置) | 全プロジェクト共通ガイドライン | リポジトリルートに配置 |
-| **settings.json** | 基盤設定一式 | `plansDirectory` 設定 + SessionStart / PostToolUse hook 登録 |
+| **settings.json** | 基盤設定一式 | `plansDirectory` 設定 + `enableAllProjectMcpServers` + SessionStart / PostToolUse hook 登録 |
 | **settings.local.json** | 存在しない | git 管理外・コンテナ環境固有（`skipDangerousModePermissionPrompt: true` + permissions.allow） |
+| **`.mcp.json`**（リポジトリルート） | 存在しない | Playwright MCP（コンテナ内 headless ブラウザ検証。npx で完全バージョンピン起動） |
 | **commands/** | 汎用 skill（handover / log-incident / claude-md-panel / update-best-practices） | 存在しない（ドメイン固有 skill なし） |
 | **rules/** | 存在しない | 存在しない |
 | **hooks/** | 汎用保護（Write/Edit 検証・注入防止） | [`session-start.sh`](#hooks)（SessionStart hook。handover・lessons.md 自動注入、インシデント検知、best_practices 更新推奨、sotlas-frontend 自身の open issue 確認、claude-container 起票 issue 確認）+ [`lint-posttool.sh`](#hooks)（PostToolUse hook。`.js`/`.vue` 編集時の eslint 自動実行） |
@@ -72,6 +73,7 @@ PreToolUse hook は未定義。
 ```json
 {
   "plansDirectory": ".claude/plans",
+  "enableAllProjectMcpServers": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -92,6 +94,9 @@ PreToolUse hook は未定義。
   }
 }
 ```
+
+`enableAllProjectMcpServers: true` はリポジトリルートの `.mcp.json`（Playwright MCP）の承認プロンプトを
+セッションごとに出さないための設定。
 
 permissions.allow は未定義。
 
