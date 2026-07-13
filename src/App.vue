@@ -6,7 +6,7 @@
         <component :is="Component" />
       </keep-alive>
     </router-view>
-    <vue-turnstile v-if="!authenticated" :site-key="siteKey" @verified="turnstileVerified" />
+    <vue-turnstile v-if="!authenticated && !devMapKeyPreseeded" :site-key="siteKey" @verified="turnstileVerified" />
   </div>
 </template>
 
@@ -27,6 +27,12 @@ export default {
   computed: {
     siteKey () {
       return import.meta.env.VITE_TURNSTILE_SITE_KEY
+    },
+    // Hides the Turnstile widget when the dev-only MapTiler key bypass (see
+    // store.js) is active, so containerized headless verification doesn't spam
+    // the console with Turnstile bot-detection errors.
+    devMapKeyPreseeded () {
+      return import.meta.env.DEV && !!import.meta.env.VITE_MAPTILER_DEV_KEY
     }
   },
   methods: {
