@@ -12,9 +12,10 @@ manuelkasper/sotlas-frontend の fork）の `.claude/` に配置した Claude Co
 | 要素 | グローバル `~/.claude/` | このプロジェクト `.claude/` |
 |---|---|---|
 | [**CLAUDE.md**](#claudemd-の位置) | 全プロジェクト共通ガイドライン | リポジトリルートに配置 |
-| **settings.json** | 基盤設定一式 | `skipDangerousModePermissionPrompt: true` + `permissions.deny`（秘密情報の生値露出防止） + SessionStart / PostToolUse hook 登録 |
+| **settings.json** | 基盤設定一式 | `skipDangerousModePermissionPrompt: true` + `permissions.deny`（秘密情報の生値露出防止） + `enableAllProjectMcpServers: true` + SessionStart / PostToolUse hook 登録 |
 | **settings.local.json** | 存在しない | 存在しない（プロジェクト固有 permissions 未定義） |
 | **commands/** | 汎用 skill（handover / log-incident / claude-md-panel / update-best-practices） | 存在しない（ドメイン固有 skill なし） |
+| **.mcp.json** | 存在しない | コンテナ内 Playwright MCP（headless Chromium）定義。リポジトリルートに配置（詳細は[後述](#mcpjson)） |
 | **rules/** | 存在しない | 存在しない |
 | **hooks/** | 汎用保護（Write/Edit 検証・注入防止） | [`session-start.sh`](#hooks)（SessionStart hook。handover・lessons.md 自動注入、インシデント検知、best_practices 更新推奨、sotlas-frontend 自身の open issue 確認、claude-container 起票 issue 確認）+ [`lint-posttool.sh`](#hooks)（PostToolUse hook。`.js`/`.vue` 編集時の eslint 自動実行） |
 | [**incidents/**](#incidents) | 存在しない | 存在しない（発生時に運用開始。手順は `/log-incident` 参照） |
@@ -75,6 +76,7 @@ PreToolUse hook は未定義。
   "permissions": {
     "deny": ["Bash(env:*)", "Bash(printenv:*)"]
   },
+  "enableAllProjectMcpServers": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -99,6 +101,19 @@ PreToolUse hook は未定義。
 `permissions.deny` は `env`/`printenv` の丸ごと実行を禁止する（`env | grep ...` で秘密情報の生値が
 出力される事故が発生したための再発防止策。値の存在確認は `[ -n "$VAR" ] && echo set` 等、値を含まない
 形で行う）。permissions.allow は未定義。
+
+`enableAllProjectMcpServers: true` はリポジトリルート `.mcp.json`（後述）で定義した MCP サーバーを
+承認プロンプトなしで自動起動する設定。
+
+### .mcp.json
+
+コンテナ内 Playwright MCP（`@playwright/mcp`、`npx` でバージョン完全ピン起動）の定義。
+`--executable-path /usr/bin/chromium`（`.claude-container.d/packages.txt` の `chromium` パッケージ）・
+`--headless --no-sandbox --isolated` でヘッドレス検証を行う。出力先 `.claude/playwright-mcp/`
+（console ログ・スクリーンショット）は `.gitignore` 対象。`env.XDG_CONFIG_HOME` は
+`/home/node/.config` が root 所有で書き込めず crashpad が SIGTRAP クラッシュする問題の回避
+（書き込み可能なパスへ retarget）。詳細な利用手順はリポジトリルート [CLAUDE.md](../CLAUDE.md)
+「検証方法」節を参照。
 
 ### incidents/
 
