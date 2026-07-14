@@ -44,7 +44,6 @@
     "vue-infinite-loading": "^2.4.5",
     "vue-native-websocket": "github:nathantsoi/vue-native-websocket#a265da6",
     "vue-router": "^4.6.4",
-    "vue2-debounce": "^1.0.1",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.1.0"
   },
@@ -58,9 +57,6 @@
   },
   "overrides": {
     "vue-infinite-loading": {
-      "vue": "$vue"
-    },
-    "vue2-debounce": {
       "vue": "$vue"
     }
   },
