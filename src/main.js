@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Buefy from 'buefy'
-// import vueDebounce from 'vue2-debounce'
 import MatchMedia from './matchmedia'
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -38,9 +37,6 @@ library.add(faWikipediaW, faGoogle, faGithub)
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.component('font-awesome-layers', FontAwesomeLayers)
-// vue2-debounce is Vue 2-only (v-debounce directive is temporarily unavailable,
-// silently no-op in templates) until replaced (Phase 4).
-// app.use(vueDebounce)
 app.use(Buefy, {
   defaultIconComponent: 'font-awesome-icon',
   defaultIconPack: 'far'

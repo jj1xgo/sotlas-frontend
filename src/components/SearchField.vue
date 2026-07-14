@@ -15,8 +15,6 @@
       icon="search"
       rounded
       clearable
-      v-debounce:300ms="onInput"
-      :debounce-events="'input'"
       @select="onSelect"
       @focus="searchFocus"
       @blur="searchBlur"
@@ -74,6 +72,7 @@ import axios from 'axios'
 import utils from '../mixins/utils.js'
 import haversine from 'haversine-distance'
 import geonames from '../mixins/geonames.js'
+import { debounce } from '../debounce'
 
 const MIN_QUERY_LENGTH = 4
 const COORDINATE_REGEX = /^\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*$/
@@ -108,6 +107,14 @@ export default {
     showNoResults () {
       return this.myQuery && this.myQuery.length >= MIN_QUERY_LENGTH && this.autocompleteResults.length === 0 && !this.isLoading
     }
+  },
+  watch: {
+    myQuery (value) {
+      this.debouncedOnInput(value)
+    }
+  },
+  created () {
+    this.debouncedOnInput = debounce(this.onInput, 300)
   },
   methods: {
     searchFocus () {
