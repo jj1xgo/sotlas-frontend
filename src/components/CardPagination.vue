@@ -4,15 +4,15 @@
     <div v-for="(row, index) in pageData" :key="row[rowKey]">
       <slot :row="row" :prevRow="(index > 0 ? pageData[index-1] : null)"></slot>
     </div>
-    <infinite-loading v-if="infinite" :identifier="infiniteIdentifier" @infinite="infiniteHandler">
-      <template v-slot:no-more><div></div></template>
-      <template v-slot:no-results><div></div></template>
+    <infinite-loading v-if="infinite" :identifier="infiniteIdentifier" :distance="100" @infinite="infiniteHandler">
+      <template v-slot:complete><div></div></template>
     </infinite-loading>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from 'v3-infinite-loading'
+import 'v3-infinite-loading/lib/style.css'
 
 export default {
   name: 'CardPagination',
