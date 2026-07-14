@@ -81,7 +81,7 @@
 | S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存、Phase 4） |
 | S6 | SummitRoutes | ルート情報表示・ダウンロード |
 | S7 | NearbySummitsList | 近隣サミット一覧 |
-| S8 | Coordinates | 座標表示・クリップボードコピー（vue-clipboard2 依存、Phase 4） |
+| S8 | Coordinates | 座標表示・クリップボードコピー（vue-clipboard2 依存、Phase 4）→**Phase 4 完了・OK**: `navigator.clipboard`+execCommandフォールバックへ置換。Playwright MCPでCopyボタンのトースト表示・フォールバック経路とも確認済み |
 | S9 | EditSpot / EditAlert (アクセス可能な場合) | スポット/アラート編集フォーム |
 
 ## 横断機能（複数ページで共通利用、個別確認が必要）
@@ -91,10 +91,10 @@
 | X1 | チャート類（BarChart/LineChart/PieChart/PercentageChart/ActivationCharts） | frappe-charts fork（Vue非依存） | 描画・データ反映 |
 | X2 | 写真アップロード（PhotosUploader/EditPhoto） | vue-filepond（Phase 4） | アップロード・プレビュー |
 | X3 | ドラッグ&ドロップ（PictureSwipe 内の並べ替え等） | vuedraggable（Phase 4） | 並べ替え動作 |
-| X4 | 無限スクロール（CardPagination） | vue-infinite-loading（Phase 4） | 追加読み込みトリガー |
-| X5 | デバウンス入力（Activators.vue / SearchField.vue） | vue2-debounce（Phase 4） | 入力遅延後に検索実行 |
+| X4 | 無限スクロール（CardPagination） | vue-infinite-loading→v3-infinite-loading（**Phase 4 完了・OK**） | 追加読み込みトリガー。Playwright MCPで`/alerts`・`/activators/:callsign`のモバイルビューを最下部までスクロールし追加読み込み・complete後の文言非表示を確認済み |
+| X5 | デバウンス入力（Activators.vue / SearchField.vue） | vue2-debounce→in-repo実装（**Phase 4 完了・OK**） | 入力遅延後に検索実行。ネットワークログで500ms/300ms後の単発リクエスト、Enter即時発火、プログラム的入力変更での発火（SearchField）を確認済み |
 | X6 | レスポンシブ判定（`$mq`） | vue-match-media（Phase 4） | モバイル/ワイド切替 |
-| X7 | WebSocket 経由のライブ更新（Spots系・LiveFeedIndicator） | vue-native-websocket fork（Phase 4） | 接続・再接続・データ反映 |
+| X7 | WebSocket 経由のライブ更新（Spots系・LiveFeedIndicator） | vue-native-websocket fork→自前実装（**Phase 4 完了・OK**） | 接続・再接続・データ反映。コンテナ内実接続で`state.socket.isConnected=true`・spots 454件受信・RBNページのLIVE表示を確認済み。再接続（切断復帰）はコンテナからは注入困難なためホスト検証項目として残す |
 | X8 | EventBus 通知（RBNSpots/SotaSpots/Activator/Summit/NavBar） | event-bus.js → mitt（Phase 1） | 各種イベント連携（トリガースクロール等） |
 
 ## Phase 2 固有の確認観点（Buefy 0.8→3.0 + bulma 0.7→1.0 移行）
