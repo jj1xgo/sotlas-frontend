@@ -7,7 +7,7 @@
 <script>
 import MapWebcam from '../components/MapWebcam.vue'
 import axios from 'axios'
-import { debounce } from 'vue2-debounce'
+import { debounce } from '../debounce'
 
 export default {
   name: 'MapWebcams',
@@ -61,7 +61,7 @@ export default {
         this.map.off('idle', this.idleListener)
       }
 
-      // Create a debounced version of loadWebcams using vue2-debounce
+      // Create a debounced version of loadWebcams
       this.idleListener = debounce(() => {
         this.loadWebcams()
       }, 300)

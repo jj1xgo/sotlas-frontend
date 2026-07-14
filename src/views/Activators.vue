@@ -6,7 +6,7 @@
       <section class="section">
         <div class="container">
           <b-field>
-            <FilterInput v-model="filter" ref="filter" v-debounce:500ms="onFilterChanged" />
+            <FilterInput v-model="filter" ref="filter" @update:model-value="onFilterInput" @keyup.enter="onFilterEnter" />
           </b-field>
 
           <b-table class="auto-width" :narrowed="true" :striped="true" :data="activators" :loading="loading" paginated backend-pagination :total="total" :per-page="perPage" v-model:current-page="curPage" backend-sorting :default-sort="[sortField, sortDirection]" @sort="onSort" :mobile-cards="false">
@@ -49,6 +49,7 @@ import prefs from '../mixins/prefs.js'
 import PageLayout from '../components/PageLayout.vue'
 import FilterInput from '../components/FilterInput.vue'
 import CountryFlag from '../components/CountryFlag.vue'
+import { debounce } from '../debounce'
 
 export default {
   name: 'Activators',
@@ -76,6 +77,13 @@ export default {
     onFilterChanged () {
       this.loadData()
     },
+    onFilterInput () {
+      this.debouncedFilterChanged()
+    },
+    onFilterEnter () {
+      this.debouncedFilterChanged.cancel()
+      this.onFilterChanged()
+    },
     country (callsign) {
       return prefix.isoCodeForCallsign(callsign)
     }
@@ -95,6 +103,9 @@ export default {
         this.loadData()
       }
     }
+  },
+  created () {
+    this.debouncedFilterChanged = debounce(this.onFilterChanged, 500)
   },
   mounted () {
     document.title = 'Activators - SOTLAS'
