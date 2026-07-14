@@ -2,10 +2,8 @@ import { createStore } from 'vuex'
 import EventBus from './event-bus'
 import { decompressKeys } from './keyzipper'
 import axios from 'axios'
+import { connectWebSocket } from './websocket'
 
-// vue-native-websocket install() is Vue 2-only (relies on Vue.use/Vue.mixin) and
-// isn't called here until it's replaced with a Vue 3-compatible package (Phase 4).
-// Live spot updates over WebSocket are temporarily unavailable until then.
 let socket = null
 
 const MAX_SPOT_AGE = 86400000
@@ -227,7 +225,6 @@ function loadAlerts (noCache) {
 loadAlerts(false)
 setInterval(loadAlerts, ALERT_UPDATE_INTERVAL)
 
-// WebSocket connection setup (vue-native-websocket) is temporarily disabled,
-// see the `socket` variable comment above.
+connectWebSocket(import.meta.env.VITE_WSS_URL + '/ws', store, { reconnectionDelay: 1000 })
 
 export default store
