@@ -46,7 +46,7 @@
     "vue-native-websocket": "github:nathantsoi/vue-native-websocket#a265da6",
     "vue-router": "^4.6.4",
     "vue2-debounce": "^1.0.1",
-    "vuedraggable": "^2.24.3",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
