@@ -15,7 +15,7 @@
           </b-dropdown>
         </p>
         <p class="control">
-          <b-button type="is-info" outlined size="is-small" v-clipboard:copy="latitude + ',' + longitude" v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError">Copy</b-button>
+          <b-button type="is-info" outlined size="is-small" @click="copyCoordinates">Copy</b-button>
         </p>
         <p v-if="haveAz" class="control">
           <b-dropdown>
@@ -91,6 +91,26 @@ export default {
     }
   },
   methods: {
+    copyCoordinates () {
+      const text = this.latitude + ',' + this.longitude
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(this.onCopySuccess, this.onCopyError)
+      } else {
+        // Fallback for non-secure contexts (navigator.clipboard requires HTTPS or localhost)
+        try {
+          const textarea = document.createElement('textarea')
+          textarea.value = text
+          textarea.style.position = 'fixed'
+          document.body.appendChild(textarea)
+          textarea.select()
+          const ok = document.execCommand('copy')
+          document.body.removeChild(textarea)
+          ok ? this.onCopySuccess() : this.onCopyError()
+        } catch (e) {
+          this.onCopyError()
+        }
+      }
+    },
     onCopySuccess () {
       this.$buefy.toast.open({
         message: 'Coordinates copied to clipboard',
