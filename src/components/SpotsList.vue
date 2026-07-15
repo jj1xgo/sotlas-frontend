@@ -71,8 +71,8 @@
         </b-select>
       </template>
     </b-table>
-    <b-modal v-if="isEditSpotActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isEditSpotActive = false">
-      <EditSpot :spot="spotToEdit" />
+    <b-modal v-model="isEditSpotActive" has-modal-card :can-cancel="['escape']">
+      <EditSpot :spot="spotToEdit" @close="isEditSpotActive = false" />
     </b-modal>
   </div>
 </template>

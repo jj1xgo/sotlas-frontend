@@ -20,8 +20,8 @@
           <router-view />
         </div>
 
-        <b-modal v-if="isEditSpotActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isEditSpotActive = false">
-          <EditSpot />
+        <b-modal v-model="isEditSpotActive" has-modal-card :can-cancel="['escape']">
+          <EditSpot @close="isEditSpotActive = false" />
         </b-modal>
       </section>
     </template>

@@ -42,7 +42,7 @@
         </b-field>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" type="button" @click="$parent.close()">Cancel</button>
+        <button class="button" type="button" @click="$emit('close')">Cancel</button>
         <button class="button is-info" :disabled="!isInputValid" :loading="saving" @click="save">Save</button>
       </footer>
   </div>
@@ -58,6 +58,7 @@ export default {
     summitCode: String,
     photo: Object
   },
+  emits: ['close', 'photoEdited'],
   mixins: [photos, api],
   computed: {
     isInputValid () {
@@ -116,7 +117,7 @@ export default {
       this.editPhoto(this.summitCode, this.photo.filename, newData)
         .then(() => {
           this.$emit('photoEdited')
-          this.$parent.close()
+          this.$emit('close')
         })
         .finally(() => {
           this.saving = false

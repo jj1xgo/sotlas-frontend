@@ -40,7 +40,7 @@
       </b-field>
     </section>
     <footer class="modal-card-foot">
-      <b-button @click="$parent.close()">Cancel</b-button>
+      <b-button @click="$emit('close')">Cancel</b-button>
       <b-button type="is-info" :disabled="!isInputValid" :loading="posting" @click="postSpot">{{ (this.spot && this.spot.id) ? 'Edit' : 'Add' }} Spot</b-button>
     </footer>
   </div>
@@ -63,6 +63,7 @@ export default {
     defaultSummitCode: String,
     spot: Object
   },
+  emits: ['close'],
   prefs: {
     key: 'spotPrefs',
     props: ['lastCallsign', 'lastSummitCode', 'defaultComments']
@@ -231,7 +232,7 @@ export default {
             type: response.data.type
           })
 
-          this.$parent.close()
+          this.$emit('close')
         })
         .catch(err => {
           let errorText = err.message
