@@ -1,0 +1,23 @@
+{
+  "generatedAt": "see git log for date",
+  "findings": [
+    {
+      "component": "SummitPhotosGroup",
+      "source": "own",
+      "file": "src/components/SummitPhotos.vue",
+      "line": 4,
+      "kind": "bind",
+      "passedAs": "titleLink",
+      "resolvedPropName": "titleLink"
+    },
+    {
+      "component": "BarChart",
+      "source": "own",
+      "file": "src/views/SolarHistory.vue",
+      "line": 8,
+      "kind": "attr",
+      "passedAs": "spline",
+      "resolvedPropName": "spline"
+    }
+  ]
+}

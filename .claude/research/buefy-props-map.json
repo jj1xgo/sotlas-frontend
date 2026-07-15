@@ -1,0 +1,1407 @@
+{
+  "BAutocomplete": {
+    "props": [
+      "appendToBody",
+      "autocomplete",
+      "checkInfiniteScroll",
+      "clearOnSelect",
+      "clearable",
+      "compatFallthrough",
+      "confirmKeys",
+      "customFormatter",
+      "data",
+      "dropdownPosition",
+      "expanded",
+      "field",
+      "groupField",
+      "groupOptions",
+      "icon",
+      "iconPack",
+      "iconRight",
+      "iconRightClickable",
+      "keepFirst",
+      "keepOpen",
+      "loading",
+      "locale",
+      "maxHeight",
+      "maxlength",
+      "modelValue",
+      "openOnFocus",
+      "rounded",
+      "selectOnClickOutside",
+      "selectableFooter",
+      "selectableHeader",
+      "size",
+      "statusIcon",
+      "type",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "active",
+      "blur",
+      "focus",
+      "icon-click",
+      "icon-right-click",
+      "infinite-scroll",
+      "select",
+      "select-footer",
+      "select-header",
+      "typing",
+      "update:modelValue"
+    ]
+  },
+  "BBreadcrumb": {
+    "props": [
+      "align",
+      "separator",
+      "size"
+    ],
+    "emits": []
+  },
+  "BBreadcrumbItem": {
+    "props": [
+      "active",
+      "compatFallthrough",
+      "tag"
+    ],
+    "emits": []
+  },
+  "BButton": {
+    "props": [
+      "active",
+      "expanded",
+      "focused",
+      "hovered",
+      "iconLeft",
+      "iconPack",
+      "iconRight",
+      "inverted",
+      "label",
+      "loading",
+      "nativeType",
+      "outlined",
+      "rounded",
+      "selected",
+      "size",
+      "tag",
+      "type"
+    ],
+    "emits": []
+  },
+  "BCarousel": {
+    "props": [
+      "animated",
+      "arrow",
+      "arrowHover",
+      "autoplay",
+      "hasDrag",
+      "iconNext",
+      "iconPack",
+      "iconPrev",
+      "iconSize",
+      "indicator",
+      "indicatorBackground",
+      "indicatorCustom",
+      "indicatorCustomSize",
+      "indicatorInside",
+      "indicatorMode",
+      "indicatorPosition",
+      "indicatorStyle",
+      "interval",
+      "modelValue",
+      "overlay",
+      "pauseHover",
+      "pauseInfo",
+      "pauseInfoType",
+      "pauseText",
+      "progress",
+      "progressType",
+      "repeat",
+      "withCarouselList"
+    ],
+    "emits": [
+      "change",
+      "click",
+      "update:modelValue"
+    ]
+  },
+  "BCarouselItem": {
+    "props": [
+      "order",
+      "value"
+    ],
+    "emits": []
+  },
+  "BCarouselList": {
+    "props": [
+      "arrow",
+      "arrowHover",
+      "asIndicator",
+      "breakpoints",
+      "data",
+      "hasDrag",
+      "hasGrayscale",
+      "hasOpacity",
+      "iconNext",
+      "iconPack",
+      "iconPrev",
+      "iconSize",
+      "itemsToList",
+      "itemsToShow",
+      "modelValue",
+      "repeat",
+      "scrollValue"
+    ],
+    "emits": [
+      "switch",
+      "update:modelValue",
+      "updated:scroll"
+    ]
+  },
+  "BCheckbox": {
+    "props": [
+      "ariaLabelledby",
+      "autocomplete",
+      "disabled",
+      "falseValue",
+      "indeterminate",
+      "inputId",
+      "modelValue",
+      "name",
+      "nativeValue",
+      "required",
+      "size",
+      "trueValue",
+      "type"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BCheckboxButton": {
+    "props": [
+      "disabled",
+      "expanded",
+      "modelValue",
+      "name",
+      "nativeValue",
+      "required",
+      "size",
+      "type"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BClockpicker": {
+    "props": [
+      "appendToBody",
+      "compatFallthrough",
+      "defaultMinutes",
+      "defaultSeconds",
+      "disabled",
+      "editable",
+      "enableSeconds",
+      "expanded",
+      "focusable",
+      "hourFormat",
+      "hoursLabel",
+      "icon",
+      "iconPack",
+      "incrementHours",
+      "incrementMinutes",
+      "incrementSeconds",
+      "inline",
+      "loading",
+      "locale",
+      "maxTime",
+      "maxlength",
+      "minTime",
+      "minutesLabel",
+      "mobileModal",
+      "mobileNative",
+      "modelValue",
+      "openOnFocus",
+      "pickerSize",
+      "placeholder",
+      "position",
+      "resetOnMeridianChange",
+      "rounded",
+      "size",
+      "statusIcon",
+      "timeCreator",
+      "timeFormatter",
+      "timeParser",
+      "type",
+      "tzOffset",
+      "unselectableTimes",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "update:modelValue"
+    ]
+  },
+  "BCollapse": {
+    "props": [
+      "animation",
+      "ariaId",
+      "modelValue",
+      "position"
+    ],
+    "emits": [
+      "close",
+      "open",
+      "update:modelValue"
+    ]
+  },
+  "BColorpicker": {
+    "props": [
+      "alpha",
+      "appendToBody",
+      "closeOnClick",
+      "colorFormatter",
+      "colorParser",
+      "disabled",
+      "expanded",
+      "focusable",
+      "horizontalColorPicker",
+      "icon",
+      "iconPack",
+      "inline",
+      "loading",
+      "locale",
+      "maxlength",
+      "mobileModal",
+      "mobileNative",
+      "modelValue",
+      "openOnFocus",
+      "position",
+      "representation",
+      "rounded",
+      "size",
+      "statusIcon",
+      "trapFocus",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "active-change",
+      "blur",
+      "focus",
+      "update:modelValue"
+    ]
+  },
+  "BDatepicker": {
+    "props": [
+      "appendToBody",
+      "ariaNextLabel",
+      "ariaPreviousLabel",
+      "closeOnClick",
+      "compatFallthrough",
+      "dateCreator",
+      "dateFormatter",
+      "dateParser",
+      "dayNames",
+      "disabled",
+      "editable",
+      "events",
+      "expanded",
+      "firstDayOfWeek",
+      "focusable",
+      "focusedDate",
+      "horizontalTimePicker",
+      "icon",
+      "iconNext",
+      "iconPack",
+      "iconPrev",
+      "iconRight",
+      "iconRightClickable",
+      "indicators",
+      "inline",
+      "loading",
+      "locale",
+      "maxDate",
+      "maxlength",
+      "minDate",
+      "mobileModal",
+      "mobileNative",
+      "modelValue",
+      "monthNames",
+      "multiple",
+      "nearbyMonthDays",
+      "nearbySelectableMonthDays",
+      "openOnFocus",
+      "placeholder",
+      "position",
+      "range",
+      "rounded",
+      "rulesForFirstWeek",
+      "selectableDates",
+      "showWeekNumber",
+      "size",
+      "statusIcon",
+      "trapFocus",
+      "type",
+      "unselectableDates",
+      "unselectableDaysOfWeek",
+      "useHtml5Validation",
+      "validationMessage",
+      "weekNumberClickable",
+      "yearsRange"
+    ],
+    "emits": [
+      "active-change",
+      "blur",
+      "change-month",
+      "change-year",
+      "focus",
+      "icon-right-click",
+      "range-end",
+      "range-start",
+      "update:modelValue",
+      "week-number-click"
+    ]
+  },
+  "BDatetimepicker": {
+    "props": [
+      "appendToBody",
+      "datepicker",
+      "datetimeCreator",
+      "datetimeFormatter",
+      "datetimeParser",
+      "disabled",
+      "editable",
+      "expanded",
+      "firstDayOfWeek",
+      "focusable",
+      "horizontalTimePicker",
+      "icon",
+      "iconPack",
+      "iconRight",
+      "iconRightClickable",
+      "inline",
+      "loading",
+      "locale",
+      "maxDatetime",
+      "maxlength",
+      "minDatetime",
+      "mobileNative",
+      "modelValue",
+      "nearbyMonthDays",
+      "openOnFocus",
+      "placeholder",
+      "position",
+      "rounded",
+      "rulesForFirstWeek",
+      "size",
+      "statusIcon",
+      "timepicker",
+      "tzOffset",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "active-change",
+      "blur",
+      "change-month",
+      "change-year",
+      "focus",
+      "icon-right-click",
+      "update:modelValue"
+    ]
+  },
+  "BDialog": {
+    "props": [
+      "animation",
+      "ariaLabel",
+      "ariaModal",
+      "ariaRole",
+      "autoFocus",
+      "canCancel",
+      "cancelCallback",
+      "cancelText",
+      "closeButtonAriaLabel",
+      "closeOnConfirm",
+      "component",
+      "confirmCallback",
+      "confirmText",
+      "container",
+      "content",
+      "customClass",
+      "customContentClass",
+      "destroyOnHide",
+      "events",
+      "focusOn",
+      "fullScreen",
+      "hasIcon",
+      "hasInput",
+      "hasModalCard",
+      "icon",
+      "iconPack",
+      "inputAttrs",
+      "message",
+      "modelValue",
+      "programmatic",
+      "props",
+      "renderOnMounted",
+      "scroll",
+      "size",
+      "title",
+      "trapFocus",
+      "type",
+      "width"
+    ],
+    "emits": [
+      "after-enter",
+      "after-leave",
+      "cancel",
+      "close",
+      "confirm",
+      "update:modelValue"
+    ]
+  },
+  "BDropdown": {
+    "props": [
+      "animation",
+      "appendToBody",
+      "appendToBodyCopyParent",
+      "ariaRole",
+      "canClose",
+      "closeOnClick",
+      "disabled",
+      "expanded",
+      "inline",
+      "maxHeight",
+      "mobileModal",
+      "modelValue",
+      "multiple",
+      "position",
+      "scrollable",
+      "trapFocus",
+      "triggerTabindex",
+      "triggers"
+    ],
+    "emits": [
+      "active-change",
+      "change",
+      "update:modelValue"
+    ]
+  },
+  "BDropdownItem": {
+    "props": [
+      "ariaRole",
+      "custom",
+      "disabled",
+      "focusable",
+      "hasLink",
+      "paddingless",
+      "separator",
+      "value"
+    ],
+    "emits": [
+      "click"
+    ]
+  },
+  "BField": {
+    "props": [
+      "addons",
+      "customClass",
+      "expanded",
+      "groupMultiline",
+      "grouped",
+      "horizontal",
+      "label",
+      "labelFor",
+      "labelPosition",
+      "message",
+      "position",
+      "type"
+    ],
+    "emits": []
+  },
+  "BIcon": {
+    "props": [
+      "alias",
+      "both",
+      "component",
+      "customClass",
+      "customSize",
+      "icon",
+      "pack",
+      "size",
+      "type"
+    ],
+    "emits": []
+  },
+  "BImage": {
+    "props": [
+      "alt",
+      "captionFirst",
+      "customClass",
+      "lazy",
+      "placeholder",
+      "ratio",
+      "responsive",
+      "rounded",
+      "src",
+      "srcFallback",
+      "srcset",
+      "srcsetFormatter",
+      "srcsetSizes",
+      "webpFallback"
+    ],
+    "emits": [
+      "error",
+      "load"
+    ]
+  },
+  "BInput": {
+    "props": [
+      "autocomplete",
+      "compatFallthrough",
+      "customClass",
+      "expanded",
+      "hasCounter",
+      "icon",
+      "iconClickable",
+      "iconPack",
+      "iconRight",
+      "iconRightClickable",
+      "iconRightType",
+      "lazy",
+      "loading",
+      "locale",
+      "maxlength",
+      "modelValue",
+      "passwordReveal",
+      "rounded",
+      "size",
+      "statusIcon",
+      "type",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "icon-click",
+      "icon-right-click",
+      "update:modelValue"
+    ]
+  },
+  "BLoading": {
+    "props": [
+      "animation",
+      "canCancel",
+      "container",
+      "isFullPage",
+      "modelValue",
+      "onCancel",
+      "programmatic"
+    ],
+    "emits": [
+      "close",
+      "update:is-full-page",
+      "update:modelValue"
+    ]
+  },
+  "BMenu": {
+    "props": [
+      "accordion",
+      "activable"
+    ],
+    "emits": []
+  },
+  "BMenuList": {
+    "props": [
+      "ariaRole",
+      "icon",
+      "iconPack",
+      "label",
+      "size"
+    ],
+    "emits": []
+  },
+  "BMenuItem": {
+    "props": [
+      "animation",
+      "ariaRole",
+      "compatFallthrough",
+      "disabled",
+      "expanded",
+      "icon",
+      "iconPack",
+      "label",
+      "modelValue",
+      "size",
+      "tag"
+    ],
+    "emits": [
+      "update:expanded",
+      "update:modelValue"
+    ]
+  },
+  "BMessage": {
+    "props": [
+      "ariaCloseLabel",
+      "autoClose",
+      "closable",
+      "duration",
+      "hasIcon",
+      "icon",
+      "iconPack",
+      "iconSize",
+      "message",
+      "modelValue",
+      "progressBar",
+      "size",
+      "title",
+      "type"
+    ],
+    "emits": [
+      "click",
+      "close",
+      "update:modelValue"
+    ]
+  },
+  "BModal": {
+    "props": [
+      "animation",
+      "ariaLabel",
+      "ariaModal",
+      "ariaRole",
+      "autoFocus",
+      "canCancel",
+      "cancelCallback",
+      "closeButtonAriaLabel",
+      "component",
+      "content",
+      "customClass",
+      "customContentClass",
+      "destroyOnHide",
+      "events",
+      "fullScreen",
+      "hasModalCard",
+      "modelValue",
+      "programmatic",
+      "props",
+      "renderOnMounted",
+      "scroll",
+      "trapFocus",
+      "width"
+    ],
+    "emits": [
+      "after-enter",
+      "after-leave",
+      "cancel",
+      "close",
+      "update:modelValue"
+    ]
+  },
+  "BNavbar": {
+    "props": [
+      "centered",
+      "closeOnClick",
+      "fixedBottom",
+      "fixedTop",
+      "mobileBurger",
+      "modelValue",
+      "shadow",
+      "spaced",
+      "transparent",
+      "type",
+      "wrapperClass"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BNavbarItem": {
+    "props": [
+      "active",
+      "tag"
+    ],
+    "emits": []
+  },
+  "BNavbarDropdown": {
+    "props": [
+      "active",
+      "arrowless",
+      "boxed",
+      "closeOnClick",
+      "collapsible",
+      "compatFallthrough",
+      "hoverable",
+      "label",
+      "right",
+      "tag"
+    ],
+    "emits": [
+      "active-change"
+    ]
+  },
+  "BNotification": {
+    "props": [
+      "animation",
+      "ariaCloseLabel",
+      "autoClose",
+      "closable",
+      "duration",
+      "hasIcon",
+      "icon",
+      "iconPack",
+      "iconSize",
+      "message",
+      "modelValue",
+      "position",
+      "progressBar",
+      "size",
+      "title",
+      "type"
+    ],
+    "emits": [
+      "click",
+      "close",
+      "update:modelValue"
+    ]
+  },
+  "BNumberinput": {
+    "props": [
+      "ariaMinusLabel",
+      "ariaPlusLabel",
+      "autocomplete",
+      "compatFallthrough",
+      "controls",
+      "controlsAlignment",
+      "controlsPosition",
+      "controlsRounded",
+      "disabled",
+      "editable",
+      "expanded",
+      "exponential",
+      "icon",
+      "iconPack",
+      "loading",
+      "locale",
+      "longPress",
+      "max",
+      "maxlength",
+      "min",
+      "minStep",
+      "modelValue",
+      "placeholder",
+      "rounded",
+      "size",
+      "statusIcon",
+      "step",
+      "type",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "update:modelValue"
+    ]
+  },
+  "BPagination": {
+    "props": [
+      "ariaCurrentLabel",
+      "ariaNextLabel",
+      "ariaPageLabel",
+      "ariaPreviousLabel",
+      "debouncePageInput",
+      "iconNext",
+      "iconPack",
+      "iconPrev",
+      "modelValue",
+      "order",
+      "pageInput",
+      "pageInputPosition",
+      "perPage",
+      "rangeAfter",
+      "rangeBefore",
+      "rounded",
+      "simple",
+      "size",
+      "total"
+    ],
+    "emits": [
+      "change",
+      "update:modelValue"
+    ]
+  },
+  "BPaginationButton": {
+    "props": [
+      "disabled",
+      "page",
+      "tag"
+    ],
+    "emits": []
+  },
+  "BProgress": {
+    "props": [
+      "format",
+      "keepTrailingZeroes",
+      "locale",
+      "max",
+      "precision",
+      "rounded",
+      "showValue",
+      "size",
+      "type",
+      "value"
+    ],
+    "emits": []
+  },
+  "BProgressBar": {
+    "props": [
+      "showValue",
+      "type",
+      "value"
+    ],
+    "emits": []
+  },
+  "BRadio": {
+    "props": [
+      "disabled",
+      "modelValue",
+      "name",
+      "nativeValue",
+      "required",
+      "size",
+      "type"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BRadioButton": {
+    "props": [
+      "disabled",
+      "expanded",
+      "modelValue",
+      "name",
+      "nativeValue",
+      "required",
+      "size",
+      "type"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BRate": {
+    "props": [
+      "customText",
+      "disabled",
+      "icon",
+      "iconPack",
+      "locale",
+      "max",
+      "modelValue",
+      "rtl",
+      "showScore",
+      "showText",
+      "size",
+      "spaced",
+      "texts"
+    ],
+    "emits": [
+      "change",
+      "update:modelValue"
+    ]
+  },
+  "BSelect": {
+    "props": [
+      "compatFallthrough",
+      "expanded",
+      "icon",
+      "iconPack",
+      "loading",
+      "locale",
+      "maxlength",
+      "modelValue",
+      "multiple",
+      "nativeSize",
+      "placeholder",
+      "rounded",
+      "size",
+      "statusIcon",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "update:modelValue"
+    ]
+  },
+  "BSkeleton": {
+    "props": [],
+    "emits": []
+  },
+  "BSidebar": {
+    "props": [
+      "canCancel",
+      "delay",
+      "expandOnHover",
+      "expandOnHoverFixed",
+      "fullheight",
+      "fullwidth",
+      "mobile",
+      "modelValue",
+      "onCancel",
+      "overlay",
+      "position",
+      "reduce",
+      "right",
+      "scroll",
+      "type"
+    ],
+    "emits": [
+      "close",
+      "update:modelValue"
+    ]
+  },
+  "BSlider": {
+    "props": [
+      "ariaLabel",
+      "biggerSliderFocus",
+      "customFormatter",
+      "disabled",
+      "format",
+      "indicator",
+      "lazy",
+      "locale",
+      "max",
+      "min",
+      "modelValue",
+      "rounded",
+      "size",
+      "step",
+      "ticks",
+      "tooltip",
+      "tooltipAlways",
+      "tooltipType",
+      "type"
+    ],
+    "emits": [
+      "change",
+      "dragend",
+      "dragging",
+      "dragstart",
+      "update:modelValue"
+    ]
+  },
+  "BSliderTick": {
+    "props": [
+      "value"
+    ],
+    "emits": []
+  },
+  "BSteps": {
+    "props": [
+      "animateInitially",
+      "animated",
+      "animation",
+      "ariaNextLabel",
+      "ariaPreviousLabel",
+      "destroyOnHide",
+      "hasNavigation",
+      "iconNext",
+      "iconPack",
+      "iconPrev",
+      "labelPosition",
+      "mobileMode",
+      "modelValue",
+      "position",
+      "rounded",
+      "size",
+      "type",
+      "vertical"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BStepItem": {
+    "props": [
+      "clickable",
+      "headerClass",
+      "icon",
+      "iconPack",
+      "label",
+      "order",
+      "step",
+      "type",
+      "value",
+      "visible"
+    ],
+    "emits": []
+  },
+  "BSwitch": {
+    "props": [
+      "ariaLabelledby",
+      "disabled",
+      "falseValue",
+      "leftLabel",
+      "modelValue",
+      "name",
+      "nativeValue",
+      "outlined",
+      "passiveType",
+      "required",
+      "rounded",
+      "size",
+      "trueValue",
+      "type"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BTable": {
+    "props": [
+      "ariaCurrentLabel",
+      "ariaNextLabel",
+      "ariaPageLabel",
+      "ariaPreviousLabel",
+      "backendFiltering",
+      "backendPagination",
+      "backendSorting",
+      "bordered",
+      "caption",
+      "cardLayout",
+      "checkable",
+      "checkboxPosition",
+      "checkboxType",
+      "checkedRows",
+      "columns",
+      "compatFallthrough",
+      "currentPage",
+      "customDetailRow",
+      "customIsChecked",
+      "customRowKey",
+      "data",
+      "debouncePageInput",
+      "debounceSearch",
+      "defaultSort",
+      "defaultSortDirection",
+      "detailIcon",
+      "detailKey",
+      "detailTransition",
+      "detailed",
+      "draggable",
+      "draggableColumn",
+      "filtersEvent",
+      "focusable",
+      "hasDetailedVisible",
+      "headerCheckable",
+      "height",
+      "hoverable",
+      "iconPack",
+      "isRowCheckable",
+      "isRowSelectable",
+      "loading",
+      "mobileCards",
+      "mobileSortPlaceholder",
+      "narrowed",
+      "openedDetailed",
+      "pageInput",
+      "pageInputPosition",
+      "paginated",
+      "paginationOrder",
+      "paginationPosition",
+      "paginationRounded",
+      "perPage",
+      "rowClass",
+      "scrollable",
+      "selected",
+      "showCaption",
+      "showDetailIcon",
+      "showHeader",
+      "sortIcon",
+      "sortIconSize",
+      "sortMultiple",
+      "sortMultipleData",
+      "sortMultipleKey",
+      "stickyCheckbox",
+      "stickyHeader",
+      "striped",
+      "total"
+    ],
+    "emits": [
+      "cellclick",
+      "check",
+      "check-all",
+      "click",
+      "columndragend",
+      "columndragleave",
+      "columndragover",
+      "columndragstart",
+      "columndrop",
+      "contextmenu",
+      "dblclick",
+      "details-close",
+      "details-open",
+      "dragend",
+      "dragleave",
+      "dragover",
+      "dragstart",
+      "drop",
+      "filters-change",
+      "page-change",
+      "select",
+      "sort",
+      "sorting-priority-removed",
+      "update:checkedRows",
+      "update:currentPage",
+      "update:openedDetailed",
+      "update:selected"
+    ]
+  },
+  "BTableColumn": {
+    "props": [
+      "cellClass",
+      "centered",
+      "customKey",
+      "customSearch",
+      "customSort",
+      "field",
+      "headerClass",
+      "headerSelectable",
+      "label",
+      "meta",
+      "numeric",
+      "searchable",
+      "sortable",
+      "sticky",
+      "subheading",
+      "tdAttrs",
+      "thAttrs",
+      "visible",
+      "width"
+    ],
+    "emits": []
+  },
+  "BTabs": {
+    "props": [
+      "animateInitially",
+      "animated",
+      "animation",
+      "destroyOnHide",
+      "expanded",
+      "modelValue",
+      "multiline",
+      "position",
+      "size",
+      "type",
+      "vertical"
+    ],
+    "emits": [
+      "update:modelValue"
+    ]
+  },
+  "BTabItem": {
+    "props": [
+      "disabled",
+      "headerClass",
+      "icon",
+      "iconPack",
+      "label",
+      "order",
+      "value",
+      "visible"
+    ],
+    "emits": []
+  },
+  "BTag": {
+    "props": [
+      "ariaCloseLabel",
+      "attached",
+      "closable",
+      "closeIcon",
+      "closeIconPack",
+      "closeIconType",
+      "closeType",
+      "disabled",
+      "ellipsis",
+      "icon",
+      "iconPack",
+      "iconType",
+      "rounded",
+      "size",
+      "tabstop",
+      "type"
+    ],
+    "emits": [
+      "click",
+      "close"
+    ]
+  },
+  "BTaglist": {
+    "props": [
+      "attached"
+    ],
+    "emits": []
+  },
+  "BTaginput": {
+    "props": [
+      "allowDuplicates",
+      "allowNew",
+      "appendToBody",
+      "ariaCloseLabel",
+      "attached",
+      "autocomplete",
+      "beforeAdding",
+      "checkInfiniteScroll",
+      "closable",
+      "closeType",
+      "compatFallthrough",
+      "confirmKeys",
+      "createTag",
+      "data",
+      "disabled",
+      "ellipsis",
+      "expanded",
+      "field",
+      "groupField",
+      "groupOptions",
+      "hasCounter",
+      "icon",
+      "iconPack",
+      "keepFirst",
+      "keepOpen",
+      "loading",
+      "locale",
+      "maxlength",
+      "maxtags",
+      "modelValue",
+      "nativeAutocomplete",
+      "onPasteSeparators",
+      "openOnFocus",
+      "removeOnKeys",
+      "rounded",
+      "size",
+      "statusIcon",
+      "type",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "add",
+      "blur",
+      "focus",
+      "infinite-scroll",
+      "remove",
+      "typing",
+      "update:modelValue"
+    ]
+  },
+  "BTimepicker": {
+    "props": [
+      "appendToBody",
+      "compatFallthrough",
+      "defaultMinutes",
+      "defaultSeconds",
+      "disabled",
+      "editable",
+      "enableSeconds",
+      "expanded",
+      "focusable",
+      "hourFormat",
+      "icon",
+      "iconPack",
+      "incrementHours",
+      "incrementMinutes",
+      "incrementSeconds",
+      "inline",
+      "loading",
+      "locale",
+      "maxTime",
+      "maxlength",
+      "minTime",
+      "mobileModal",
+      "mobileNative",
+      "modelValue",
+      "openOnFocus",
+      "placeholder",
+      "position",
+      "resetOnMeridianChange",
+      "rounded",
+      "size",
+      "statusIcon",
+      "timeCreator",
+      "timeFormatter",
+      "timeParser",
+      "tzOffset",
+      "unselectableTimes",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "update:modelValue"
+    ]
+  },
+  "BTooltip": {
+    "props": [
+      "active",
+      "always",
+      "animated",
+      "animation",
+      "appendToBody",
+      "autoClose",
+      "closeDelay",
+      "contentClass",
+      "dashed",
+      "delay",
+      "label",
+      "multilined",
+      "position",
+      "size",
+      "square",
+      "triggers",
+      "type"
+    ],
+    "emits": [
+      "close",
+      "open"
+    ]
+  },
+  "BUpload": {
+    "props": [
+      "accept",
+      "compatFallthrough",
+      "disabled",
+      "dragDrop",
+      "expanded",
+      "icon",
+      "iconPack",
+      "loading",
+      "locale",
+      "maxlength",
+      "modelValue",
+      "multiple",
+      "native",
+      "rounded",
+      "size",
+      "statusIcon",
+      "type",
+      "useHtml5Validation",
+      "validationMessage"
+    ],
+    "emits": [
+      "blur",
+      "focus",
+      "invalid",
+      "update:modelValue"
+    ]
+  }
+}
