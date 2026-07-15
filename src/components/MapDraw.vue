@@ -7,7 +7,7 @@
         <div v-if="descent !== null" class="distance-info">↓ <DistanceLabel :distance="descent" small-units /></div>
         <b-button size="is-small" type="is-text" icon-left="window-close" @click="hideElevationProfile" />
       </div>
-      <b-loading :active="loading" :is-full-page="false" />
+      <b-loading :model-value="loading" :is-full-page="false" />
       <LineChart v-if="chartData" :data="chartData" labelField="distance" valueField="elevation" name="Elevation" :xIsSeries="true" :animate="false" :suffixX="' ' + distanceUnits" :suffixY="' ' + $store.state.altitudeUnits" />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <b-navbar wrapper-class="container" :class="{ 'search-focused': searchFocused }" :fixed-top="true" :close-on-click="false" v-model:isActive="burgerActive">
+  <b-navbar wrapper-class="container" :class="{ 'search-focused': searchFocused }" :fixed-top="true" :close-on-click="false" v-model="burgerActive">
     <template #brand>
       <b-navbar-item tag="router-link" to="/about">
         <img v-if="$mq.widescreen" src="../assets/sotlas.svg" alt="Logo">

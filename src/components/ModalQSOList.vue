@@ -7,7 +7,7 @@
       </header>
       <section class="modal-card-body">
         <QSOList v-if="activationDetails !== null" :data="activationDetails.ActivatorLogs" />
-        <b-loading :is-full-page="false" :active="activationLoading" />
+        <b-loading :is-full-page="false" :model-value="activationLoading" />
       </section>
       <footer class="modal-card-foot"></footer>
     </div>

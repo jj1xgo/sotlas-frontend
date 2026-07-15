@@ -50,7 +50,7 @@
     </div>
 
     <RBNSpotsList v-if="!loading && filteredSpots.length > 0" :data="filteredSpots" :infinite="true" />
-    <b-loading :active="loading" :is-full-page="false" />
+    <b-loading :model-value="loading" :is-full-page="false" />
 
     <p v-if="!loading && filteredSpots.length === 0">No matching spots found.</p>
 

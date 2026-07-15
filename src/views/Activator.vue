@@ -33,7 +33,7 @@
           </div>
 
           <SpotsList v-if="recentSpots.length > 0" class="auto-width" :data="recentSpots" :callsignLink="false" :paginated="recentSpots.length > 10" />
-          <p v-else-if="$store.state.spots.length === 0"><b-loading :active="true" :is-full-page="false" />Loading...</p>
+          <p v-else-if="$store.state.spots.length === 0"><b-loading :model-value="true" :is-full-page="false" />Loading...</p>
         </div>
       </section>
 
@@ -49,7 +49,7 @@
           </div>
 
           <RBNSpotsList v-if="rbnSpots !== null && rbnSpots.length > 0" class="auto-width" :data="rbnSpots" :callsignLink="false" :paginated="rbnSpots.length > 10" />
-          <p v-else-if="rbnSpots === null"><b-loading :active="true" :is-full-page="false" />Loading...</p>
+          <p v-else-if="rbnSpots === null"><b-loading :model-value="true" :is-full-page="false" />Loading...</p>
         </div>
       </section>
 
@@ -67,7 +67,7 @@
         <section class="section">
           <div class="container">
             <ActivationCharts v-if="activations.length > 0" :activations="activations" />
-            <p class="loading-charts" v-else-if="activationsLoading"><b-loading :active="true" :is-full-page="false" /><font-awesome-icon :icon="['far', 'chart-bar']" /></p>
+            <p class="loading-charts" v-else-if="activationsLoading"><b-loading :model-value="true" :is-full-page="false" /><font-awesome-icon :icon="['far', 'chart-bar']" /></p>
           </div>
         </section>
 
@@ -98,7 +98,7 @@
             No activations found.
           </b-message>
 
-          <p v-if="activationsLoading"><b-loading :active="true" :is-full-page="false" />Loading...</p>
+          <p v-if="activationsLoading"><b-loading :model-value="true" :is-full-page="false" />Loading...</p>
         </div>
       </section>
     </template>

@@ -34,7 +34,7 @@
     <SwisstopoInfo />
     <BasemapAtInfo />
     <MapKeyFailedInfo v-if="mapTilerApiKeyFailed" />
-    <b-loading :is-full-page="false" :active="(filtering || !showMap || !mapStyle) && !mapTilerApiKeyFailed" />
+    <b-loading :is-full-page="false" :model-value="(filtering || !showMap || !mapStyle) && !mapTilerApiKeyFailed" />
   </div>
 </template>
 
