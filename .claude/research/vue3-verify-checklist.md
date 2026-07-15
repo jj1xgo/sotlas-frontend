@@ -10,41 +10,41 @@
 
 | # | 要素 | 確認内容 | Vue2 現状 |
 |---|---|---|---|
-| G1 | NavBar ロゴ・リンク | ロゴ表示、モバイル/ワイド切替、各リンクの遷移 | 未確認（Phase 0 時点、既存動作の記録は各 Phase 実施者が行う） |
-| G2 | NavBar 時計 | 現在時刻(UTC)表示が1分毎に更新 | 〃 |
-| G3 | NavBar 検索欄 | SearchField のフォーカス/候補表示、Enter で SearchAnything へ遷移 | 〃 |
-| G4 | NavBar 「More」ドロップダウン | 開閉、各リンク遷移 | 〃 |
-| G5 | ログイン(SSO/Keycloak) | LoginButton クリック→ログイン→ログアウト。**sotl.as 本番ドメインでのみ検証可能**（メンテナ提供のサブパス環境を使う） | 〃 |
-| G6 | Cloudflare Turnstile | 未ログイン時に表示され verified イベントでトークンがストアに入る | 〃 |
-| G7 | ページ遷移時のスクロール位置復元 | 戻る操作でスクロール位置が戻る（Map ページは `delayScroll` 分岐あり） | 〃 |
-| G8 | `lastPath` 復元 | `/` アクセス時に前回パスへリダイレクト | 〃 |
-| G9 | Footer | 表示・リンク | 〃 |
+| G1 | NavBar ロゴ・リンク | ロゴ表示、モバイル/ワイド切替、各リンクの遷移 | **Phase 5・OK**: ロゴ・時計・Map/Summits/Spots/Alerts各リンク表示。Playwright MCPで確認済み |
+| G2 | NavBar 時計 | 現在時刻(UTC)表示が1分毎に更新 | **Phase 5・表示のみ確認**: UTC時刻表示自体はOK。1分毎更新は低視認性のため目視確認は省略（best_practices原則9） |
+| G3 | NavBar 検索欄 | SearchField のフォーカス/候補表示、Enter で SearchAnything へ遷移 | **Phase 5・OK**: フォーカス→"Searching..."表示、Enterで`/search?q=...`へ遷移確認済み |
+| G4 | NavBar 「More」ドロップダウン | 開閉、各リンク遷移 | **Phase 5・OK**: クリックでNew Photos/Activators/Settingsが展開表示（スクリーンショット確認済み） |
+| G5 | ログイン(SSO/Keycloak) | LoginButton クリック→ログイン→ログアウト。**sotl.as 本番ドメインでのみ検証可能**（メンテナ提供のサブパス環境を使う） | 未確認・**ホスト側依頼**（コンテナ内では本番ドメイン制約により検証不能） |
+| G6 | Cloudflare Turnstile | 未ログイン時に表示され verified イベントでトークンがストアに入る | **Phase 5・既知制約**: `Error callback: 600010`としてTurnstileがヘッドレスブロックされることを再確認（lesson51と同一、恒久対応はissue #18） |
+| G7 | ページ遷移時のスクロール位置復元 | 戻る操作でスクロール位置が戻る（Map ページは `delayScroll` 分岐あり） | 未確認（優先度低、時間の関係でスコープ外） |
+| G8 | `lastPath` 復元 | `/` アクセス時に前回パスへリダイレクト | 未確認（優先度低、時間の関係でスコープ外） |
+| G9 | Footer | 表示・リンク | **Phase 5・OK**: "SOTA Atlas by Manuel HB9DQM. About"・バージョン表示（コミットハッシュ）確認済み |
 
 ## ルート別（router.js 準拠）
 
 | # | パス | コンポーネント | 確認内容 | Vue2 現状 |
 |---|---|---|---|---|
-| R1 | `/about` | About.vue | 静的ページ表示 | 未確認 |
-| R2 | `/settings` | Settings.vue | 各設定項目の変更が反映・永続化される | 未確認 |
-| R3 | `/map` | Map.vue | 下記「Map ページ詳細」参照 | 未確認 |
-| R4 | `/map/summits/:summitCode` | Map.vue | サミットコード指定でポップアップ表示（大文字強制・小文字→大文字リダイレクト） | 未確認 |
-| R5 | `/map/coordinates/:coordinates/:zoom` | Map.vue | 座標・ズーム指定で地図移動 | 未確認 |
-| R6 | `/map/regions/:region` | Map.vue | リージョン指定表示 | 未確認 |
-| R7 | `/summits/` | AssociationList.vue | Association 一覧表示・検索 | 未確認 |
-| R8 | `/summits/:associationCode` | Association.vue | Association 詳細（大文字強制・リダイレクト） | 未確認 |
-| R9 | `/summits/:regionCode` | Region.vue | Region 詳細（大文字強制・リダイレクト） | 未確認 |
-| R10 | `/summits/:summitCode` | Summit.vue | Summit 詳細（下記「Summit ページ詳細」参照） | 未確認 |
-| R11 | `/activations/:activationId` | Activation.vue | Activation 詳細（QSOList・チャート） | 未確認 |
-| R12 | `/activators/` | Activators.vue | Activator 一覧・検索・フィルタ | 未確認 |
-| R13 | `/activators/:callsign` | Activator.vue | Activator 詳細（チャート・履歴） | 未確認 |
-| R14 | `/spots` (redirect) | Spots.vue | `/spots/sotawatch` へリダイレクト | 未確認 |
-| R15 | `/spots/sotawatch` | SotaSpots.vue | Spot 一覧・自動更新（LiveFeedIndicator） | 未確認 |
-| R16 | `/spots/rbn` | RBNSpots.vue | RBN Spot 一覧・自動更新 | 未確認 |
-| R17 | `/alerts` | Alerts.vue | Alert 一覧・フィルタ・編集(EditAlert) | 未確認 |
-| R18 | `/new_photos` | NewPhotos.vue | 新着写真一覧・PictureSwipe 拡大表示 | 未確認 |
-| R19 | `/solar_history` | SolarHistory.vue | 太陽活動履歴チャート | 未確認 |
-| R20 | `/search` | SearchAnything.vue | 検索結果一覧・各種リンク遷移 | 未確認 |
-| R21 | `*` (404) | NotFound.vue | 存在しないパスで表示 | 未確認 |
+| R1 | `/about` | About.vue | 静的ページ表示 | **Phase 5・OK**: 全文表示、リンク（GitHub・データソース等）確認済み |
+| R2 | `/settings` | Settings.vue | 各設定項目の変更が反映・永続化される | **Phase 5・OK**: Units（b-radio）切替→リロード後も選択状態が保持されることをスクリーンショットで確認済み（B1と同型のBuefy3永続化パターン） |
+| R3 | `/map` | Map.vue | 下記「Map ページ詳細」参照 | 未確認・**ホスト側依頼**（Turnstile制約でコンテナ内は地図描画不可、CLAUDE.md既知制約） |
+| R4 | `/map/summits/:summitCode` | Map.vue | サミットコード指定でポップアップ表示（大文字強制・小文字→大文字リダイレクト） | 未確認・**ホスト側依頼** |
+| R5 | `/map/coordinates/:coordinates/:zoom` | Map.vue | 座標・ズーム指定で地図移動 | 未確認・**ホスト側依頼** |
+| R6 | `/map/regions/:region` | Map.vue | リージョン指定表示 | 未確認・**ホスト側依頼** |
+| R7 | `/summits/` | AssociationList.vue | Association 一覧表示・検索 | **Phase 5・OK**: 大量データ表示、Filter絞り込み（B2）・列ソート（B5）とも確認済み |
+| R8 | `/summits/:associationCode` | Association.vue | Association 詳細（大文字強制・リダイレクト） | **Phase 5・OK**: `/summits/JA`（Region一覧）表示・breadcrumbs確認済み |
+| R9 | `/summits/:regionCode` | Region.vue | Region 詳細（大文字強制・リダイレクト） | **Phase 5・OK**: `/summits/JA/NN`（Summit一覧）表示、見た目破綻なし（B7）確認済み |
+| R10 | `/summits/:summitCode` | Summit.vue | Summit 詳細（下記「Summit ページ詳細」参照） | **Phase 5・OK**: `/summits/JA/NN-001`でS1/S3/S4/S6/X1確認済み（詳細は下記） |
+| R11 | `/activations/:activationId` | Activation.vue | Activation 詳細（QSOList・チャート） | 未確認・**ホスト側依頼**（QSOs一覧クリックはSSOログイン必須、未ログイン時は`$buefy.dialog.alert`のログイン促しダイアログが正しく表示されることのみ確認済み） |
+| R12 | `/activators/` | Activators.vue | Activator 一覧・検索・フィルタ | **Phase 5・OK**: 国旗アイコン・スコアソート済みテーブル表示確認済み |
+| R13 | `/activators/:callsign` | Activator.vue | Activator 詳細（チャート・履歴） | **Phase 5・OK**: 統計・BarChart/PieChart（X1）・Logged activationsテーブル・ページネーション確認済み |
+| R14 | `/spots` (redirect) | Spots.vue | `/spots/sotawatch` へリダイレクト | **Phase 5・OK**: `/spots`→`/spots/sotawatch`のリダイレクト確認済み |
+| R15 | `/spots/sotawatch` | SotaSpots.vue | Spot 一覧・自動更新（LiveFeedIndicator） | **Phase 5・OK**: "Live Feed CONNECTED"表示・タブUI確認済み（X7は既にPhase4完了確認済み） |
+| R16 | `/spots/rbn` | RBNSpots.vue | RBN Spot 一覧・自動更新 | **Phase 5・OK**: タブ切替・フィルタUI・LiveFeed表示確認済み（直近1時間データなしは正常） |
+| R17 | `/alerts` | Alerts.vue | Alert 一覧・フィルタ・編集(EditAlert) | **Phase 5・OK**: 一覧表示、AddボタンでEditAlertモーダルが開き（T1/T1b修正が実機で機能）、Cancelで閉じることを確認済み |
+| R18 | `/new_photos` | NewPhotos.vue | 新着写真一覧・PictureSwipe 拡大表示 | **Phase 5・OK**: 写真ギャラリー・コメントアイコン表示確認済み |
+| R19 | `/solar_history` | SolarHistory.vue | 太陽活動履歴チャート | **Phase 5・OK**: LineChart（SFI/SN）・PercentageChart描画確認済み |
+| R20 | `/search` | SearchAnything.vue | 検索結果一覧・各種リンク遷移 | **Phase 5・OK**: G3のEnter検索から`/search?q=Everest`への遷移で確認済み |
+| R21 | `*` (404) | NotFound.vue | 存在しないパスで表示 | **Phase 5・OK**: 存在しないパスで"Not Found"ページ表示確認済み |
 
 ## Map ページ詳細（最複雑・vue-mapbox 依存、Phase 3 で最重要）
 
@@ -74,26 +74,26 @@
 
 | # | 要素 | 確認内容 |
 |---|---|---|
-| S1 | SummitAttributes | 標高・ポイント等の属性表示 |
-| S2 | MiniMap | 小地図表示 |
-| S3 | SummitActivations / LoggedActivationsList | アクティベーション履歴一覧 |
-| S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 |
-| S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存、Phase 4） |
-| S6 | SummitRoutes | ルート情報表示・ダウンロード |
-| S7 | NearbySummitsList | 近隣サミット一覧 |
+| S1 | SummitAttributes | 標高・ポイント等の属性表示 →**Phase 5・OK**: 座標・Locator・First activation・points・activations表示確認済み（`/summits/JA/NN-001`） |
+| S2 | MiniMap | 小地図表示 →未確認・**ホスト側依頼**（Turnstile制約） |
+| S3 | SummitActivations / LoggedActivationsList | アクティベーション履歴一覧 →**Phase 5・OK**: テーブル・ページネーション表示確認済み |
+| S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 →**Phase 5・OK**: 写真ギャラリー表示確認済み。並べ替え操作（X3、vuedraggable）はスコープ外の既知未修正依存のため対象外 |
+| S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存 →**Phase 1 前倒し完了・OK**: 自前実装 `src/components/LazyYoutubeVideo.vue` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み） |
+| S6 | SummitRoutes | ルート情報表示・ダウンロード →**Phase 5・OK**: GPXダウンロードリンク表示確認済み（403エラーは既知ベースライン、lesson53） |
+| S7 | NearbySummitsList | 近隣サミット一覧 →未確認（優先度低、時間の関係でスコープ外） |
 | S8 | Coordinates | 座標表示・クリップボードコピー（vue-clipboard2 依存、Phase 4）→**Phase 4 完了・OK**: `navigator.clipboard`+execCommandフォールバックへ置換。Playwright MCPでCopyボタンのトースト表示・フォールバック経路とも確認済み |
-| S9 | EditSpot / EditAlert (アクセス可能な場合) | スポット/アラート編集フォーム |
+| S9 | EditSpot / EditAlert (アクセス可能な場合) | スポット/アラート編集フォーム →**Phase 5・部分OK**: EditAlertはT1/T1b修正のモーダル開閉を確認済み（`/alerts`のAddボタン）。EditSpotは`:disabled="!authenticated"`により未ログイン時Addボタンが非活性（想定通りの仕様、Alertsとの非対称性はVue2由来と推測）で実物未確認・**ホスト側依頼** |
 
 ## 横断機能（複数ページで共通利用、個別確認が必要）
 
 | # | 機能 | 依存 | 確認内容 |
 |---|---|---|---|
-| X1 | チャート類（BarChart/LineChart/PieChart/PercentageChart/ActivationCharts） | frappe-charts fork（Vue非依存） | 描画・データ反映 |
-| X2 | 写真アップロード（PhotosUploader/EditPhoto） | vue-filepond（Phase 4） | アップロード・プレビュー |
-| X3 | ドラッグ&ドロップ（PictureSwipe 内の並べ替え等） | vuedraggable（Phase 4） | 並べ替え動作 |
+| X1 | チャート類（BarChart/LineChart/PieChart/PercentageChart/ActivationCharts） | frappe-charts fork（Vue非依存） | 描画・データ反映 →**Phase 5・OK**: Activator詳細のBarChart/PieChart、SolarHistoryのLineChart/PercentageChartで描画確認済み |
+| X2 | 写真アップロード（PhotosUploader/EditPhoto） | vue-filepond（Phase 4） | アップロード・プレビュー →未確認・**ホスト側依頼**（SSOログイン必須） |
+| X3 | ドラッグ&ドロップ（PictureSwipe 内の並べ替え等） | vuedraggable（Phase 4） | 並べ替え動作 →**既知未修正**: lesson43/52記載のとおりvuedraggable v2.24.3がVue3非互換（`TypeError: reading 'header'`）。この検証セッションのスコープ外、別途対応が必要 |
 | X4 | 無限スクロール（CardPagination） | vue-infinite-loading→v3-infinite-loading（**Phase 4 完了・OK**） | 追加読み込みトリガー。Playwright MCPで`/alerts`・`/activators/:callsign`のモバイルビューを最下部までスクロールし追加読み込み・complete後の文言非表示を確認済み |
 | X5 | デバウンス入力（Activators.vue / SearchField.vue） | vue2-debounce→in-repo実装（**Phase 4 完了・OK**） | 入力遅延後に検索実行。ネットワークログで500ms/300ms後の単発リクエスト、Enter即時発火、プログラム的入力変更での発火（SearchField）を確認済み |
-| X6 | レスポンシブ判定（`$mq`） | vue-match-media（Phase 4） | モバイル/ワイド切替 |
+| X6 | レスポンシブ判定（`$mq`） | vue-match-media →**Phase 1 前倒し完了・OK**: 自前実装 `src/matchmedia.js` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み | モバイル/ワイド切替 |
 | X7 | WebSocket 経由のライブ更新（Spots系・LiveFeedIndicator） | vue-native-websocket fork→自前実装（**Phase 4 完了・OK**） | 接続・再接続・データ反映。コンテナ内実接続で`state.socket.isConnected=true`・spots 454件受信・RBNページのLIVE表示を確認済み。再接続（切断復帰）はコンテナからは注入困難なためホスト検証項目として残す |
 | X8 | EventBus 通知（RBNSpots/SotaSpots/Activator/Summit/NavBar） | event-bus.js → mitt（Phase 1） | 各種イベント連携（トリガースクロール等） |
 
@@ -104,14 +104,14 @@ Phase 2 では実装中の調査で判明した以下の破壊的変更に対応
 
 | # | 要素 | 確認内容 | 対応した破壊的変更 |
 |---|---|---|---|
-| B1 | MapOptionsControl（`/map`）のチェックボックス群 | 各オプション（Regions/Contours/Hillshading/AZ 等）をON/OFF→ページを**リロード**して設定が保持されているか | `b-checkbox`/`b-radio`/`b-input` が `input` イベントを廃止し `update:modelValue` のみemitするようになったため、`@input` で行っていた localStorage 永続化（`setMapOption` mutation）が発火しなくなっていた（`@update:model-value` へ修正済み） |
-| B2 | FilterInput 使用箇所（`/activators`、`/alerts`、`/spots/rbn`、`/summits/`、Region/Association 一覧、Activator 詳細のアクティベーション絞り込み等） | 検索欄に文字を入力→リストが即座に絞り込まれるか | `FilterInput.vue`/`FrequencyInput.vue` が独自にVue2方式のv-model契約（`props:{value}`+`$emit('input')`）のままPhase1から取り残されており、Buefy3のb-inputと組み合わせで入力値の伝播が機能しない状態だった（`modelValue`/`update:modelValue` へ修正済み） |
-| B3 | EditSpot のFrequencyInput（周波数手入力） | Alert/Spot編集画面で周波数欄に手入力→値が反映されるか | 同上（B2と同じ根本原因） |
-| B4 | EditAlert のfreqMode タグ入力 | Alert編集で周波数/モードのタグ追加・カンマ区切り分割が機能するか | b-taginput が `input` イベントを廃止（`@update:model-value` へ修正済み） |
-| B5 | 全 b-table ページ（R7,R12,R15〜R17,R20 等）のソート・ページネーション | ヘッダクリックでソート、ページ送りが機能するか | コード変更なし（既にv-slot構文でAPI互換）だが実機での回帰確認は未実施 |
-| B6 | `$buefy` 経由のダイアログ/トースト/スナックバー/ローディング（Alert削除確認、写真アップロードエラー、ネットワークエラー通知、各ページのローディング表示等） | 表示・ボタン動作・自動消去のタイミング | コード変更なし（オプションキー互換確認済み）だが実機での回帰確認は未実施 |
-| B7 | navbar・モーダル・ドロップダウン・フォーム部品全般の見た目 | 色・枠線・背景等がbulma 0.7時代と大きく破綻していないか | bulma 0.7.5→1.0.4へ更新（CSS変数ベースのテーマ機構への移行に伴う） |
-| B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。これが効いているかの確認 |
+| B1 | MapOptionsControl（`/map`）のチェックボックス群 | 各オプション（Regions/Contours/Hillshading/AZ 等）をON/OFF→ページを**リロード**して設定が保持されているか | `b-checkbox`/`b-radio`/`b-input` が `input` イベントを廃止し `update:modelValue` のみemitするようになったため、`@input` で行っていた localStorage 永続化（`setMapOption` mutation）が発火しなくなっていた（`@update:model-value` へ修正済み）。未確認・**ホスト側依頼**（Turnstile制約でmapページ自体が検証不能）。ただし同型のb-radio永続化パターンはR2（Settings）で実機確認済み |
+| B2 | FilterInput 使用箇所（`/activators`、`/alerts`、`/spots/rbn`、`/summits/`、Region/Association 一覧、Activator 詳細のアクティベーション絞り込み等） | 検索欄に文字を入力→リストが即座に絞り込まれるか | `FilterInput.vue`/`FrequencyInput.vue` が独自にVue2方式のv-model契約（`props:{value}`+`$emit('input')`）のままPhase1から取り残されており、Buefy3のb-inputと組み合わせで入力値の伝播が機能しない状態だった（`modelValue`/`update:modelValue` へ修正済み）。**Phase 5・OK**: `/summits/`でFilter欄に"Japan"入力→4件へ即座に絞り込まれることを確認済み |
+| B3 | EditSpot のFrequencyInput（周波数手入力） | Alert/Spot編集画面で周波数欄に手入力→値が反映されるか | 同上（B2と同じ根本原因）。未確認・**ホスト側依頼**（EditSpotのAddボタンが`:disabled="!authenticated"`でコンテナ内は未ログインのため開けない） |
+| B4 | EditAlert のfreqMode タグ入力 | Alert編集で周波数/モードのタグ追加・カンマ区切り分割が機能するか | b-taginput が `input` イベントを廃止（`@update:model-value` へ修正済み）。未確認・**ホスト側依頼**（EditAlertモーダル自体はコンテナ内で開閉確認済みだが、タグ入力の詳細操作・送信はSSOログインが前提のため） |
+| B5 | 全 b-table ページ（R7,R12,R15〜R17,R20 等）のソート・ページネーション | ヘッダクリックでソート、ページ送りが機能するか | コード変更なし（既にv-slot構文でAPI互換）。**Phase 5・OK**: `/summits/`でIdentifier列ヘッダクリック→降順ソート反映を確認済み |
+| B6 | `$buefy` 経由のダイアログ/トースト/スナックバー/ローディング（Alert削除確認、写真アップロードエラー、ネットワークエラー通知、各ページのローディング表示等） | 表示・ボタン動作・自動消去のタイミング | コード変更なし（オプションキー互換確認済み）。**Phase 5・OK**: `$buefy.dialog.alert`（Activator詳細のQSOsクリック→"Please log in to view QSOs."）の表示・OKボタンでの消去を確認済み |
+| B7 | navbar・モーダル・ドロップダウン・フォーム部品全般の見た目 | 色・枠線・背景等がbulma 0.7時代と大きく破綻していないか | bulma 0.7.5→1.0.4へ更新（CSS変数ベースのテーマ機構への移行に伴う）。**Phase 5・OK**: 非地図ページ全般（Settings/Summits/Activators/Alerts等）のスクリーンショットで大きな破綻なしを確認済み |
+| B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。未確認（優先度低、コンテナ内ヘッドレスブラウザでのOSカラースキーム切替は手間が大きく時間の関係でスコープ外） |
 
 ## 運用メモ
 
