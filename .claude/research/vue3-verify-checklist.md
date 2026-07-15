@@ -82,7 +82,7 @@
 | S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 →**Phase 5・OK**: 写真ギャラリー表示確認済み、TypeErrorなし（X3参照、vuedraggable既にv4で解消済みと判明） |
 | S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存 →**Phase 1 前倒し完了・OK**: 自前実装 `src/components/LazyYoutubeVideo.vue` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み） |
 | S6 | SummitRoutes | ルート情報表示・ダウンロード →**Phase 5・OK**: GPXダウンロードリンク表示確認済み（403エラーは既知ベースライン、lesson53） |
-| S7 | NearbySummitsList | 近隣サミット一覧 →未確認（優先度低、時間の関係でスコープ外） |
+| S7 | NearbySummitsList | 近隣サミット一覧 →**訂正・分類誤り**: Summit詳細ページではなくEditAlert/EditSpotフォーム内の「Summit reference」欄に付随する"Nearby"ドロップダウンとして存在（`grep`で使用箇所2件、いずれもフォームコンポーネント）。**Phase 5・部分OK**: `/alerts`のAddボタンからNearbyクリックまで動作確認。Geolocation APIを呼び出す設計のため、ヘッドレス環境では"User denied Geolocation"のネイティブダイアログとなり実際のリスト表示までは未確認（lesson33のOSネイティブダイアログ制約、コード側の異常兆候なし） |
 | S8 | Coordinates | 座標表示・クリップボードコピー（vue-clipboard2 依存、Phase 4）→**Phase 4 完了・OK**: `navigator.clipboard`+execCommandフォールバックへ置換。Playwright MCPでCopyボタンのトースト表示・フォールバック経路とも確認済み |
 | S9 | EditSpot / EditAlert (アクセス可能な場合) | スポット/アラート編集フォーム →**Phase 5・部分OK**: EditAlertはT1/T1b修正のモーダル開閉を確認済み（`/alerts`のAddボタン）。EditSpotは`:disabled="!authenticated"`により未ログイン時Addボタンが非活性（想定通りの仕様、Alertsとの非対称性はVue2由来と推測）で実物未確認・**ホスト側依頼** |
 
@@ -113,7 +113,7 @@ Phase 2 では実装中の調査で判明した以下の破壊的変更に対応
 | B5 | 全 b-table ページ（R7,R12,R15〜R17,R20 等）のソート・ページネーション | ヘッダクリックでソート、ページ送りが機能するか | コード変更なし（既にv-slot構文でAPI互換）。**Phase 5・OK**: `/summits/`でIdentifier列ヘッダクリック→降順ソート反映を確認済み |
 | B6 | `$buefy` 経由のダイアログ/トースト/スナックバー/ローディング（Alert削除確認、写真アップロードエラー、ネットワークエラー通知、各ページのローディング表示等） | 表示・ボタン動作・自動消去のタイミング | コード変更なし（オプションキー互換確認済み）。**Phase 5・OK**: `$buefy.dialog.alert`（Activator詳細のQSOsクリック→"Please log in to view QSOs."）の表示・OKボタンでの消去を確認済み |
 | B7 | navbar・モーダル・ドロップダウン・フォーム部品全般の見た目 | 色・枠線・背景等がbulma 0.7時代と大きく破綻していないか | bulma 0.7.5→1.0.4へ更新（CSS変数ベースのテーマ機構への移行に伴う）。**Phase 5・OK**: 非地図ページ全般（Settings/Summits/Activators/Alerts等）のスクリーンショットで大きな破綻なしを確認済み |
-| B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。未確認（優先度低、コンテナ内ヘッドレスブラウザでのOSカラースキーム切替は手間が大きく時間の関係でスコープ外） |
+| B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。**Phase 5・OK（静的解析）**: Playwright MCPにOSカラースキームのエミュレーション機能が無いため、代替としてビルド後CSS(`npm run build`)を実データで解析。通常版`themes/_index.scss`は`@include cv.system-theme($name: "dark")`で`prefers-color-scheme: dark`メディアクエリを生成するが、`bulma-no-dark-mode.scss`は`themes/light`のみ`@use`し`themes/dark`を一切importしない設計と、ソースコードレベルで確認。ビルド後CSSを`grep`した結果、bulma由来の`prefers-color-scheme: dark`は0件（ヒットした6件はmaplibre-glのハイコントラストモード対応用`prefers-color-scheme:light`で無関係）。ダークテーマ自体がビルド成果物に含まれないため、OS設定に関わらず配色は変化しない |
 
 ## 運用メモ
 
