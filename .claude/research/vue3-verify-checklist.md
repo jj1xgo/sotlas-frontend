@@ -26,10 +26,10 @@
 |---|---|---|---|---|
 | R1 | `/about` | About.vue | 静的ページ表示 | **Phase 5・OK**: 全文表示、リンク（GitHub・データソース等）確認済み |
 | R2 | `/settings` | Settings.vue | 各設定項目の変更が反映・永続化される | **Phase 5・OK**: Units（b-radio）切替→リロード後も選択状態が保持されることをスクリーンショットで確認済み（B1と同型のBuefy3永続化パターン） |
-| R3 | `/map` | Map.vue | 下記「Map ページ詳細」参照 | 未確認・**ホスト側依頼**（Turnstile制約でコンテナ内は地図描画不可、CLAUDE.md既知制約） |
-| R4 | `/map/summits/:summitCode` | Map.vue | サミットコード指定でポップアップ表示（大文字強制・小文字→大文字リダイレクト） | 未確認・**ホスト側依頼** |
-| R5 | `/map/coordinates/:coordinates/:zoom` | Map.vue | 座標・ズーム指定で地図移動 | 未確認・**ホスト側依頼** |
-| R6 | `/map/regions/:region` | Map.vue | リージョン指定表示 | 未確認・**ホスト側依頼** |
+| R3 | `/map` | Map.vue | 下記「Map ページ詳細」参照 | **訂正・Phase 5・OK**: master由来のTurnstile devバイパス（`devMapKeyPreseeded`、issue #18）が`feat/vue3-migration`に未移植だったと判明・移植（`src/store.js`/`src/App.vue`、ローカルパッチ扱い・upstream PRには含めない）。移植後、地図タイル（関東地方）が正常描画、Turnstile 600010エラーなしを確認 |
+| R4 | `/map/summits/:summitCode` | Map.vue | サミットコード指定でポップアップ表示（大文字強制・小文字→大文字リダイレクト） | **Phase 5・OK**: `/map/summits/JA/NN-001`でSummitPopup（M9）表示を確認 |
+| R5 | `/map/coordinates/:coordinates/:zoom` | Map.vue | 座標・ズーム指定で地図移動 | **Phase 5・OK**: `/map/coordinates/35.689300,139.689900/8.0`で地図移動・表示を確認 |
+| R6 | `/map/regions/:region` | Map.vue | リージョン指定表示 | 未確認（優先度低、時間の関係でスコープ外。R3-R5でTurnstileバイパス自体は実証済み） |
 | R7 | `/summits/` | AssociationList.vue | Association 一覧表示・検索 | **Phase 5・OK**: 大量データ表示、Filter絞り込み（B2）・列ソート（B5）とも確認済み |
 | R8 | `/summits/:associationCode` | Association.vue | Association 詳細（大文字強制・リダイレクト） | **Phase 5・OK**: `/summits/JA`（Region一覧）表示・breadcrumbs確認済み |
 | R9 | `/summits/:regionCode` | Region.vue | Region 詳細（大文字強制・リダイレクト） | **Phase 5・OK**: `/summits/JA/NN`（Summit一覧）表示、見た目破綻なし（B7）確認済み |
@@ -52,30 +52,32 @@
 
 | # | 要素 | 確認内容 |
 |---|---|---|
-| M1 | 地図の基本表示 | ズーム・パン・回転無効化の確認 |
-| M2 | MglGeolocateControl | 現在地取得・追従 |
-| M3 | MglNavigationControl | ズームボタン |
-| M4 | MglScaleControl | スケール表示（km/mi 切替） |
-| M5 | MglAttributionControl | 表示・モバイルでコンパクト化 |
-| M6 | MapFilterControl | フィルタ開始/終了 |
-| M7 | MapOptionsControl | レイヤー切替（**夜間帯/ターミネーターのトグルを含む**、webcams 等） |
-| M8 | MapDownloadControl | ダウンロード機能 |
-| M9 | SummitPopup | サミットクリックでポップアップ表示、最新スポット・次回アラート表示 |
-| M10 | MapRoute | ルート表示（永続ルート） |
-| M11 | MapInfoPopup | 情報ポップアップ表示・閉じる |
-| M12 | MapDraw | 描画機能 |
-| M13 | MapWebcams | ウェブカムレイヤー(オプション有効時) |
-| M14 | SwisstopoInfo / BasemapAtInfo | 地図クレジット表示 |
-| M15 | MapKeyFailedInfo | MapTiler API キー失敗時の表示 |
-| M16 | 夜間帯(ターミネーター)オーバーレイ | MapTerminator.vue、地図タイプ非依存であることを含め表示・info ダイアログ確認（直近実装分） |
-| M17 | ローディングポップアップ | サミットクリック直後の LoadingRing 表示 |
+| M1 | 地図の基本表示 | ズーム・パン・回転無効化の確認 →**Phase 5・OK**: 関東地方の地図タイル正常描画確認済み |
+| M2 | MglGeolocateControl | 現在地取得・追従 →未確認（ヘッドレス環境で位置情報APIの扱いが不安定なため優先度低） |
+| M3 | MglNavigationControl | ズームボタン →**Phase 5・OK**: 右上のズームボタン表示確認済み |
+| M4 | MglScaleControl | スケール表示（km/mi 切替） →**Phase 5・OK**: 左下のスケールバー（"20 km"等）表示確認済み |
+| M5 | MglAttributionControl | 表示・モバイルでコンパクト化 →**Phase 5・部分OK**: 右下の帰属表示（© MapTiler © OpenStreetMap）確認済み。モバイルコンパクト化は未確認 |
+| M6 | MapFilterControl | フィルタ開始/終了 →**Phase 5・アイコン表示のみ確認**: 左上のフィルタアイコン表示を確認、開閉動作は未実施 |
+| M7 | MapOptionsControl | レイヤー切替（**夜間帯/ターミネーターのトグルを含む**、webcams 等） →**Phase 5・OK**: スタイル選択・Regions/Contour lines/Hillshading/Activation zones/Hiking difficulty/Recent spots/Alerts for next/Inactive summits/Webcamsのチェックボックス群を開閉・確認。terminatorは本移行ではM16の通り対象外 |
+| M8 | MapDownloadControl | ダウンロード機能 →**Phase 5・アイコン表示のみ確認**: 左上のダウンロードアイコン表示を確認、クリック動作は未実施 |
+| M9 | SummitPopup | サミットクリックでポップアップ表示、最新スポット・次回アラート表示 →**Phase 5・OK**: `/map/summits/JA/NN-001`で写真・名前・altitude/points/activations/last activation・Close/Minimize/Moreボタン表示を確認 |
+| M10 | MapRoute | ルート表示（永続ルート） →未確認（優先度低、時間の関係でスコープ外） |
+| M11 | MapInfoPopup | 情報ポップアップ表示・閉じる →未確認（優先度低、時間の関係でスコープ外） |
+| M12 | MapDraw | 描画機能 →**Phase 5・アイコン表示のみ確認**: 右側のツールバー（線・点・削除・フォルダ・保存アイコン）表示を確認、描画動作は未実施 |
+| M13 | MapWebcams | ウェブカムレイヤー(オプション有効時) →未確認（優先度低、時間の関係でスコープ外） |
+| M14 | SwisstopoInfo / BasemapAtInfo | 地図クレジット表示 →**Phase 5・OK**: 帰属表示確認済み（M5と同一箇所） |
+| M15 | MapKeyFailedInfo | MapTiler API キー失敗時の表示 →未確認（今回はキー取得自体が成功しているため対象外） |
+| M16 | 夜間帯(ターミネーター)オーバーレイ | MapTerminator.vue、地図タイプ非依存であることを含め表示・info ダイアログ確認（直近実装分） →**対象外**（Phase 0確認済みの通り、terminator機能は本移行のベースブランチに未マージのため） |
+| M17 | ローディングポップアップ | サミットクリック直後の LoadingRing 表示 →未確認（優先度低、時間の関係でスコープ外） |
+
+**M系検証の前提（重要）**: 上記はTurnstile devバイパス（`devMapKeyPreseeded`、R3参照）をコンテナ内で有効化した状態での確認。この仕組みは`feat/vue3-migration`のローカルパッチであり、upstream PRには含めない。ホスト側（本物のTurnstileフロー）での再確認は依然有効（G5・G6と合わせて）。
 
 ## Summit ページ詳細（複合コンポーネントが多い）
 
 | # | 要素 | 確認内容 |
 |---|---|---|
 | S1 | SummitAttributes | 標高・ポイント等の属性表示 →**Phase 5・OK**: 座標・Locator・First activation・points・activations表示確認済み（`/summits/JA/NN-001`） |
-| S2 | MiniMap | 小地図表示 →未確認・**ホスト側依頼**（Turnstile制約） |
+| S2 | MiniMap | 小地図表示 →**訂正・Phase 5・OK**: Turnstile devバイパス移植後、`/summits/JA/NN-001`で山頂マーカー・ズーム/位置取得/拡大ボタン・帰属表示とも正常描画を確認 |
 | S3 | SummitActivations / LoggedActivationsList | アクティベーション履歴一覧 →**Phase 5・OK**: テーブル・ページネーション表示確認済み |
 | S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 →**Phase 5・OK**: 写真ギャラリー表示確認済み、TypeErrorなし（X3参照、vuedraggable既にv4で解消済みと判明） |
 | S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存 →**Phase 1 前倒し完了・OK**: 自前実装 `src/components/LazyYoutubeVideo.vue` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み） |
@@ -104,7 +106,7 @@ Phase 2 では実装中の調査で判明した以下の破壊的変更に対応
 
 | # | 要素 | 確認内容 | 対応した破壊的変更 |
 |---|---|---|---|
-| B1 | MapOptionsControl（`/map`）のチェックボックス群 | 各オプション（Regions/Contours/Hillshading/AZ 等）をON/OFF→ページを**リロード**して設定が保持されているか | `b-checkbox`/`b-radio`/`b-input` が `input` イベントを廃止し `update:modelValue` のみemitするようになったため、`@input` で行っていた localStorage 永続化（`setMapOption` mutation）が発火しなくなっていた（`@update:model-value` へ修正済み）。未確認・**ホスト側依頼**（Turnstile制約でmapページ自体が検証不能）。ただし同型のb-radio永続化パターンはR2（Settings）で実機確認済み |
+| B1 | MapOptionsControl（`/map`）のチェックボックス群 | 各オプション（Regions/Contours/Hillshading/AZ 等）をON/OFF→ページを**リロード**して設定が保持されているか | `b-checkbox`/`b-radio`/`b-input` が `input` イベントを廃止し `update:modelValue` のみemitするようになったため、`@input` で行っていた localStorage 永続化（`setMapOption` mutation）が発火しなくなっていた（`@update:model-value` へ修正済み）。**訂正・Phase 5・OK**: Turnstile devバイパス移植後に実機確認。「Regions」チェックボックスをON→リロード後もチェック状態が保持されることをスクリーンショットで確認済み |
 | B2 | FilterInput 使用箇所（`/activators`、`/alerts`、`/spots/rbn`、`/summits/`、Region/Association 一覧、Activator 詳細のアクティベーション絞り込み等） | 検索欄に文字を入力→リストが即座に絞り込まれるか | `FilterInput.vue`/`FrequencyInput.vue` が独自にVue2方式のv-model契約（`props:{value}`+`$emit('input')`）のままPhase1から取り残されており、Buefy3のb-inputと組み合わせで入力値の伝播が機能しない状態だった（`modelValue`/`update:modelValue` へ修正済み）。**Phase 5・OK**: `/summits/`でFilter欄に"Japan"入力→4件へ即座に絞り込まれることを確認済み |
 | B3 | EditSpot のFrequencyInput（周波数手入力） | Alert/Spot編集画面で周波数欄に手入力→値が反映されるか | 同上（B2と同じ根本原因）。未確認・**ホスト側依頼**（EditSpotのAddボタンが`:disabled="!authenticated"`でコンテナ内は未ログインのため開けない） |
 | B4 | EditAlert のfreqMode タグ入力 | Alert編集で周波数/モードのタグ追加・カンマ区切り分割が機能するか | b-taginput が `input` イベントを廃止（`@update:model-value` へ修正済み）。未確認・**ホスト側依頼**（EditAlertモーダル自体はコンテナ内で開閉確認済みだが、タグ入力の詳細操作・送信はSSOログインが前提のため） |
