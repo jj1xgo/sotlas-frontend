@@ -44,7 +44,7 @@
     </div>
 
     <SpotsList v-if="filteredSpots.length > 0" :data="filteredSpots" :infinite="true" />
-    <b-loading v-if="$store.state.spots.length === 0" :active="true" :is-full-page="false" />
+    <b-loading v-if="$store.state.spots.length === 0" :model-value="true" :is-full-page="false" />
 
     <p v-else-if="filteredSpots.length === 0">No matching spots found.</p>
   </div>

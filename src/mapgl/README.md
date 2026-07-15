@@ -67,9 +67,12 @@ on the SDK directly.
 - **Control prop reactivity** (`controls.js`): unlike
   `@indoorequal/vue-maplibre-gl`'s `useControl` (which reads props once at
   creation), this module's `useControl` deep-watches the full props object
-  and removes+recreates the control on any change. This is what let SOTLAS
-  drop its `:key="$mq.mobile"` remount workaround for
-  `MglAttributionControl`.
+  and removes+recreates the control on any change (e.g. so
+  `MglAttributionControl`'s `compact` prop tracks `$mq.mobile` across resizes
+  without a `:key` remount). This does NOT change `AttributionControl`'s
+  compact-on-load behavior — maplibre-gl always pairs the `compact` class
+  with `compact-show` on (re)creation, so the control still renders expanded
+  until the map is dragged or the control is clicked, same as upstream.
 
 ## 4. SDK behaviors we explicitly suppress or rely on
 

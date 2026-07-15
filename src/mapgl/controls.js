@@ -3,10 +3,16 @@ import { AttributionControl, GeolocateControl, NavigationControl, ScaleControl }
 import { isInitializedSymbol, mapSymbol } from './keys.js'
 
 // @indoorequal/vue-maplibre-gl's useControl only evaluates props once at
-// creation (no prop watcher besides position), which is why SOTLAS had to
-// work around AttributionControl's compact mode with a `:key="$mq.mobile"`
-// remount. Here we watch the full props object and remove+recreate the
-// control on any change, so callers don't need that workaround.
+// creation (no prop watcher besides position). This migration branch briefly
+// worked around that with a `:key="$mq.mobile"` remount on
+// MglAttributionControl (added in 5956f8c, removed once this module replaced
+// vue-maplibre-gl in ba3b689) — that workaround never existed upstream. Here
+// we watch the full props object and remove+recreate the control on any
+// change, which is a real improvement over evaluating props once (e.g. for
+// resize-driven prop changes), but it does NOT make AttributionControl's
+// compact mode collapse on load: maplibre-gl always pairs the `compact`
+// class with `compact-show` on (re)creation, so the control renders expanded
+// until the user drags the map or clicks it, matching upstream's behavior.
 function useControl (createControl, props) {
   const map = inject(mapSymbol)
   const isInitialized = inject(isInitializedSymbol)
