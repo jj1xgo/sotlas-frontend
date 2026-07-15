@@ -77,7 +77,7 @@
 | S1 | SummitAttributes | 標高・ポイント等の属性表示 →**Phase 5・OK**: 座標・Locator・First activation・points・activations表示確認済み（`/summits/JA/NN-001`） |
 | S2 | MiniMap | 小地図表示 →未確認・**ホスト側依頼**（Turnstile制約） |
 | S3 | SummitActivations / LoggedActivationsList | アクティベーション履歴一覧 →**Phase 5・OK**: テーブル・ページネーション表示確認済み |
-| S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 →**Phase 5・OK**: 写真ギャラリー表示確認済み。並べ替え操作（X3、vuedraggable）はスコープ外の既知未修正依存のため対象外 |
+| S4 | SummitPhotosGroup / PictureSwipe | 写真表示・拡大 →**Phase 5・OK**: 写真ギャラリー表示確認済み、TypeErrorなし（X3参照、vuedraggable既にv4で解消済みと判明） |
 | S5 | SummitVideosGroup | 動画埋め込み（vue-lazy-youtube-video 依存 →**Phase 1 前倒し完了・OK**: 自前実装 `src/components/LazyYoutubeVideo.vue` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み） |
 | S6 | SummitRoutes | ルート情報表示・ダウンロード →**Phase 5・OK**: GPXダウンロードリンク表示確認済み（403エラーは既知ベースライン、lesson53） |
 | S7 | NearbySummitsList | 近隣サミット一覧 →未確認（優先度低、時間の関係でスコープ外） |
@@ -90,7 +90,7 @@
 |---|---|---|---|
 | X1 | チャート類（BarChart/LineChart/PieChart/PercentageChart/ActivationCharts） | frappe-charts fork（Vue非依存） | 描画・データ反映 →**Phase 5・OK**: Activator詳細のBarChart/PieChart、SolarHistoryのLineChart/PercentageChartで描画確認済み |
 | X2 | 写真アップロード（PhotosUploader/EditPhoto） | vue-filepond（Phase 4） | アップロード・プレビュー →未確認・**ホスト側依頼**（SSOログイン必須） |
-| X3 | ドラッグ&ドロップ（PictureSwipe 内の並べ替え等） | vuedraggable（Phase 4） | 並べ替え動作 →**既知未修正**: lesson43/52記載のとおりvuedraggable v2.24.3がVue3非互換（`TypeError: reading 'header'`）。この検証セッションのスコープ外、別途対応が必要 |
+| X3 | ドラッグ&ドロップ（PictureSwipe 内の並べ替え等） | vuedraggable（Phase 4） | 並べ替え動作 →**訂正・Phase 4で解消済み**: lesson43/52記載の「vuedraggable v2.24.3起因のTypeError」は古い情報。実データ確認の結果、`package.json`は既に`vuedraggable: ^4.1.0`（node_modules実物でも4.1.0を確認）で、upstream/vue3側も`3c47022`で同じv4更新を実施済み。今回のSummit詳細ページ表示（S4）でTypeErrorは再現せず、コンソールエラーなしを確認済み。並べ替え操作自体（ドラッグ）はPlaywright合成イベントの限界（lesson35と同型のリスク）を踏まえ未実施・優先度低 |
 | X4 | 無限スクロール（CardPagination） | vue-infinite-loading→v3-infinite-loading（**Phase 4 完了・OK**） | 追加読み込みトリガー。Playwright MCPで`/alerts`・`/activators/:callsign`のモバイルビューを最下部までスクロールし追加読み込み・complete後の文言非表示を確認済み |
 | X5 | デバウンス入力（Activators.vue / SearchField.vue） | vue2-debounce→in-repo実装（**Phase 4 完了・OK**） | 入力遅延後に検索実行。ネットワークログで500ms/300ms後の単発リクエスト、Enter即時発火、プログラム的入力変更での発火（SearchField）を確認済み |
 | X6 | レスポンシブ判定（`$mq`） | vue-match-media →**Phase 1 前倒し完了・OK**: 自前実装 `src/matchmedia.js` へ置換済み。package.jsonに旧依存の記載なし、コード実物で確認済み | モバイル/ワイド切替 |
