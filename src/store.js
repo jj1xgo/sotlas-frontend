@@ -66,7 +66,11 @@ const store = createStore({
     mapType,
     mapOptions,
     mapCenter: null,
-    mapTilerApiKey: null,
+    // Dev-only bypass for containerized headless-browser verification, where
+    // Cloudflare Turnstile cannot pass bot detection. VITE_MAPTILER_DEV_KEY is only
+    // ever set in the claude-container environment, never on the host or in prod
+    // builds (import.meta.env.DEV is always false for `vite build`).
+    mapTilerApiKey: (import.meta.env.DEV && import.meta.env.VITE_MAPTILER_DEV_KEY) || null,
     mapTilerApiKeyLoading: false,
     turnstileToken: null
   },
