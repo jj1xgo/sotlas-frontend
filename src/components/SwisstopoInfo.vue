@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model:active="active" :on-cancel="cancelInfo" :can-cancel="false">
+  <b-modal v-model="active" :on-cancel="cancelInfo" :can-cancel="false">
     <div class="box content">
       <div class="has-text-centered">
         <span class="fp ch flag"></span>

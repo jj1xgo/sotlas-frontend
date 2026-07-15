@@ -45,7 +45,7 @@
       </b-field>
     </section>
     <footer class="modal-card-foot">
-      <b-button @click="$parent.close()">Cancel</b-button>
+      <b-button @click="$emit('close')">Cancel</b-button>
       <b-button type="is-info" :disabled="!isInputValid" :loading="posting" @click="postAlert">{{ this.alert ? 'Edit' : 'Add' }} Alert</b-button>
     </footer>
   </div>
@@ -69,6 +69,7 @@ export default {
     defaultSummitCode: String,
     alert: Object
   },
+  emits: ['close'],
   prefs: {
     key: 'editAlertPrefs',
     props: ['lastCallsign', 'timeZone', 'defaultComments']
@@ -255,7 +256,7 @@ export default {
       this.postSotaWatchAlert(params)
         .then(response => {
           this.$store.dispatch('reloadAlerts')
-          this.$parent.close()
+          this.$emit('close')
         })
         .catch(err => {
           let errorText = err.message

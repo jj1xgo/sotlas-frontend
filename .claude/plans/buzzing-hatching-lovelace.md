@@ -33,6 +33,24 @@ eslint（vue3-essential 警告ゼロ）と bulma 整合（bulma 1.0.4 + buefy 3.
 
 `<b-modal>` 自体の `@close`（Escape キャンセル経路）は現状のまま温存する。
 
+### T1b: `<b-modal>` の `v-model:active`/`:active="true"` 破損パターンの修正（T1検証中に発見・ユーザー承認済みの追加スコープ・2段階で発覚）
+
+**発見内容（1段階目）**: Buefy 3 の `<b-modal>` は `active` prop を持たず `modelValue` のみ（`node_modules/buefy/src/components/modal/Modal.vue:75-177`、`props: { modelValue: Boolean, ... }`。`active` という名前の prop は grep で 0 件）。`destroyed: !(this.modelValue || this.renderOnMounted)` が初期値を決める。
+
+**発見内容（2段階目・訂正）**: 6箇所を `v-model:active="X"` に修正後も実機で開かず再調査した結果、`v-model:active` という構文自体が誤りと判明。Vue 3 の `v-model:active` は `:active` prop + `@update:active` イベントへ展開されるが、Modal コンポーネントには `active` という名前の prop も `update:active` イベントも存在しない（`modelValue`/`update:modelValue` のみ）。正しくは **`v-model="X"`**（引数なし、デフォルトで `modelValue` にバインド）。`AlertsList.vue` で `v-model="isEditAlertActive"` に修正し実機（Playwright MCP screenshot）でモーダル表示・フォーム動作を確認済み。
+
+**影響範囲**（`grep -rn '<b-modal' src` で全数確認済み、**10箇所全て**が `v-model:active` または `:active="true"` の誤用）:
+- `src/components/AlertsList.vue:72,75`（EditAlert/EditSpot）
+- `src/views/Summit.vue:125,128`（EditAlert/EditSpot）
+- `src/components/SpotsList.vue:74`（EditSpot）
+- `src/views/Spots.vue:23`（EditSpot）
+- `src/components/SummitPhotos.vue:15`（EditPhoto）
+- `src/components/ModalQSOList.vue:2`
+- `src/components/SwisstopoInfo.vue:2`
+- `src/components/BasemapAtInfo.vue:2`
+
+**修正方法**: 全箇所を `v-model:active="X"` → `v-model="X"` に置換（`v-if` + `:active="true"` 型だった6箇所は既にT1bの初回修正で `v-if` 削除・`v-model:active` 化済みのため、残作業は `v-model:active` → `v-model` の引数除去のみ）。子コンポーネント側の `@close="X = false"`（T1で追加済み）はそのまま維持。
+
 ### T2: チェックリスト消化・更新（`.claude/research/vue3-verify-checklist.md`）
 
 1. **陳腐化記述の更新**: X6（vue-match-media）・S5（vue-lazy-youtube-video）は Phase 1 で前倒し置換済みの示唆あり（同ファイル 169 行目のメモ）。コード実物（package.json・import 箇所）で置換済みを確認してから「完了」へ更新

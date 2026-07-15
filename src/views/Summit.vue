@@ -122,11 +122,11 @@
 
     <SummitActivations :summitCode="summitCode" :activations="activations" :myActivations="myActivations" :myChases="myChases" />
 
-    <b-modal v-if="isAddAlertActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isAddAlertActive = false">
-      <EditAlert :defaultSummitCode="summitCode" />
+    <b-modal v-model="isAddAlertActive" has-modal-card :can-cancel="['escape']">
+      <EditAlert :defaultSummitCode="summitCode" @close="isAddAlertActive = false" />
     </b-modal>
-    <b-modal v-if="isAddSpotActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isAddSpotActive = false">
-      <EditSpot :defaultSummitCode="summitCode" />
+    <b-modal v-model="isAddSpotActive" has-modal-card :can-cancel="['escape']">
+      <EditSpot :defaultSummitCode="summitCode" @close="isAddSpotActive = false" />
     </b-modal>
   </SummitDatabasePageLayout>
 </template>
