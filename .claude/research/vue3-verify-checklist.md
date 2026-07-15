@@ -15,9 +15,9 @@
 | G3 | NavBar 検索欄 | SearchField のフォーカス/候補表示、Enter で SearchAnything へ遷移 | **Phase 5・OK**: フォーカス→"Searching..."表示、Enterで`/search?q=...`へ遷移確認済み |
 | G4 | NavBar 「More」ドロップダウン | 開閉、各リンク遷移 | **Phase 5・OK**: クリックでNew Photos/Activators/Settingsが展開表示（スクリーンショット確認済み） |
 | G5 | ログイン(SSO/Keycloak) | LoginButton クリック→ログイン→ログアウト。**sotl.as 本番ドメインでのみ検証可能**（メンテナ提供のサブパス環境を使う） | 未確認・**ホスト側依頼**（コンテナ内では本番ドメイン制約により検証不能） |
-| G6 | Cloudflare Turnstile | 未ログイン時に表示され verified イベントでトークンがストアに入る | **Phase 5・既知制約**: `Error callback: 600010`としてTurnstileがヘッドレスブロックされることを再確認（lesson51と同一、恒久対応はissue #18） |
-| G7 | ページ遷移時のスクロール位置復元 | 戻る操作でスクロール位置が戻る（Map ページは `delayScroll` 分岐あり） | 未確認（優先度低、時間の関係でスコープ外） |
-| G8 | `lastPath` 復元 | `/` アクセス時に前回パスへリダイレクト | 未確認（優先度低、時間の関係でスコープ外） |
+| G6 | Cloudflare Turnstile | 未ログイン時に表示され verified イベントでトークンがストアに入る | **本物のTurnstileフローは未確認・ホスト側依頼**（R3の通りdevバイパスで地図検証自体は完結できたが、`verified`イベント発火・トークン取得という本来の仕組みはバイパスで迂回しているため未検証） |
+| G7 | ページ遷移時のスクロール位置復元 | 戻る操作でスクロール位置が戻る（Map ページは `delayScroll` 分岐あり） | **訂正・Phase 5・OK**: `/summits/`で800pxスクロール→別ページへ遷移→ブラウザバックでスクロール位置(800px)が復元されることを`window.scrollY`で確認済み |
+| G8 | `lastPath` 復元 | `/` アクセス時に前回パスへリダイレクト | **訂正・Phase 5・OK**: `/about`訪問後に`localStorage.getItem('lastPath')`が`/about`であることを確認、`/`アクセスで`/about`へリダイレクトされることを確認済み |
 | G9 | Footer | 表示・リンク | **Phase 5・OK**: "SOTA Atlas by Manuel HB9DQM. About"・バージョン表示（コミットハッシュ）確認済み |
 
 ## ルート別（router.js 準拠）
