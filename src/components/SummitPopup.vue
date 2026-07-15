@@ -1,5 +1,5 @@
 <template>
-  <MglPopup v-if="summit" key="summitinfo" :coordinates="[summit.coordinates.longitude, summit.coordinates.latitude]" anchor="bottom" :closeButton="false" :focusAfterOpen="false" @close="$emit('close')">
+  <MglPopup v-if="summit" key="summitinfo" :coordinates="[summit.coordinates.longitude, summit.coordinates.latitude]" anchor="bottom" :closeButton="false" :focusAfterOpen="false" :max-width="maxWidth" @close="$emit('close')">
     <div :class="{ summitPopup: true, minimize: minimizePopup }">
       <div v-if="coverPhoto" class="photo">
         <div style="text-align: center"><a :href="coverPhoto.mediaLink" target="_blank"><img :src="coverPhoto.src" /></a></div>
@@ -38,7 +38,8 @@ export default {
   props: {
     summit: Object,
     lastSpot: Object,
-    nextAlert: Object
+    nextAlert: Object,
+    maxWidth: String
   },
   mixins: [utils, coverphoto],
   components: {

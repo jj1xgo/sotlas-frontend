@@ -34,7 +34,7 @@
       </b-field>
 
       <b-field label="Frequency-Mode(s)">
-        <b-taginput v-model="freqMode" ref="freqMode" autocomplete rounded :data="freqModeSuggestions" :confirm-key-codes="[9,13,32,188]" @typing="updateFreqModeSuggestions" @update:model-value="onFreqModeInput" @blur="onFreqModeBlur" @keydown="onFreqModeKeyDown" append-to-body />
+        <b-taginput v-model="freqMode" ref="freqMode" autocomplete rounded :data="freqModeSuggestions" :confirm-keys="freqModeConfirmKeys" @typing="updateFreqModeSuggestions" @update:model-value="onFreqModeInput" @blur="onFreqModeBlur" @keydown="onFreqModeKeyDown" append-to-body />
         <template v-slot:message>
           Format: <em>freq-mode, ...</em> (e.g. <em>7.030-cw, 14.250-ssb</em>)
         </template>
@@ -306,10 +306,10 @@ export default {
         this.$refs.freqMode.addTag()
       }, 100)
     },
-    onFreqModeKeyDown () {
+    onFreqModeKeyDown (event) {
       // Hack to allow us to get keep-first behavior on autocomplete despite the fact
       // that b-taginput sets keepFirst = !allowNew
-      if (this.$refs.freqMode.confirmKeyCodes.indexOf(event.keyCode) >= 0) {
+      if (this.freqModeConfirmKeys.indexOf(event.key) >= 0) {
         event.preventDefault()
         this.$refs.freqMode.addTag()
       }
@@ -351,6 +351,7 @@ export default {
       time: '',
       freqMode: [],
       freqModeSuggestions: [],
+      freqModeConfirmKeys: [',', 'Tab', 'Enter', ' '],
       comments: '',
       summit: null,
       summitInvalid: false,
