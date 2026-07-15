@@ -115,6 +115,39 @@ Phase 2 では実装中の調査で判明した以下の破壊的変更に対応
 | B7 | navbar・モーダル・ドロップダウン・フォーム部品全般の見た目 | 色・枠線・背景等がbulma 0.7時代と大きく破綻していないか | bulma 0.7.5→1.0.4へ更新（CSS変数ベースのテーマ機構への移行に伴う）。**Phase 5・OK**: 非地図ページ全般（Settings/Summits/Activators/Alerts等）のスクリーンショットで大きな破綻なしを確認済み |
 | B8 | OSのダーク/ライト設定を切り替えても表示が変わらないこと | OS側でダークモードに切り替えて再読み込み→配色が変化しないか | bulma 1.0はデフォルトで`prefers-color-scheme: dark`の自動ダークテーマを含むため、`bulma-no-dark-mode`版を採用して回避済み。**Phase 5・OK（静的解析）**: Playwright MCPにOSカラースキームのエミュレーション機能が無いため、代替としてビルド後CSS(`npm run build`)を実データで解析。通常版`themes/_index.scss`は`@include cv.system-theme($name: "dark")`で`prefers-color-scheme: dark`メディアクエリを生成するが、`bulma-no-dark-mode.scss`は`themes/light`のみ`@use`し`themes/dark`を一切importしない設計と、ソースコードレベルで確認。ビルド後CSSを`grep`した結果、bulma由来の`prefers-color-scheme: dark`は0件（ヒットした6件はmaplibre-glのハイコントラストモード対応用`prefers-color-scheme:light`で無関係）。ダークテーマ自体がビルド成果物に含まれないため、OS設定に関わらず配色は変化しない |
 
+## Phase 5 総点検（modelValue化コンポーネントへの旧prop渡し・サイレントフォールスルー）
+
+背景: Phase 1〜4はコンテナ内ヘッドレスブラウザ検証環境（Playwright MCP、2026-07-13導入）が
+無く、ホスト側の部分的な目視確認しか行われていなかった。`<b-modal>`のv-model破損（Phase 2〜5、
+全10箇所）を発見・修正した際、同型の「Buefy 3で`modelValue`化されたコンポーネントに旧prop名を
+渡している」パターンが他にも残っていないか、機械的な総点検を実施した（詳細は
+`.claude/plans/cuddly-churning-sunset.md`）。
+
+**手法**: (1) ブラウザ上でBuefy全57コンポーネントの実物props/emitsをmixin再帰マージ込みで抽出
+（`.claude/research/buefy-props-map.json`）、(2) `@vue/compiler-sfc`でsrc全94ファイルの
+テンプレートASTを解析し渡しているprop/v-model名を抽出、(3) 突合して未宣言のものを検出する
+スクリプト（`.claude/scripts/check-prop-fallthrough.js`）。既知ケース（`b-loading :active`が
+偽陽性なく検出されること）で較正済み。(4) 独立した経路として、ランタイムでDOM上の素の
+camelCase風属性（フォールスルーの痕跡）を全ページ・モバイル/デスクトップ両幅で検出する
+スキャンも実施し、静的解析の結果と一致することを確認。
+
+| # | 要素 | 確認内容 | 結果 |
+|---|---|---|---|
+| P5-1 | `<b-loading :active>` 全10箇所 | Loading.vueの`active` prop不在 | **確定バグ・修正済み**: `isActive`が永久false→スピナー全無表示。`:model-value`へ置換、`filtering=true`で`.loading-overlay`が実際に出ることを確認 |
+| P5-2 | `NavBar.vue v-model:isActive` | Navbar.vueの`isActive` prop不在 | **確定バグ・修正済み**: バーガーメニューがナビリンクタップ後も開いたまま。`v-model`へ置換、400px幅でナビリンクタップ→メニューが閉じることを確認 |
+| P5-3 | `CardPagination.vue v-model:current` | Pagination.vueの`current` prop不在 | **確定バグ・修正済み**: モバイルカード一覧のページ送りが無反応。`v-model`へ置換、`/activators/DL6FBK`でページ送り→カード内容が変わることを確認 |
+| P5-4 | `SwisstopoInfo`/`BasemapAtInfo` `:on-cancel` | Modal.vueの`onCancel` prop不在（Buefy0.8残骸） | デッドコード削除（実害なし、`:can-cancel="false"`のため） |
+| P5-5 | `EditAlert.vue :confirm-key-codes` | Taginput.vueの`confirmKeyCodes` prop不在（Buefy3は`confirmKeys`＋値形式もキー名文字列に変更） | **確定バグ・修正済み**: `onFreqModeKeyDown`が`this.$refs.freqMode.confirmKeyCodes`（存在しない）を参照し、Frequency-Mode(s)欄でキー入力のたびに`TypeError: Cannot read properties of undefined (reading 'indexOf')`。`freqModeConfirmKeys`データプロパティ（`[',', 'Tab', 'Enter', ' ']`）を追加、`event.key`ベースに変更。実機でエラー解消・タグ確定動作を確認 |
+| P5-6 | `Map.vue :max-width="'600px'"` on `<SummitPopup>` | SummitPopup.vueが`maxWidth`propを宣言・転送していない | **確定バグ・修正済み**: `MglPopup`はデフォルト240px固定のまま（600px指定が届いていなかった）。`maxWidth` propを追加し`MglPopup`へ転送 |
+| P5-7 | `SummitPhotos.vue :titleLink` on `SummitPhotosGroup` | SummitPhotosGroup.vueの`titleLink` prop不在 | upstream由来の無害なデッドコード（byte-identical、親スロット内で直接`group.titleLink`参照のため実害なし）。**修正不要・スコープ外** |
+| P5-8 | `SolarHistory.vue spline="1"` on `<BarChart>` | BarChart.vueの`spline` prop不在 | upstream由来の既存バグ（byte-identical）。Vue3移行と無関係。**スコープ外** |
+| P5-9 | `SummitVideosGroup.vue :webp="false"` on `LazyYoutubeVideo` | 自前実装（Phase1、vue-lazy-youtube-video置換）に`webp` prop未実装 | Phase1移行時の実装漏れ、実害ほぼ皆無（自前実装は元からJPG固定）。デッドコード削除 |
+| P5-10 | 全16非地図ページ＋4地図ページ×2幅（400px/1280px）のDOMフォールスルー痕跡スキャン | 素のcamelCase風属性の検出 | 新規バグ0件（P5-7の`titlelink`のみ再検出、既知・対応不要と一致） |
+| P5-11 | Console総点検（全ページ巡回時のerror/warning） | 既知ノイズ以外の新規エラー | `/activations/:activationId`ページで未ログイン時`this.$keycloak.login()`がTypeError（`$keycloak`は`wantSso`未設定時は未インストール）。upstreamと完全に同一実装のため**Vue3移行のリグレッションではなくupstream由来の既存バグ、スコープ外**（記録のみ） |
+
+修正済み6件（P5-1〜3, 5, 6, 9）は`d09a4ad`・`ccc0025`でコミット。機械照合スクリプトと
+成果物は`083e3ac`でローカルパッチとしてコミット（upstream PRには含めない）。
+
 ## 運用メモ
 
 - Phase 0 時点では「Vue2 現状」を記録する運用に空欄で用意した。Phase 1 着手前にホスト側で
