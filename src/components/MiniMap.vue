@@ -21,7 +21,7 @@
       <div v-if="zoomWarningVisible" class="zoom-warning">Zoom in to see all activations</div>
     </MglMap>
     <MapKeyFailedInfo v-if="mapTilerApiKeyFailed" />
-    <b-loading class="mini-map-loading" :is-full-page="false" :active="!mapStyle && !mapTilerApiKeyFailed" />
+    <b-loading class="mini-map-loading" :is-full-page="false" :model-value="!mapStyle && !mapTilerApiKeyFailed" />
   </div>
 </template>
 

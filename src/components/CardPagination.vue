@@ -1,6 +1,6 @@
 <template>
   <div class="card-list">
-    <b-pagination v-if="paginated && !infinite" :total="data.length" v-model:current="currentCardPage" :simple="true" size="is-small" :per-page="perPage" aria-next-label="Next page" aria-previous-label="Previous page" aria-page-label="Page" aria-current-label="Current page" />
+    <b-pagination v-if="paginated && !infinite" :total="data.length" v-model="currentCardPage" :simple="true" size="is-small" :per-page="perPage" aria-next-label="Next page" aria-previous-label="Previous page" aria-page-label="Page" aria-current-label="Current page" />
     <div v-for="(row, index) in pageData" :key="row[rowKey]">
       <slot :row="row" :prevRow="(index > 0 ? pageData[index-1] : null)"></slot>
     </div>

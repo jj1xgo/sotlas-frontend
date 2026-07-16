@@ -4,7 +4,7 @@
       <router-link v-if="titleLink" :to="titleLink">{{ title }}</router-link>
       <span v-else>{{ title }}</span>
     </div>
-    <LazyYoutubeVideo v-for="video in videos" :key="video.src" :src="video.src" previewImageSize="hqdefault" :webp="false" />
+    <LazyYoutubeVideo v-for="video in videos" :key="video.src" :src="video.src" previewImageSize="hqdefault" />
   </div>
 </template>
 

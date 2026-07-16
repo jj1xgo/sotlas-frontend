@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <ul class="resources">
-      <li v-for="resource in resources" :key="resource.id"><b-icon v-if="resource.icon" :icon="resource.icon" :pack="resource.iconPack" size="is-small" /><svgicon v-if="resource.svgicon" class="icon" :icon="resource.svgicon" color="#555" /><img v-if="resource.iconImg" class="icon" :src="resource.iconImg" />{{ resource.prefix ? resource.prefix + ': ' : '' }}<a :href="resource.url" target="_blank">{{ resource.title }}</a><span class="subdued author" v-if="resource.author">(by {{ resource.author }} on {{ formatSubmittedDate(resource.date) }})</span><span v-if="resource.suffix" class="subdued details">{{ resource.suffix }}</span></li>
+      <li v-for="resource in resources" :key="resource.id"><b-icon v-if="resource.icon" :icon="resource.icon" :pack="resource.iconPack" size="is-small" /><img v-if="resource.iconImg" class="icon" :src="resource.iconImg" />{{ resource.prefix ? resource.prefix + ': ' : '' }}<a :href="resource.url" target="_blank">{{ resource.title }}</a><span class="subdued author" v-if="resource.author">(by {{ resource.author }} on {{ formatSubmittedDate(resource.date) }})</span><span v-if="resource.suffix" class="subdued details">{{ resource.suffix }}</span></li>
     </ul>
   </div>
 </template>

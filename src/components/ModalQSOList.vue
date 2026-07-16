@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model:active="modalActive" :can-cancel="['escape', 'outside']" has-modal-card>
+  <b-modal v-model="modalActive" :can-cancel="['escape', 'outside']" has-modal-card>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title"><span v-if="activationDetails"><router-link :to="makeActivatorLinkUserId(activationDetails.UserID)">{{ activationDetails.OwnCallsign }}</router-link> on <router-link :to="makeSummitLink(summitCode)">{{ activationDetails.Summit }}</router-link>, <span class="activation-date">{{ niceActivationDate }}</span></span></p>
@@ -7,7 +7,7 @@
       </header>
       <section class="modal-card-body">
         <QSOList v-if="activationDetails !== null" :data="activationDetails.ActivatorLogs" />
-        <b-loading :is-full-page="false" :active="activationLoading" />
+        <b-loading :is-full-page="false" :model-value="activationLoading" />
       </section>
       <footer class="modal-card-foot"></footer>
     </div>

@@ -69,11 +69,11 @@
         </b-select>
       </template>
     </b-table>
-    <b-modal v-if="isEditAlertActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isEditAlertActive = false">
-      <EditAlert :alert="alertToEdit" />
+    <b-modal v-model="isEditAlertActive" has-modal-card :can-cancel="['escape']">
+      <EditAlert :alert="alertToEdit" @close="isEditAlertActive = false" />
     </b-modal>
-    <b-modal v-if="isEditSpotActive" :active="true" has-modal-card :can-cancel="['escape']" @close="isEditSpotActive = false">
-      <EditSpot :spot="spotToMake" />
+    <b-modal v-model="isEditSpotActive" has-modal-card :can-cancel="['escape']">
+      <EditSpot :spot="spotToMake" @close="isEditSpotActive = false" />
     </b-modal>
   </div>
 </template>
