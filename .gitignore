@@ -21,17 +21,10 @@ yarn-error.log*
 *.sw?
 src/compiled-icons
 
-# claude code files
-.claude/settings.local.json
-.claude/conversations/
-.claude/sessions/
-.claude/skills/.cache/
-.claude/handovers/
-.claude/incidents/
-.claude/bash_history
-.claude/lessons.md
-.claude/playwright-mcp/
-.claude/pr-drafts/
+# CLAUDE.md と .claude/ はメンテナ個人の開発運用ファイル（プロダクト本体ではない）。
+# private nested git リポジトリ（jj1xgo/sotlas-frontend-ops）として別管理する。
+CLAUDE.md
+.claude/
 
 # claude-container runtime settings (may contain host-specific paths)
 .claude-container.d/env
