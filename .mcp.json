@@ -8,12 +8,12 @@
       }
     },
     "playwright": {
-      "command": "npx",
+      "command": "node",
       "env": {
         "XDG_CONFIG_HOME": "/home/node/.cache/xdg-config"
       },
       "args": [
-        "-y", "@playwright/mcp@0.0.78",
+        ".claude-container.d/playwright-mcp/node_modules/@playwright/mcp/cli.js",
         "--browser", "chromium",
         "--executable-path", "/usr/bin/chromium",
         "--headless",

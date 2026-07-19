@@ -2,6 +2,10 @@
 # npm install の実パッケージ取得に必要。
 # 注: FontAwesome Pro は使わない（stub+alias でローカルパッチ済み）ため
 # npm.fontawesome.com は不要。
+# 注: 製品ビルド（npm install）専用。MCP サーバー（Playwright MCP）は claude-container
+# v5.0.0 ガイダンス（stdio 型サーバーの npx 実行時取得を避ける）に従い
+# .claude-container.d/playwright-mcp/ の lockfile 固定ローカルインストールへ移行済みで、
+# セッション開始時にこのドメインへアクセスすることはない。
 registry.npmjs.org
 # package.json の github: 依存（vue-keycloak-js, mapbox-gl-draw, frappe-charts,
 # vue-mapbox, vue-native-websocket）の tarball 取得に必要。
