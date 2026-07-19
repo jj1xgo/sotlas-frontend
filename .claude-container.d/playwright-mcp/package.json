@@ -1,0 +1,7 @@
+{
+  "name": "playwright-mcp-pinned",
+  "private": true,
+  "dependencies": {
+    "@playwright/mcp": "0.0.78"
+  }
+}
