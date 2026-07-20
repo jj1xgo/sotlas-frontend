@@ -37,6 +37,9 @@ az.sotl.as
 secure.geonames.org
 # ウェブカム一覧 API（既定 OFF の機能だが先回りで許可）。
 api.windy.com
+# Wikipedia ウィジェット（summit 詳細ページの関連記事取得用と推測）。未収載だと
+# ERR_ADDRESS_UNREACHABLE で「Network or server error」トーストが出る（検証中に発見）。
+en.wikipedia.org
 # 注: sso.sota.org.uk は追加しない（Keycloak init は wantSso フラグ時のみで、
 # SSO 検証は今回の対象外）。
 # 注: vue-native-websocket は Vue2 専用で install が無効化済み（store.js 参照）。
