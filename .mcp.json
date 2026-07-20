@@ -23,6 +23,10 @@
         "--caps", "vision",
         "--output-dir", ".claude/playwright-mcp"
       ]
+    },
+    "codex": {
+      "command": "codex",
+      "args": ["mcp-server"]
     }
   }
 }
