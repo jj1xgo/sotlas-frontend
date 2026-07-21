@@ -15,6 +15,9 @@ api.githubcopilot.com
 # Codex MCP サーバー（.mcp.json の codex サーバー）。Codex は API 呼び出し先を
 # https://chatgpt.com/backend-api/ にハードコードしている。
 chatgpt.com
+# Context7 MCP サーバー（ユーザースコープ ~/.claude.json の mcpServers、type: http）。
+# ライブラリの最新ドキュメント参照用（sotlas-frontend-ops#28）。
+mcp.context7.com
 
 # --- ここから Playwright MCP（.mcp.json）によるコンテナ内 WebUI 検証用 ---
 # アプリ実行時に叩く外部ドメイン。ワイルドカード非対応のため個別列挙。
