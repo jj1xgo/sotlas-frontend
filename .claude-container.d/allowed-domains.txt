@@ -6,6 +6,9 @@ registry.npmjs.org
 # package.json の github: 依存（vue-keycloak-js, mapbox-gl-draw, frappe-charts,
 # vue-mapbox, vue-native-websocket）の tarball 取得に必要。
 codeload.github.com
+# Codex MCP サーバー（.mcp.json の codex サーバー）。Codex は API 呼び出し先を
+# https://chatgpt.com/backend-api/ にハードコードしている。
+chatgpt.com
 
 # --- ここから Playwright MCP（.mcp.json）によるコンテナ内 WebUI 検証用 ---
 # アプリ実行時に叩く外部ドメイン。ワイルドカード非対応のため個別列挙。
