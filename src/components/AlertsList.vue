@@ -52,7 +52,7 @@
             {{ props.row.frequency }}<br />
             <span class="comments-text">{{ props.row.comments }} ({{ props.row.posterCallsign }})</span>
           </div>
-          <b-dropdown v-if="canEditAlert(props.row)" class="actions" aria-role="list">
+          <b-dropdown v-if="canEditAlert(props.row)" class="actions" aria-role="list" append-to-body>
             <template v-slot:trigger>
               <b-button size="is-small" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
             </template>

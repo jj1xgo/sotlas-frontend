@@ -54,7 +54,7 @@
       <b-table-column field="comments" class="comments" label="Comments" v-slot="props">
         <div class="comments-cell">
           <b-tooltip class="comments-tooltip" :label="props.row.comments" position="is-left" multilined :active="!$mq.fullhd"><div>{{ props.row.comments }}</div></b-tooltip>
-          <b-dropdown v-if="canEditSpot(props.row)" class="actions" aria-role="list">
+          <b-dropdown v-if="canEditSpot(props.row)" class="actions" aria-role="list" append-to-body>
             <template v-slot:trigger>
               <b-button size="is-small" icon-pack="fas" icon-right="caret-down" outlined>Actions</b-button>
             </template>
