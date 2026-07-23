@@ -31,8 +31,8 @@
   `feat/vue3-migration` 等の既存進行中ブランチは現行の日本語コミットのまま継続する（遡及的な
   書き直しはしない）。上流への PR を出す前に
   `git rebase --onto upstream/master master feat/<slug>` でローカルパッチ分を除いた状態にしてから出す
-- **push・PR 作成はホスト側で行う**（コンテナ内の PAT は Issues 限定スコープで push 不可。詳細は
-  「コンテナ開発」参照）。PR 作成は `git push` 後に GitHub の Web UI（Compare & pull request）で行う
+- **push はコンテナ内から行える**（詳細は「コンテナ開発」参照）。PR 作成は `git push` 後に GitHub の
+  Web UI（Compare & pull request）で行う
 
 ## FontAwesome Pro 事情
 
@@ -90,8 +90,9 @@ upstream 本体の機能。fork 独自パッチではない。機構詳細は RE
   `packages.txt` に `nodejs`/`npm` を追加しても PATH 優先順位（`/usr/local/bin` が `/usr/bin` より先）で
   常に上書きされ無意味なので置かない
 - コンテナはポートを公開しない。ブラウザ確認の方法は上記「検証方法」を参照
-- issue 連携用の PAT は `.claude-container.d/env`（gitignore 対象）の `GH_TOKEN_FILE` で渡す。
-  この PAT は Issues 限定スコープで push 権限を持たない
+- git push/fetch・issue 連携用 PAT の配線は `.claude/CLAUDE.md`「コンテナ開発」「クロスリポジトリ
+  issue 操作」節を正とする（旧 `GH_TOKEN_FILE` 方式は claude-container v4.0.0 で `GITHUB_MAIN_PAT`／
+  `GITHUB_MCP_PAT` の分離配線に置き換わっている）
 
 ## 課題管理（GitHub Issues）
 
