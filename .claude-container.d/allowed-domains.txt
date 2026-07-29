@@ -16,7 +16,7 @@ api.githubcopilot.com
 # https://chatgpt.com/backend-api/ にハードコードしている。
 chatgpt.com
 # Context7 MCP サーバー（ユーザースコープ ~/.claude.json の mcpServers、type: http）。
-# ライブラリの最新ドキュメント参照用（sotlas-frontend-ops#28）。
+# ライブラリの最新ドキュメント参照用（内部運用issue参照）。
 mcp.context7.com
 
 # --- ここから Playwright MCP（.mcp.json）によるコンテナ内 WebUI 検証用 ---
