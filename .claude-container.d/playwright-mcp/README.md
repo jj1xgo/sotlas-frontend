@@ -2,7 +2,7 @@
 
 `.mcp.json` の `playwright` サーバーが起動時に読み込む `@playwright/mcp` の実体。
 claude-container v5.0.0 の stdio 型起動時 TTY 確認ゲート対応で、`npx` の実行時取得を避けるため
-このディレクトリで exact pin してローカルインストールしている（詳細: sotlas-frontend-ops#24）。
+このディレクトリで exact pin してローカルインストールしている（詳細: 内部運用issue参照）。
 
 ## バージョン更新手順
 
