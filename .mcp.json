@@ -10,10 +10,12 @@
     "playwright": {
       "command": "node",
       "env": {
-        "XDG_CONFIG_HOME": "/home/node/.cache/xdg-config"
+        "XDG_CACHE_HOME": "/tmp/playwright-mcp/xdg-cache",
+        "XDG_CONFIG_HOME": "/tmp/playwright-mcp/xdg-config",
+        "XDG_DATA_HOME": "/tmp/playwright-mcp/xdg-data"
       },
       "args": [
-        ".claude-container.d/playwright-mcp/node_modules/@playwright/mcp/cli.js",
+        "node_modules/@playwright/mcp/cli.js",
         "--browser", "chromium",
         "--executable-path", "/usr/bin/chromium",
         "--headless",

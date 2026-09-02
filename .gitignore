@@ -25,6 +25,3 @@ src/compiled-icons
 # 別途管理するため追跡しない。
 CLAUDE.md
 .claude/
-
-# claude-container runtime settings (may contain host-specific paths)
-.claude-container.d/env

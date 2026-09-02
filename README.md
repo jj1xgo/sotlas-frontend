@@ -7,6 +7,17 @@ This is the Vue.js based frontend for SOTLAS (https://sotl.as), an interactive a
 npm install
 ```
 
+This also installs the exact-pinned Playwright MCP development dependency used
+by `.mcp.json`.
+
+### agent-container
+
+Project-specific Node.js and Debian packages are declared in
+`.agent-container.d/`. After updating a checkout from the former
+`.claude-container.d/` layout, review and migrate anything still needed, then
+remove the entire legacy directory before running `agentctl doctor` or starting
+a new runtime. An empty `.claude-container.d/` directory is also unsupported.
+
 ### FontAwesome Pro (optional)
 This project uses a few [FontAwesome Pro](https://fontawesome.com/) icons. A Pro
 subscription is **not required** to build or develop: if the `NPM_FONTAWESOME_TOKEN`
