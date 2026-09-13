@@ -1,0 +1,12 @@
+# Additional pip packages for the sotlas-frontend container (system Python).
+#
+# This project has no Python dependencies: the app is Node.js (Vite/Vue), and
+# in-container verification uses Playwright MCP (npm) and headless Chromium
+# (apt, see packages.txt). This file exists only so that the claude-container
+# launcher does not fall back to its bundled default with a WARNING.
+#
+# If a pip package is ever needed here, note that pip3 is not part of the base
+# image: add `python3-pip` to packages.txt as well, then rebuild with `-b`.
+# Only bare names with optional extras/version specifiers are accepted
+# (validated by validate-build-input.sh); URLs, paths, options and environment
+# markers are rejected and stop the build.
