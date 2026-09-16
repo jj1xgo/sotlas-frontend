@@ -21,9 +21,11 @@ yarn-error.log*
 *.sw?
 src/compiled-icons
 
-# CLAUDE.md と .claude/ はメンテナ個人の開発運用ファイル（プロダクト本体ではない）。
-# 別途管理するため追跡しない。
+# CLAUDE.md is ignored on every nested path (private per-checkout notes),
+# except the tracked public root file re-included below. .claude/ is the
+# maintainer's private ops checkout (separate repo), not part of the product.
 CLAUDE.md
+!/CLAUDE.md
 .claude/
 
 # claude-container runtime settings (may contain host-specific paths)
