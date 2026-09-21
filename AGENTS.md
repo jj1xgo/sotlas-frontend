@@ -22,8 +22,9 @@ version and what APIs are safe to use — do not infer it from the branch name
 or from what another branch uses (branches named `vue2-*` have existed with
 Vue 3 content underneath). Run `grep '"vue":' package.json` at the start of
 work before proposing framework-specific code. If that check shows Vue 2.7
-(the version on `master`, which is EOL), do not propose Vue 3-only APIs or
-assume Vue 3 semantics. Stack: Vue / Vite / Buefy (Bulma) / vue-mapbox
+(EOL; `master` has been on Vue 3 since the 2026-09-18 upstream sync), do not
+propose Vue 3-only APIs or assume Vue 3 semantics. Stack: Vue / Vite / Buefy
+(Bulma) / vue-mapbox
 (backed by MapLibre).
 
 ## Setup and commands
