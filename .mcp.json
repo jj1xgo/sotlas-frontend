@@ -6,7 +6,7 @@
         "XDG_CONFIG_HOME": "/home/node/.cache/xdg-config"
       },
       "args": [
-        ".claude-container.d/playwright-mcp/node_modules/@playwright/mcp/cli.js",
+        ".c3c/playwright-mcp/node_modules/@playwright/mcp/cli.js",
         "--browser", "chromium",
         "--executable-path", "/usr/bin/chromium",
         "--headless",
