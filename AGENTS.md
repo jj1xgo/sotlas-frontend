@@ -67,6 +67,6 @@ MapLibre-based).
 - Before proposing an upstream PR, don't assume a fixed base — check which
   upstream branch is actually the target, what the real content diff is, and
   what depends on it. Exclude fork-specific operational files and local
-  patches (see this repo's `.gitignore` and `.claude-container.d/` for
+  patches (see this repo's `.gitignore` and `.c3c/` for
   examples) from upstream-bound commits.
 - Commits intended for an upstream PR are written in English.
