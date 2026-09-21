@@ -37,6 +37,8 @@ photos.sotl.as
 sotlas-photos.s3.eu-central-003.backblazeb2.com
 # 標高 API（summit 詳細ページで発火）。
 elevation.sotl.as
+# 標高 API の切替先（upstream c3acf47、2026-09-18。.env の VITE_ELEVATION_API_URL 参照）。
+elevation.racemap.com
 # アクティベーションゾーン GeoJSON。
 az.sotl.as
 # 検索機能（SearchField.vue）。
