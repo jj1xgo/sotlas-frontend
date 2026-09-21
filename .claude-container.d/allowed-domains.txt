@@ -50,7 +50,7 @@ api.windy.com
 en.wikipedia.org
 # 注: sso.sota.org.uk は追加しない（Keycloak init は wantSso フラグ時のみで、
 # SSO 検証は今回の対象外）。
-# 注: vue-native-websocket は Vue2 専用で install が無効化済み（store.js 参照）。
-# Phase 4 で live spot 更新を復活させる際は、接続先ホストを別途 allowlist 確認する。
+# 注: live spot の WebSocket は Vue 3 版では `src/websocket.js` の自前実装（vue-native-websocket は
+# 廃止）。接続先は .env の VITE_WSS_URL（wss://sotl.as/api、上の sotl.as で許可済み）。
 # 注: 代替ベースマップ（swisstopo 等）・Windy サムネイル画像ホストは、必要になった
 # 検証時に browser_network_requests で実ホストを確認してから追記する。
