@@ -24,8 +24,8 @@ Vue 3 content underneath). Run `grep '"vue":' package.json` at the start of
 work before proposing framework-specific code. If that check shows Vue 2.7
 (EOL; `master` has been on Vue 3 since the 2026-09-18 upstream sync), do not
 propose Vue 3-only APIs or assume Vue 3 semantics. Stack: Vue / Vite / Buefy
-(Bulma) / vue-mapbox
-(backed by MapLibre).
+(Bulma) / `src/mapgl` (in-tree map components on the MapTiler SDK, which is
+MapLibre-based).
 
 ## Setup and commands
 
