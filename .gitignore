@@ -29,4 +29,4 @@ CLAUDE.md
 .claude/
 
 # claude-container runtime settings (may contain host-specific paths)
-.claude-container.d/env
+.c3c/env
