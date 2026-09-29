@@ -46,6 +46,9 @@ MapLibre-based).
   build. UI changes: also check the affected screen/console/network.
 - When a check was not run, say so explicitly (`not run`) with the reason,
   and keep that distinct from a check that ran and passed.
+- `.mcp.json` registers a Playwright MCP server whose local install lives in
+  the maintainer's private configuration (`.c3c/`, not in this repository).
+  In a checkout without it, that server fails to connect; ignore it.
 
 ## Coding conventions
 
@@ -67,6 +70,6 @@ MapLibre-based).
 - Before proposing an upstream PR, don't assume a fixed base — check which
   upstream branch is actually the target, what the real content diff is, and
   what depends on it. Exclude fork-specific operational files and local
-  patches (see this repo's `.gitignore` and `.c3c/` for
+  patches (see this repo's `.gitignore` and `.mcp.json` for
   examples) from upstream-bound commits.
 - Commits intended for an upstream PR are written in English.
