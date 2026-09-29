@@ -28,5 +28,6 @@ CLAUDE.md
 !/CLAUDE.md
 .claude/
 
-# claude-container runtime settings (may contain host-specific paths)
-.c3c/env
+# c3c container configuration is the maintainer's private setup and lives
+# outside this repository (locally a symlink, so no trailing slash).
+/.c3c
